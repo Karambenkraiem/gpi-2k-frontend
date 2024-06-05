@@ -2,17 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
+const roleOptions = [
+    { value: 'ADMINISTRATEUR', label: 'Admin' },
+    { value: 'DIRECTEUR', label: 'Directeur' },
+    { value: 'TECHNICIEN', label: 'Technicien' },
+    { value: 'EMPLOYE', label: 'Employé' },
+    { value: 'RMQ', label: 'Responsable Qualité' },
+];
+
+const etatOptions = [
+    { value: 'actif', label: 'Actif' },
+    { value: 'desactif', label: 'Inactif' },
+];
+
 const Utilisateurs = () => {
     const [users, setUsers] = useState([]);
     const [show, setShow] = useState(false);
-    const [currentUser, setCurrentUser] = useState({ 
-        idUtilisateur: 0, 
-        fullName: '', 
-        email: '', 
-        password: '',        
-        telFix: '', 
-        telMobile: '', 
-        idSpecialite: '' 
+    const [currentUser, setCurrentUser] = useState({
+        idUtilisateur: 0,
+        password: '',
+        fullName: '',
+        email: '',
+        roleUtilisateur: 'EMPLOYE',
+        etatUtilisateur: 'actif',
+        telFix: '',
+        telMobile: '',
+        idSpecialite: '',
     });
     const [isEditing, setIsEditing] = useState(false);
 
@@ -31,15 +46,16 @@ const Utilisateurs = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
-        setCurrentUser({ 
-            idUtilisateur: 0, 
-            fullName: '', 
-            email: '', 
-            password: '', // Reset password field
-            
-            telFix: '', 
-            telMobile: '', 
-            idSpecialite: '' 
+        setCurrentUser({
+            idUtilisateur: 0,
+            password: '',
+            fullName: '',
+            email: '',
+            roleUtilisateur: 'EMPLOYE',
+            etatUtilisateur: 'actif',
+            telFix: '',
+            telMobile: '',
+            idSpecialite: '',
         });
         setIsEditing(false);
         setShow(true);
@@ -47,10 +63,11 @@ const Utilisateurs = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCurrentUser({ ...currentUser, [name]: name ==='idUtilisateur' ? parseInt(value, 10) : value });
+        setCurrentUser({ ...currentUser, [name]: name === 'idUtilisateur' ? parseInt(value, 10) : value });
     };
 
     const handleAddUser = async () => {
+        console.log(currentUser);
         try {
             const response = await axios.post('http://localhost:3000/utilisateur', currentUser);
             setUsers([...users, response.data]);
@@ -69,7 +86,6 @@ const Utilisateurs = () => {
             console.error("Erreur lors de la modification de l'utilisateur :", error.response.data);
         }
     };
-    
 
     const handleDelete = async (id) => {
         try {
@@ -101,6 +117,8 @@ const Utilisateurs = () => {
                         <th>Tel Fixe</th>
                         <th>Tel Mobile</th>
                         <th>Spécialité</th>
+                        <th>Role</th>
+                        <th>Etat</th>
                         <th>Crée à</th>
                         <th>Dernière connexion</th>
                         <th>Actions</th>
@@ -115,6 +133,8 @@ const Utilisateurs = () => {
                             <td>{utilisateur.telFix}</td>
                             <td>{utilisateur.telMobile}</td>
                             <td>{utilisateur.idSpecialite}</td>
+                            <td>{utilisateur.roleUtilisateur}</td>
+                            <td>{utilisateur.etatUtilisateur}</td>
                             <td>{utilisateur.createdAt}</td>
                             <td>{utilisateur.lastLogin}</td>
                             <td>
@@ -132,9 +152,7 @@ const Utilisateurs = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-
-
-                    <Form.Group controlId="formUserId">
+                        <Form.Group controlId="formUserId">
                             <Form.Label>Matricule</Form.Label>
                             <Form.Control
                                 type="number"
@@ -146,30 +164,6 @@ const Utilisateurs = () => {
                         </Form.Group>
 
 
-
-
-
-                        
-                        <Form.Group controlId="formUserName">
-                            <Form.Label>Nom</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Entrez le nom"
-                                name="fullName"
-                                value={currentUser.fullName}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formUserEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Entrez l'email"
-                                name="email"
-                                value={currentUser.email}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
                         <Form.Group controlId="formPassword">
                             <Form.Label>Mot de passe</Form.Label>
                             <Form.Control
@@ -180,16 +174,68 @@ const Utilisateurs = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+
+
+                        <Form.Group controlId="formUserName">
+                            <Form.Label>Nom</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Entrez le nom"
+                                name="fullName"
+                                value={currentUser.fullName}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
+
+                        <Form.Group controlId="formUserEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Entrez l'email"
+                                name="email"
+                                value={currentUser.email}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
+
+                        <Form.Group controlId="formRole">
+                            <Form.Label>Rôle</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="roleUtilisateur"
+                                value={currentUser.roleUtilisateur}
+                                onChange={handleChange}
+                            >
+                                {roleOptions.map((role) => (
+                                    <option key={role.value} value={role.value}>
+                                        {role.label}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="formEtat">
+                            <Form.Label>État</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="etatUtilisateur"
+                                value={currentUser.etatUtilisateur}
+                                onChange={handleChange}
+                            >
+                                {etatOptions.map((etat) => (
+                                    <option key={etat.value} value={etat.value}>
+                                        {etat.label}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+
+
+
+
                         
-                        
-
-
-
-
-
-
-
-
                         <Form.Group controlId="formTelFixe">
                             <Form.Label>Tel Fixe</Form.Label>
                             <Form.Control
@@ -220,6 +266,15 @@ const Utilisateurs = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+                        
+
+
+
+
+
+
+
+
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
