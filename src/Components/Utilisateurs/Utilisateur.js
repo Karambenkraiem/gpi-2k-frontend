@@ -1,4 +1,3 @@
-// src/components/Utilisateurs.js
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
@@ -6,7 +5,15 @@ import axios from 'axios';
 const Utilisateurs = () => {
     const [users, setUsers] = useState([]);
     const [show, setShow] = useState(false);
-    const [currentUser, setCurrentUser] = useState({ idUtilisateur: '', fullName: '', email: '', createdAt: '', lastLogin: '', telFix: '', telMobile: '', idSpecialite: '' });
+    const [currentUser, setCurrentUser] = useState({ 
+        idUtilisateur: 0, 
+        fullName: '', 
+        email: '', 
+        password: '',        
+        telFix: '', 
+        telMobile: '', 
+        idSpecialite: '' 
+    });
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
@@ -15,7 +22,7 @@ const Utilisateurs = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/utilisateur'); // Remplacez l'URL par celle de votre API
+            const response = await axios.get('http://localhost:3000/utilisateur');
             setUsers(response.data);
         } catch (error) {
             console.error("Erreur lors de la récupération des utilisateurs :", error);
@@ -24,14 +31,23 @@ const Utilisateurs = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
-        setCurrentUser({ idUtilisateur: '', fullName: '', email: '', createdAt: '', lastLogin: '', telFix: '', telMobile: '', idSpecialite: '' });
+        setCurrentUser({ 
+            idUtilisateur: 0, 
+            fullName: '', 
+            email: '', 
+            password: '', // Reset password field
+            
+            telFix: '', 
+            telMobile: '', 
+            idSpecialite: '' 
+        });
         setIsEditing(false);
         setShow(true);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCurrentUser({ ...currentUser, [name]: value });
+        setCurrentUser({ ...currentUser, [name]: name ==='idUtilisateur' ? parseInt(value, 10) : value });
     };
 
     const handleAddUser = async () => {
@@ -47,32 +63,22 @@ const Utilisateurs = () => {
     const handleEditUser = async () => {
         try {
             await axios.put(`http://localhost:3000/utilisateur/${currentUser.idUtilisateur}`, currentUser);
-            setUsers(users.map(utilisateur => Utilisateurs.idUtilisateur === currentUser.idUtilisateur ? currentUser : utilisateur));
+            setUsers(users.map(utilisateur => utilisateur.idUtilisateur === currentUser.idUtilisateur ? currentUser : utilisateur));
             handleClose();
         } catch (error) {
-            console.error("Erreur lors de la modification de l'utilisateur :", error);
+            console.error("Erreur lors de la modification de l'utilisateur :", error.response.data);
         }
     };
+    
 
-
-
-    const handleDeleteUser = async (idUtilisateur) => {
-        console.log("ID Utilisateur à supprimer :", idUtilisateur);  
-        if (!idUtilisateur) {
-            console.error("ID Utilisateur est indéfini ou invalide");
-            return;
-        }
-
+    const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/utilisateur/${idUtilisateur}`);
-            setUsers((Utilisateurs) => Utilisateurs.filter(utilisateur => utilisateur.idUtilisateur !== idUtilisateur));
+            await axios.delete(`http://localhost:3000/utilisateur/${id}`);
+            fetchUsers();
         } catch (error) {
-            console.error("Erreur lors de la suppression de l'utilisateur demandé :", error);
+            console.error('Error deleting utilisateur:', error);
         }
     };
-
-
-
 
     const handleEditButtonClick = (utilisateur) => {
         setCurrentUser(utilisateur);
@@ -92,34 +98,28 @@ const Utilisateurs = () => {
                         <th>ID</th>
                         <th>Nom</th>
                         <th>Email</th>
-
                         <th>Tel Fixe</th>
                         <th>Tel Mobile</th>
-                        <th>Specialité</th>
-                        <th>Crée à </th>
-                        <th>Derniere connexion</th>
-
+                        <th>Spécialité</th>
+                        <th>Crée à</th>
+                        <th>Dernière connexion</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((utilisateur) => (
                         <tr key={utilisateur.idUtilisateur}>
                             <td>{utilisateur.idUtilisateur}</td>
-                            <td>{utilisateur.name}</td>
+                            <td>{utilisateur.fullName}</td>
                             <td>{utilisateur.email}</td>
                             <td>{utilisateur.telFix}</td>
                             <td>{utilisateur.telMobile}</td>
                             <td>{utilisateur.idSpecialite}</td>
                             <td>{utilisateur.createdAt}</td>
                             <td>{utilisateur.lastLogin}</td>
-
-
-
-                            <td align='center'>
-                                <Button variant="warning" className="mr" onClick={() => handleEditButtonClick(utilisateur)}>Modifier</Button>
-                            </td>
-                            <td align='center'>
-                                <Button variant="danger" onClick={() => handleDeleteUser(utilisateur.idUtilisateur)}>Supprimer</Button>
+                            <td>
+                                <Button variant="warning" className="mr-2" onClick={() => handleEditButtonClick(utilisateur)}>Modifier</Button>
+                                <Button variant="danger" onClick={() => handleDelete(utilisateur.idUtilisateur)}>Supprimer</Button>
                             </td>
                         </tr>
                     ))}
@@ -132,13 +132,31 @@ const Utilisateurs = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+
+
+                    <Form.Group controlId="formUserId">
+                            <Form.Label>Matricule</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Entrez le matricule"
+                                name="idUtilisateur"
+                                value={currentUser.idUtilisateur}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
+
+
+
+
+                        
                         <Form.Group controlId="formUserName">
                             <Form.Label>Nom</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Entrez le nom"
-                                name="name"
-                                value={currentUser.name}
+                                name="fullName"
+                                value={currentUser.fullName}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -152,41 +170,38 @@ const Utilisateurs = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="formCreatedAt">
-                            <Form.Label>Crée à </Form.Label>
+                        <Form.Group controlId="formPassword">
+                            <Form.Label>Mot de passe</Form.Label>
                             <Form.Control
-                                type="text"
-                                placeholder="Date de création"
-                                name="dateCreation"
-                                value={currentUser.createdAt}
+                                type="password"
+                                placeholder="Entrez le mot de passe"
+                                name="password"
+                                value={currentUser.password}
                                 onChange={handleChange}
                             />
                         </Form.Group>
+                        
+                        
 
-                        <Form.Group controlId="formLastLogin">
-                            <Form.Label>Dernière connexion</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Dernière connexion"
-                                name="dateConnexion"
-                                value={currentUser.lastLogin}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+
+
+
+
+
+
 
                         <Form.Group controlId="formTelFixe">
-                            <Form.Label>Tel Fixe </Form.Label>
+                            <Form.Label>Tel Fixe</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Telephone fixe"
-                                name="telFixe"
+                                name="telFix"
                                 value={currentUser.telFix}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-
                         <Form.Group controlId="formTelMobile">
-                            <Form.Label>Tel Mobile </Form.Label>
+                            <Form.Label>Tel Mobile</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Telephone Mobile"
@@ -195,19 +210,16 @@ const Utilisateurs = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
-
-                        <Form.Group controlId="formSpecielite">
-                            <Form.Label>Specialité </Form.Label>
+                        <Form.Group controlId="formSpecialite">
+                            <Form.Label>Spécialité</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Spécialité"
-                                name="specialite"
+                                name="idSpecialite"
                                 value={currentUser.idSpecialite}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-
-
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
