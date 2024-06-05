@@ -127,18 +127,20 @@ const Utilisateurs = () => {
                 <tbody>
                     {users.map((utilisateur) => (
                         <tr key={utilisateur.idUtilisateur}>
-                            <td>{utilisateur.idUtilisateur}</td>
-                            <td>{utilisateur.fullName}</td>
-                            <td>{utilisateur.email}</td>
-                            <td>{utilisateur.telFix}</td>
-                            <td>{utilisateur.telMobile}</td>
-                            <td>{utilisateur.idSpecialite}</td>
-                            <td>{utilisateur.roleUtilisateur}</td>
-                            <td>{utilisateur.etatUtilisateur}</td>
-                            <td>{utilisateur.createdAt}</td>
-                            <td>{utilisateur.lastLogin}</td>
-                            <td>
+                            <td >{utilisateur.idUtilisateur}</td>
+                            <td >{utilisateur.fullName}</td>
+                            <td >{utilisateur.email}</td>
+                            <td >{utilisateur.telFix}</td>
+                            <td >{utilisateur.telMobile}</td>
+                            <td >{utilisateur.idSpecialite}</td>
+                            <td >{utilisateur.roleUtilisateur}</td>
+                            <td >{utilisateur.etatUtilisateur}</td>
+                            <td >{utilisateur.createdAt}</td>
+                            <td >{utilisateur.lastLogin}</td>
+                            <td >
                                 <Button variant="warning" className="mr-2" onClick={() => handleEditButtonClick(utilisateur)}>Modifier</Button>
+                            </td>
+                            <td text-align="center">
                                 <Button variant="danger" onClick={() => handleDelete(utilisateur.idUtilisateur)}>Supprimer</Button>
                             </td>
                         </tr>
@@ -235,7 +237,7 @@ const Utilisateurs = () => {
 
 
 
-                        
+
                         <Form.Group controlId="formTelFixe">
                             <Form.Label>Tel Fixe</Form.Label>
                             <Form.Control
@@ -266,7 +268,7 @@ const Utilisateurs = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        
+
 
 
 
