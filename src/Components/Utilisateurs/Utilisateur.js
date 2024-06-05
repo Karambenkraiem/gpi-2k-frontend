@@ -62,7 +62,7 @@ const Utilisateurs = () => {
 
     const handleEditUser = async () => {
         try {
-            await axios.put(`http://localhost:3000/utilisateur/${currentUser.idUtilisateur}`, currentUser);
+            await axios.patch(`http://localhost:3000/utilisateur/${currentUser.idUtilisateur}`, currentUser);
             setUsers(users.map(utilisateur => utilisateur.idUtilisateur === currentUser.idUtilisateur ? currentUser : utilisateur));
             handleClose();
         } catch (error) {
