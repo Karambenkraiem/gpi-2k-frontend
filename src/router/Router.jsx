@@ -4,10 +4,10 @@ import Main from "../apps/Main";
 import Auth from "../apps/Auth";
 import Login from "../pages/Login";
 import ForgetPassword from "../pages/ForgetPassword";
-import Accueil from "../Components/Accueil/Accueil";
-import Utilisateurs from "../Components/Utilisateurs/Utilisateurs";
-import Utilisateur from "../Components/Utilisateurs/Utilisateur";
-import Materiel from "../Components/Materiels/Materiel";
+import Accueil from '../pages/Accueil'
+import Utilisateurs from '../pages/Utilisateurs/Utilisateurs';
+import Utilisateur from "../pages/Utilisateurs/Utilisateur";
+import Materiel from "../pages/Materiel";
 
 export default function Router() {
   const user = true;

@@ -16,12 +16,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
+
 import { Link, Outlet } from "react-router-dom";
-import { Nav, NavLink } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
+import { PeopleOutline, StorageOutlined } from "@mui/icons-material";
+import Utilisateur from "../pages/Utilisateurs/Utilisateur";
+import Utilisateurs from "../pages/Utilisateurs/Utilisateurs";
 
 const drawerWidth = 240;
 
@@ -119,7 +119,7 @@ export default function Main() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            GPI-2K-IsetRades-TECI
           </Typography>
         </Toolbar>
       </AppBar>
@@ -136,9 +136,9 @@ export default function Main() {
         <Divider />
         <List>
           {[
-            { label: "Utilisateurs", path: "/utilisateurs",icon:<AccessTimeFilledIcon/>  },
-            { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
-            { label: "Materiels", path: "/materiel",icon:<InboxIcon /> },
+            { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
+            // { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
+            { label: "Materiels", path: "/materiel", icon: <StorageOutlined /> },
           ].map((elem, index) => (
             <Nav.Link as={Link} to={elem.path}>
               <ListItem
@@ -172,7 +172,7 @@ export default function Main() {
           ))}
         </List>
         <Divider />
-        <List>
+        {/* <List>
           {["All mail", "Trash", "Spam"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -195,7 +195,7 @@ export default function Main() {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
