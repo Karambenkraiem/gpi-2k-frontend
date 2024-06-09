@@ -35,12 +35,13 @@ const Utilisateurs = () => {
     password: '',
     fullName: '',
     email: '',
+    idSpecialite: '',
     roleUtilisateur: '',
     etatUtilisateur: '',
     telFix: '',
     telMobile: '',
-    idSpecialite: '',
   });
+  const [errors, setErrors] = useState ({});
 
   useEffect (() => {
     axios
@@ -50,9 +51,29 @@ const Utilisateurs = () => {
         setLoading (false);
       })
       .catch (error => {
-        console.error ('There was an error fetching the data!', error);
+        console.error ('Error Fetching Data', error);
       });
   }, []);
+
+  const validate = (name, value) => {
+    let errorMsg = '';
+    if (name === 'idUtilisateur' && !value) {
+      errorMsg = 'Matricule est obligatoire !!!';
+    } else if (name === 'fullName' && !value) {
+      errorMsg = 'Nom & Prénom est obligatoire';
+    } else if (name === 'password' && !value) {
+      errorMsg = 'Mot de Passe est obligatoire';
+    } else if (name === 'email' && (!value || !/\S+@\S+\.\S+/.test (value))) {
+      errorMsg = "Email n'est pas valide";
+    } else if (name === 'idSpecialite' && !value) {
+      errorMsg = 'Specialité est obligatoire';
+    } else if (name === 'roleUtilisateur' && !value) {
+      errorMsg = 'Role est obligatoire';
+    } else if (name === 'etatUtilisateur' && !value) {
+      errorMsg = 'Etat est obligatoire';
+    }
+    setErrors (prevErrors => ({...prevErrors, [name]: errorMsg}));
+  };
 
   const handleOpen = (user = null) => {
     if (user) {
@@ -64,11 +85,11 @@ const Utilisateurs = () => {
         password: '',
         fullName: '',
         email: '',
+        idSpecialite: '',
         roleUtilisateur: '',
         etatUtilisateur: '',
         telFix: '',
         telMobile: '',
-        idSpecialite: '',
       });
       setIsEditing (false);
     }
@@ -80,8 +101,16 @@ const Utilisateurs = () => {
   const handleSave = () => {
     const userToSave = {
       ...currentUser,
-      idUtilisateur: parseInt (currentUser.idUtilisateur, 10), // Convert idUtilisateur to integer
+      idUtilisateur: parseInt (currentUser.idUtilisateur, 10),
     };
+
+    const hasErrors = Object.values (errors).some (errorMsg => errorMsg);
+    if (hasErrors) {
+      console.error (
+        'Il y  a des champs obligatoire veuillez les remplir SVP !!!'
+      );
+      return;
+    }
 
     if (isEditing) {
       axios
@@ -101,7 +130,7 @@ const Utilisateurs = () => {
           handleClose ();
         })
         .catch (error => {
-          console.error ('There was an error updating the user!', error);
+          console.error ('Problème modification Utilisateur', error);
         });
     } else {
       axios
@@ -111,7 +140,7 @@ const Utilisateurs = () => {
           handleClose ();
         })
         .catch (error => {
-          console.error ('There was an error adding the user!', error);
+          console.error ('Erreur ajout de utilisateur', error);
         });
     }
   };
@@ -123,12 +152,14 @@ const Utilisateurs = () => {
         setUsers (users.filter (user => user.idUtilisateur !== id));
       })
       .catch (error => {
-        console.error ('There was an error deleting the user!', error);
+        console.error ('Erreur Suppression de utilisateur....', error);
       });
   };
 
   const handleChange = e => {
-    setCurrentUser ({...currentUser, [e.target.name]: e.target.value});
+    const {name, value} = e.target;
+    setCurrentUser ({...currentUser, [name]: value});
+    validate (name, value);
   };
 
   const columns = [
@@ -161,7 +192,7 @@ const Utilisateurs = () => {
   return (
     <Box sx={{height: 400, width: '100%'}}>
       <Button variant="contained" color="primary" onClick={() => handleOpen ()}>
-        Ajouter Utilisateur
+        + Ajouter Utilisateur
       </Button>
       <DataGrid
         rows={users}
@@ -184,35 +215,41 @@ const Utilisateurs = () => {
           <h2>{isEditing ? 'Edit User' : 'Add User'}</h2>
           <TextField
             label="Matricule"
-            name="Matricule"
+            name="idUtilisateur"
             required
             value={currentUser.idUtilisateur}
             type="number"
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.idUtilisateur}
+            helperText={errors.idUtilisateur}
           />
           <TextField
             label="Nom & Prénom"
             required
-            name="Nom & Prénom"
+            name="fullName"
             value={currentUser.fullName}
             onChange={handleChange}
             fullWidth
             margin="normal"
             type="text"
+            error={!!errors.fullName}
+            helperText={errors.fullName}
           />
           <TextField
             label="Mot de Passe"
             required
-            name="Mot de Passe"
+            name="password"
             type="password"
             value={currentUser.password}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.password}
+            helperText={errors.password}
           />
-          
+
           <TextField
             label="Email"
             name="email"
@@ -222,15 +259,19 @@ const Utilisateurs = () => {
             fullWidth
             margin="normal"
             type="email"
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
-            label="Specialite"
+            label="Specialité"
             required
             name="idSpecialite"
             value={currentUser.idSpecialite}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.idSpecialite}
+            helperText={errors.idSpecialite}
           />
           <TextField
             label="Role"
@@ -240,6 +281,8 @@ const Utilisateurs = () => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.roleUtilisateur}
+            helperText={errors.roleUtilisateur}
           />
           <TextField
             label="Etat"
@@ -249,6 +292,8 @@ const Utilisateurs = () => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.etatUtilisateur}
+            helperText={errors.etatUtilisateur}
           />
           <TextField
             label="Telephone Fixe"
@@ -268,10 +313,11 @@ const Utilisateurs = () => {
             margin="normal"
             type="tel"
           />
-          
-          <Button onClick={handleSave}>
-            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}{isEditing ? '_ Enregistrer' : '_ Ajouter'}
-            
+
+          <Button variant="contained" color="primary" fullWidth sx={{mt:2}} onClick={handleSave}>
+            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+            {isEditing ? '_ Enregistrer' : '_ Ajouter'}
+
           </Button>
         </Box>
       </Modal>
