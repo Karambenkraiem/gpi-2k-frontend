@@ -12,5 +12,9 @@ export default function Utilisateur() {
       setUser(res.data);
     });
   }, [user]); // exucution automatique des instructions (did mount) (will update)
-  return <div>{user?.fullName}</div>;
+  return(
+     <div>
+      {user?.fullName}
+     </div>
+    );
 }
