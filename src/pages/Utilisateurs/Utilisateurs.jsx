@@ -86,6 +86,7 @@ const Utilisateurs = () => {
     setOpen (true);
   };
 
+
   const handleClose = () => setOpen (false);
 
   const handleSave = () => {
@@ -176,10 +177,12 @@ const Utilisateurs = () => {
           </Button>
           
           
-          <Button><VscActivateBreakpoints /></Button>
+          <Button><VscActivateBreakpoints/></Button>
           
           
-          <Button onClick={()=>handleView(params.row.idUtilisateur)}> <TbEyeSearch /></Button>
+          <Button onClick={()=>handleView(params.row.idUtilisateur)}>
+            <TbEyeSearch />
+          </Button>
           <Button onClick={() => handleDelete (params.row.idUtilisateur)}>
             <RiDeleteBin6Line />
           </Button>
