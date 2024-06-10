@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "jsx": "react-jsx",
+        "baseUrl": "src",
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src"
+, "jsconfig.json"    ],
+    "exclude": [
+        "node_modules",
+        "build"
+    ]
+}

@@ -12,30 +12,7 @@ import {TbEyeSearch} from 'react-icons/tb';
 import {FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-const RoleUtilisateur = {
-  DIRECTEUR: 'Directeur',
-  ADMINISTRATEUR: 'Administrateur',
-  TECHNICIEN: 'Technicien',
-  EMPLOYE: 'Employé',
-  RMQ: 'RMQ'
-};
-const EtatUtilisateur = {
-  actif: 'Actif',
-  desactif: 'Désactivé'
-};
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  maxHeight: '90vh', // Allows the modal to scroll if content overflows
-  overflowY: 'auto',
-};
+import UtilisateurModal from '../../components/UtilisateurModal'
 
 const Utilisateurs = () => {
   const [users, setUsers] = useState ([]);
@@ -217,6 +194,17 @@ const Utilisateurs = () => {
       <Button variant="contained" color="primary" onClick={() => handleOpen ()}>
         + Ajouter Utilisateur
       </Button>
+
+      <UtilisateurModal
+        open={open}
+        handleClose={() => setOpen(false)}
+        isEditing={isEditing}
+        currentUser={currentUser}
+        handleChange={handleChange}
+        handleSave={handleSave}
+        errors={errors}
+      />
+
       <DataGrid
         rows={users}
         columns={columns}
@@ -233,116 +221,6 @@ const Utilisateurs = () => {
         checkboxSelection
         disableRowSelectionOnClick
       />
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <h2>{isEditing ? 'Edit User' : 'Add User'}</h2>
-          <TextField
-            label="Matricule"
-            name="idUtilisateur"
-            required
-            value={currentUser.idUtilisateur}
-            type="number"
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            error={!!errors.idUtilisateur}
-            helperText={errors.idUtilisateur}
-          />
-          <TextField
-            label="Nom & Prénom"
-            required
-            name="fullName"
-            value={currentUser.fullName}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type="text"
-            error={!!errors.fullName}
-            helperText={errors.fullName}
-          />
-          <TextField
-            label="Mot de Passe"
-            required
-            name="password"
-            type="password"
-            value={currentUser.password}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            error={!!errors.password}
-            helperText={errors.password}
-          />
-
-          <TextField
-            label="Email"
-            name="email"
-            required
-            value={currentUser.email}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type="email"
-            error={!!errors.email}
-            helperText={errors.email}
-          />
-          <TextField
-            label="Specialité"
-            
-            name="idSpecialite"
-            value={currentUser.idSpecialite}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            
-          />
-          <TextField
-            label="Role"
-            name="roleUtilisateur"
-            required
-            value={currentUser.roleUtilisateur}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            error={!!errors.roleUtilisateur}
-            helperText={errors.roleUtilisateur}
-          />
-          <TextField
-            label="Etat"
-            required
-            name="etatUtilisateur"
-            value={currentUser.etatUtilisateur}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            error={!!errors.etatUtilisateur}
-            helperText={errors.etatUtilisateur}
-          />
-          <TextField
-            label="Telephone Fixe"
-            name="telFix"
-            value={currentUser.telFix}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type="tel"
-          />
-          <TextField
-            label="Telephone Mobile"
-            name="telMobile"
-            value={currentUser.telMobile}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type="tel"
-          />
-
-          <Button variant="contained" color="primary" fullWidth sx={{mt:2}} onClick={handleSave}>
-            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-            {isEditing ? '_ Enregistrer' : '_ Ajouter'}
-
-          </Button>
-        </Box>
-      </Modal>
     </Box>
   );
 };
