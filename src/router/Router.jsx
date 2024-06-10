@@ -9,6 +9,7 @@ import Utilisateurs from '../pages/Utilisateurs/Utilisateurs';
 import Utilisateur from "../pages/Utilisateurs/Utilisateur";
 import Materiel from "../pages/Materiel";
 
+
 export default function Router() {
   const user = true;
   return (
@@ -18,7 +19,7 @@ export default function Router() {
           <Route element={<Main />} path="/">
             <Route index element={<Accueil />} />
             <Route path="/utilisateurs" element={<Utilisateurs />} />
-            <Route path="/utilisateurs/:id" element={<Utilisateur />} />
+            <Route path="/utilisateur/:idUtilisateur" element={<Utilisateur />} />
             <Route path="/materiel" element={<Materiel />} />
           </Route>
           <Route path="*" element={<div>404</div>} />

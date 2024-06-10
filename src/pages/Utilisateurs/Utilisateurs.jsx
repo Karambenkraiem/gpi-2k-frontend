@@ -11,6 +11,8 @@ import {VscActivateBreakpoints} from 'react-icons/vsc';
 import {TbEyeSearch} from 'react-icons/tb';
 import {FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+
 
 const style = {
   position: 'absolute',
@@ -42,6 +44,7 @@ const Utilisateurs = () => {
     telMobile: '',
   });
   const [errors, setErrors] = useState ({});
+  const Navigate = useNavigate();
 
   useEffect (() => {
     axios
@@ -161,6 +164,12 @@ const Utilisateurs = () => {
     setCurrentUser ({...currentUser, [name]: value});
     validate (name, value);
   };
+  
+  
+  
+  const handleView = id =>{
+    Navigate(`/utilisateur/${id}`);
+  };
 
   const columns = [
     {field: 'idUtilisateur', headerName: 'Matricule', width: 90},
@@ -178,8 +187,12 @@ const Utilisateurs = () => {
           <Button onClick={() => handleOpen (params.row)}>
             <LuClipboardEdit />
           </Button>
+          
+          
           <Button><VscActivateBreakpoints /></Button>
-          <Button> <TbEyeSearch /></Button>
+          
+          
+          <Button onClick={()=>handleView(params.row.idUtilisateur)}> <TbEyeSearch /></Button>
           <Button onClick={() => handleDelete (params.row.idUtilisateur)}>
             <RiDeleteBin6Line />
           </Button>
