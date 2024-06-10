@@ -12,7 +12,17 @@ import {TbEyeSearch} from 'react-icons/tb';
 import {FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-
+const RoleUtilisateur = {
+  DIRECTEUR: 'Directeur',
+  ADMINISTRATEUR: 'Administrateur',
+  TECHNICIEN: 'Technicien',
+  EMPLOYE: 'Employé',
+  RMQ: 'RMQ'
+};
+const EtatUtilisateur = {
+  actif: 'Actif',
+  desactif: 'Désactivé'
+};
 
 const style = {
   position: 'absolute',
@@ -277,14 +287,13 @@ const Utilisateurs = () => {
           />
           <TextField
             label="Specialité"
-            required
+            
             name="idSpecialite"
             value={currentUser.idSpecialite}
             onChange={handleChange}
             fullWidth
             margin="normal"
-            error={!!errors.idSpecialite}
-            helperText={errors.idSpecialite}
+            
           />
           <TextField
             label="Role"
