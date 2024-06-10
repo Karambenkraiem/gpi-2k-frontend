@@ -16,12 +16,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { Link as RouterLink } from 'react-router-dom';
+
 
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { PeopleOutline, StorageOutlined } from "@mui/icons-material";
-import Utilisateur from "../pages/Utilisateurs/Utilisateur";
-import Utilisateurs from "../pages/Utilisateurs/Utilisateurs";
+import { HomeOutlined, PeopleOutline, StorageOutlined } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -119,7 +119,10 @@ export default function Main() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
+          <Link component={RouterLink} to="/" underline="none" style={{ color: 'hsl(240, 100%, 50%)' }}>
+
             GPI-2K-IsetRades-TECI
+            </Link>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -136,6 +139,7 @@ export default function Main() {
         <Divider />
         <List>
           {[
+            { label: "Accueil", path: "/", icon: <HomeOutlined /> },
             { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
             // { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
             { label: "Materiels", path: "/materiel", icon: <StorageOutlined /> },
