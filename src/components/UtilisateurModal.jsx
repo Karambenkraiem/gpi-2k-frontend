@@ -46,7 +46,7 @@ const UtilisateurModal = ({
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
-        <h2>{isEditing ? "Edit User" : "Add User"}</h2>
+        <h2>{isEditing ? "Modifier Utilisateur" : "Ajouter Utilisateur"}</h2>
 
         <TextField
           label="Matricule"
