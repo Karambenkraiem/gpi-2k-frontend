@@ -3,16 +3,12 @@ import Box from '@mui/material/Box';
 import {DataGrid} from '@mui/x-data-grid';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
 import {LuClipboardEdit} from 'react-icons/lu';
 import {RiDeleteBin6Line} from 'react-icons/ri';
 import {VscActivateBreakpoints} from 'react-icons/vsc';
 import {TbEyeSearch} from 'react-icons/tb';
-import {FaRegSave} from 'react-icons/fa';
-import {IoPersonAddOutline} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import UtilisateurModal from '../../components/UtilisateurModal'
+import UtilisateurModal from '../../components/UtilisateurModal';
 
 const Utilisateurs = () => {
   const [users, setUsers] = useState ([]);
@@ -86,7 +82,6 @@ const Utilisateurs = () => {
     setOpen (true);
   };
 
-
   const handleClose = () => setOpen (false);
 
   const handleSave = () => {
@@ -94,7 +89,6 @@ const Utilisateurs = () => {
       ...currentUser,
       idUtilisateur: parseInt (currentUser.idUtilisateur, 10),
     };
-
     const hasErrors = Object.values (errors).some (errorMsg => errorMsg);
     if (hasErrors) {
       console.error (
@@ -153,8 +147,25 @@ const Utilisateurs = () => {
     validate (name, value);
   };
   
-  
-  
+  const toggleStatus = (userId) => {
+    const user = users.find(u => u.idUtilisateur === userId);
+    if (!user) {
+      console.error('Données Introuvable !!!');
+      return;
+    }  
+    const updatedUser = {
+      ...user,
+      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'desactif' : 'actif',
+    };  
+    axios
+      .patch(`http://localhost:3000/utilisateur/${userId}`, updatedUser)
+      .then((response) => {
+        setUsers(users.map(u => (u.idUtilisateur === userId ? response.data : u)));
+      })
+      .catch((error) => {
+        console.error('Erreur Mise à jours etat utilisateur !!! ', error);
+      });
+  };
   const handleView = id =>{
     Navigate(`/utilisateur/${id}`);
   };
@@ -175,18 +186,13 @@ const Utilisateurs = () => {
           <Button onClick={() => handleOpen (params.row)}>
             <LuClipboardEdit />
           </Button>
-          
-          
-          <Button><VscActivateBreakpoints/></Button>
-          
-          
+          <Button onClick={() => toggleStatus(params.row.idUtilisateur)}><VscActivateBreakpoints /></Button>
           <Button onClick={()=>handleView(params.row.idUtilisateur)}>
             <TbEyeSearch />
           </Button>
           <Button onClick={() => handleDelete (params.row.idUtilisateur)}>
             <RiDeleteBin6Line />
           </Button>
-
         </div>
       ),
     },
@@ -197,7 +203,6 @@ const Utilisateurs = () => {
       <Button variant="contained" color="primary" onClick={() => handleOpen ()}>
         + Ajouter Utilisateur
       </Button>
-
       <UtilisateurModal
         open={open}
         handleClose={() => setOpen(false)}
@@ -207,7 +212,6 @@ const Utilisateurs = () => {
         handleSave={handleSave}
         errors={errors}
       />
-
       <DataGrid
         rows={users}
         columns={columns}
