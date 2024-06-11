@@ -7,7 +7,7 @@ import {LuClipboardEdit} from 'react-icons/lu';
 import {RiDeleteBin6Line} from 'react-icons/ri';
 import {VscActivateBreakpoints} from 'react-icons/vsc';
 import {TbEyeSearch} from 'react-icons/tb';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import UtilisateurModal from '../../components/UtilisateurModal';
 
 const Utilisateurs = () => {
@@ -27,7 +27,7 @@ const Utilisateurs = () => {
     telMobile: '',
   });
   const [errors, setErrors] = useState ({});
-  const Navigate = useNavigate();
+  const Navigate = useNavigate ();
 
   useEffect (() => {
     axios
@@ -98,6 +98,8 @@ const Utilisateurs = () => {
     }
 
     if (isEditing) {
+      // const {Specialite,...rest}=userToSave;
+      delete userToSave.Specialite;
       axios
         .patch (
           `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
@@ -146,28 +148,30 @@ const Utilisateurs = () => {
     setCurrentUser ({...currentUser, [name]: value});
     validate (name, value);
   };
-  
-  const toggleStatus = (userId) => {
-    const user = users.find(u => u.idUtilisateur === userId);
+
+  const toggleStatus = userId => {
+    const user = users.find (u => u.idUtilisateur === userId);
     if (!user) {
-      console.error('Données Introuvable !!!');
+      console.error ('Données Introuvable !!!');
       return;
-    }  
+    }
     const updatedUser = {
       ...user,
       etatUtilisateur: user.etatUtilisateur === 'actif' ? 'desactif' : 'actif',
-    };  
+    };
     axios
-      .patch(`http://localhost:3000/utilisateur/${userId}`, updatedUser)
-      .then((response) => {
-        setUsers(users.map(u => (u.idUtilisateur === userId ? response.data : u)));
+      .patch (`http://localhost:3000/utilisateur/${userId}`, updatedUser)
+      .then (response => {
+        setUsers (
+          users.map (u => (u.idUtilisateur === userId ? response.data : u))
+        );
       })
-      .catch((error) => {
-        console.error('Erreur Mise à jours etat utilisateur !!! ', error);
+      .catch (error => {
+        console.error ('Erreur Mise à jours etat utilisateur !!! ', error);
       });
   };
-  const handleView = id =>{
-    Navigate(`/utilisateur/${id}`);
+  const handleView = id => {
+    Navigate (`/utilisateur/${id}`);
   };
 
   const columns = [
@@ -186,8 +190,10 @@ const Utilisateurs = () => {
           <Button onClick={() => handleOpen (params.row)}>
             <LuClipboardEdit />
           </Button>
-          <Button onClick={() => toggleStatus(params.row.idUtilisateur)}><VscActivateBreakpoints /></Button>
-          <Button onClick={()=>handleView(params.row.idUtilisateur)}>
+          <Button onClick={() => toggleStatus (params.row.idUtilisateur)}>
+            <VscActivateBreakpoints />
+          </Button>
+          <Button onClick={() => handleView (params.row.idUtilisateur)}>
             <TbEyeSearch />
           </Button>
           <Button onClick={() => handleDelete (params.row.idUtilisateur)}>
@@ -205,7 +211,7 @@ const Utilisateurs = () => {
       </Button>
       <UtilisateurModal
         open={open}
-        handleClose={() => setOpen(false)}
+        handleClose={() => setOpen (false)}
         isEditing={isEditing}
         currentUser={currentUser}
         handleChange={handleChange}

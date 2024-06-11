@@ -161,8 +161,8 @@ const Utilisateur = () => {
                 <h4 className="my-3">{user.fullName}</h4>
                 <h5 className="my-3">Matricule: {user.idUtilisateur}</h5>
                 <p className="text-muted mb-1">Email: {user.email}</p>
-                <p className="text-muted mb-1">Specialilté: {user.idSpecialite}</p>
-                <p className="text-muted mb-1">Departement: {user.idDepartement}</p>
+                <p className="text-muted mb-1">Specialilté: {user?.Specialite.nom}</p>
+                <p className="text-muted mb-1">Departement: {user?.Specialite.Departement?.nom}</p>
                 <p className="text-muted mb-1">Role: {user.roleUtilisateur}</p>
                 <p className="text-muted mb-1">Etat: {user.etatUtilisateur}</p>
                 <p className="text-muted mb-0">Tel Fix: {user.telFix}</p>
