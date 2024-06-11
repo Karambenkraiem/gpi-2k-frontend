@@ -21,17 +21,17 @@ const style = {
 };
 
 const RoleUtilisateur = {
-  DIRECTEUR: "Directeur",
-  ADMINISTRATEUR: "Administrateur",
-  TECHNICIEN: "Technicien",
-  EMPLOYE: "Employé",
+  DIRECTEUR: "DIRECTEUR",
+  ADMINISTRATEUR: "ADMINISTRATEUR",
+  TECHNICIEN: "TECHNICIEN",
+  EMPLOYE: "EMPLOYE",
   RMQ: "RMQ",
 };
 
 const EtatUtilisateur = {
-  actif: "Actif",
-  desactif: "Inactif",
-  suspendu: "Suspendu",
+  actif: "actif",
+  desactif: "desactif",
+  // suspendu: "Suspendu",
 };
 
 const UtilisateurModal = ({
