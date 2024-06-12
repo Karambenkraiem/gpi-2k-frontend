@@ -1,196 +1,170 @@
-import React, {useState, useEffect} from 'react';
-import Box from '@mui/material/Box';
-import {DataGrid} from '@mui/x-data-grid';
-import axios from 'axios';
-import Button from '@mui/material/Button';
-import {LuClipboardEdit} from 'react-icons/lu';
-import {RiDeleteBin6Line} from 'react-icons/ri';
-import {VscActivateBreakpoints} from 'react-icons/vsc';
-import {TbEyeSearch} from 'react-icons/tb';
-import {useNavigate} from 'react-router-dom';
-
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
+import Button from "@mui/material/Button";
+import { LuClipboardEdit } from "react-icons/lu";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { VscActivateBreakpoints } from "react-icons/vsc";
+import { TbEyeSearch } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import { TextField } from "@mui/material";
+import { FaRegSave } from "react-icons/fa";
+import { IoPersonAddOutline } from "react-icons/io5";
 
 const Spécialité = () => {
-  const [Spécialité, setSpécialité] = useState ([]);
-  const [loading, setLoading] = useState (true);
-  const [open, setOpen] = useState (false);
-  const [isEditing, setIsEditing] = useState (false);
-  const [currentSpécialité, setCurrentSpécialité] = useState ({
-    idSpécialité: '',
-    nom: '',
-    idDepartement: '',
+  const [errors, setErrors] = useState({});
+  const Navigate = useNavigate();
+  const [specialites, setSpecialites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const handleClose = () => setOpen(false);
+  const [currentSpecialite, setCurrentSpecialite] = useState({
+    idSpecialite: "",
+    nom: "",
+    idDepartement: "",
   });
-  const [errors, setErrors] = useState ({});
-  const Navigate = useNavigate ();
 
-  useEffect (() => {
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    maxHeight: '90vh', // Allows the modal to scroll if content overflows
+    overflowY: 'auto',
+  };
+
+  useEffect(() => {
     axios
-      .get ('http://localhost:3000/utilisateur')
-      .then (response => {
-        setSpécialité (response.data);
-        setLoading (false);
+      .get("http://localhost:3000/specialite")
+      .then((response) => {
+        setSpecialites(response.data);
+        setLoading(false);
       })
-      .catch (error => {
-        console.error ('Error Fetching Data', error);
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
       });
   }, []);
 
   const validate = (name, value) => {
-    let errorMsg = '';
-    if (name === 'idUtilisateur' && !value) {
-      errorMsg = 'Matricule est obligatoire !!!';
-    } else if (name === 'fullName' && !value) {
-      errorMsg = 'Nom & Prénom est obligatoire';
-    } else if (name === 'password' && !value) {
-      errorMsg = 'Mot de Passe est obligatoire';
-    } else if (name === 'email' && (!value || !/\S+@\S+\.\S+/.test (value))) {
-      errorMsg = "Email n'est pas valide";
-    } else if (name === 'idSpecialite' && !value) {
-      errorMsg = 'Specialité est obligatoire';
-    } else if (name === 'roleUtilisateur' && !value) {
-      errorMsg = 'Role est obligatoire';
-    } else if (name === 'etatUtilisateur' && !value) {
-      errorMsg = 'Etat est obligatoire';
+    let errorMsg = "";
+    if (name === "idSpecialite" && !value) {
+      errorMsg = "L'identifiant de la spécialité est obligatoire!";
+    } else if (name === "nom" && !value) {
+      errorMsg = "Nom de la spécialité est obligatoire";
+    } else if (name === "département" && !value) {
+      errorMsg = "Le département est obligatoire";
     }
-    setErrors (prevErrors => ({...prevErrors, [name]: errorMsg}));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
 
-  const handleOpen = (user = null) => {
-    if (user) {
-      setCurrentUser (user);
-      setIsEditing (true);
+  const handleOpen = (specialite = null) => {
+    if (specialite) {
+      setCurrentSpecialite(specialite);
+      setIsEditing(true);
     } else {
-      setCurrentUser ({
-        idUtilisateur: '',
-        password: '',
-        fullName: '',
-        email: '',
-        idSpecialite: '',
-        roleUtilisateur: '',
-        etatUtilisateur: '',
-        telFix: '',
-        telMobile: '',
+      setCurrentSpecialite({
+        idSpecialite: "",
+        nom: "",
+        idDepartement: "",
       });
-      setIsEditing (false);
+      setIsEditing(false);
     }
-    setOpen (true);
+    setOpen(true);
   };
-
-  const handleClose = () => setOpen (false);
 
   const handleSave = () => {
-    const userToSave = {
-      ...currentUser,
-      idUtilisateur: parseInt (currentUser.idUtilisateur, 10),
+    const specialiteToSave = {
+      ...currentSpecialite,
+      idUtilisateur: parseInt(currentSpecialite.idSpecialite, 10),
     };
-    const hasErrors = Object.values (errors).some (errorMsg => errorMsg);
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
-      console.error (
-        'Il y  a des champs obligatoire veuillez les remplir SVP !!!'
+      console.error(
+        "Veuillez remplir tous les champs obligatoires!"
       );
       return;
     }
 
     if (isEditing) {
-      const {Specialite,...rest}=userToSave;
+      const { Departement,...rest } = specialiteToSave;
       //delete userToSave.Specialite;
       axios
-        .patch (
-          `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
+        .patch(
+          `http://localhost:3000/specialite/${specialiteToSave.idSpecialite}`,
           rest
         )
-        .then (response => {
-          setUsers (
-            users.map (
-              user =>
-                user.idUtilisateur === userToSave.idUtilisateur
-                  ? response.data
-                  : user
+        .then((response) => {
+          setSpecialites(
+            specialites.map((specialite) =>
+              specialite.idSpecialite === specialiteToSave.idSpecialite
+                ? response.data
+                : specialite
             )
           );
-          handleClose ();
+          handleClose();
         })
-        .catch (error => {
-          console.error ('Problème modification Utilisateur', error);
+        .catch((error) => {
+          console.error("Problème modification de la spécialité", error);
         });
     } else {
       axios
-        .post ('http://localhost:3000/utilisateur', userToSave)
-        .then (response => {
-          setUsers ([...users, response.data]);
-          handleClose ();
+        .post("http://localhost:3000/specialite", specialiteToSave)
+        .then((response) => {
+          setSpecialites([...specialites, response.data]);
+          handleClose();
         })
-        .catch (error => {
-          console.error ('Erreur ajout de utilisateur', error);
+        .catch((error) => {
+          console.error("Erreur ajout de la spécialité", error);
         });
     }
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     axios
-      .delete (`http://localhost:3000/utilisateur/${id}`)
-      .then (response => {
-        setUsers (users.filter (user => user.idUtilisateur !== id));
-      })
-      .catch (error => {
-        console.error ('Erreur Suppression de utilisateur....', error);
-      });
-  };
-
-  const handleChange = e => {
-    const {name, value} = e.target;
-    setCurrentUser ({...currentUser, [name]: value});
-    validate (name, value);
-  };
-
-  const toggleStatus = userId => {
-    const user = users.find (u => u.idUtilisateur === userId);
-    if (!user) {
-      console.error ('Données Introuvable !!!');
-      return;
-    }
-    const updatedUser = {
-      ...user,
-      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'desactif' : 'actif',
-    };
-    axios
-      .patch (`http://localhost:3000/utilisateur/${userId}`, updatedUser)
-      .then (response => {
-        setUsers (
-          users.map (u => (u.idUtilisateur === userId ? response.data : u))
+      .delete(`http://localhost:3000/specialite/${id}`)
+      .then((response) => {
+        setSpecialites(specialites.filter((specialite) => specialite.idSpecialite !== id)
         );
       })
-      .catch (error => {
-        console.error ('Erreur Mise à jours etat utilisateur !!! ', error);
+      .catch((error) => {
+        console.error("Erreur Suppression de la spécialité....", error);
       });
   };
-  const handleView = id => {
-    Navigate (`/utilisateur/${id}`);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentSpecialite({ ...currentSpecialite, [name]: value });
+    validate(name, value);
+  };
+
+  const handleView = (id) => {
+    Navigate(`/specialite/${id}`);
   };
 
   const columns = [
-    {field: 'idUtilisateur', headerName: 'Matricule', width: 90},
-    {field: 'fullName', headerName: 'Nom & Prénom', width: 150},
-    {field: 'roleUtilisateur', headerName: 'Role', width: 150},
-    {field: 'etatUtilisateur', headerName: 'Etat', width: 150},
-    {field: 'idSpecialite', headerName: 'Spécialité', width: 150},
-    // { field: 'departement', headerName: 'Departement', width: 150, editable: true },
+    { field: "idSpecialite", headerName: "#ID", width: 90 },
+    { field: "nom", headerName: "Designation", width: 150 },
+    { field: "idDepartement", headerName: "Département", width: 150 },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      headerName: "Actions",
       width: 250,
-      renderCell: params => (
+      renderCell: (params) => (
         <div>
-          <Button onClick={() => handleOpen (params.row)}>
+          <Button onClick={() => handleOpen(params.row)}>
             <LuClipboardEdit />
           </Button>
-          <Button onClick={() => toggleStatus (params.row.idUtilisateur)}>
-            <VscActivateBreakpoints />
-          </Button>
-          <Button onClick={() => handleView (params.row.idUtilisateur)}>
+          <Button onClick={() => handleView(params.row.idSpecialite)}>
             <TbEyeSearch />
           </Button>
-          <Button onClick={() => handleDelete (params.row.idUtilisateur)}>
+          <Button onClick={() => handleDelete(params.row.idSpecialite)}>
             <RiDeleteBin6Line />
           </Button>
         </div>
@@ -199,154 +173,72 @@ const Spécialité = () => {
   ];
 
   return (
-    <Box sx={{height: 400, width: '100%'}}>
-      <Button variant="contained" color="primary" onClick={() => handleOpen ()}>
-        + Ajouter Utilisateur
+    <Box sx={{ height: 400, width: "100%" }}>
+      <Button variant="contained" color="primary" onClick={() => handleOpen()}>
+        + Ajouter Spécialité
       </Button>
       <Modal open={open} onClose={handleClose}>
-      <Box sx={style}>
-        <h2>{isEditing ? 'Modifier Utilisateur' : 'Ajouter Utilisateur'}</h2>
+        {/*<Box sx={Style}>*/}
+        <Box sx={style}>
+          <h2>{isEditing ? "Modifier Utilisateur" : "Ajouter Utilisateur"}</h2>
 
-        <TextField
-          label="Matricule"
-          name="idUtilisateur"
-          required
-          value={currentUser.idUtilisateur}
-          type="number"
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          error={!!errors.idUtilisateur}
-          helperText={errors.idUtilisateur}
-          disabled={isEditing ? true : false}
-        />
+          <TextField
+            label="Identifiant Spécialité"
+            name="idSpecialite"
+            required
+            value={currentSpecialite.idSpecialite}
+            type="text"
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            //   error={!!errors.idSpecialite}
+            //   helperText={errors.idSpecialite}
+            disabled={isEditing ? true : false}
+          />
 
-        <TextField
-          label="Nom & Prénom"
-          required
-          name="fullName"
-          value={currentUser.fullName}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          type="text"
-          error={!!errors.fullName}
-          helperText={errors.fullName}
-        />
+          <TextField
+            label="Nom & Prénom"
+            required
+            name="fullName"
+            value={currentSpecialite.nom}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            type="text"
+            //   error={!!errors.nom}
+            //   helperText={errors.nom}
+          />
 
-        <TextField
-          label="Mot de Passe"
-          required
-          name="password"
-          type="password"
-          value={currentUser.password}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          error={!!errors.password}
-          helperText={errors.password}
-        />
+          <TextField
+            label="Mot de Passe"
+            required
+            name="password"
+            type="password"
+            value={currentSpecialite.idDepartement}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            //   error={!!errors.password}
+            //   helperText={errors.password}
+          />
 
-        <TextField
-          label="Email"
-          name="email"
-          required
-          value={currentUser.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          type="email"
-          error={!!errors.email}
-          helperText={errors.email}
-        />
-
-        <Select
-          label="Specialité"
-          name="idSpecialite"
-          required
-          value={currentUser.idSpecialite}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.idSpecialite}
-          style={{marginTop: '1rem'}}
-        >
-          {specialites.map (elem => (
-            <MenuItem key={elem.idSpecialite} value={elem.idSpecialite}>
-              {elem.nom}
-            </MenuItem>
-          ))}
-        </Select>
-
-        <Select
-          label="Role"
-          name="roleUtilisateur"
-          required
-          value={currentUser.roleUtilisateur}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.roleUtilisateur}
-          style={{marginTop: '1rem'}}
-        >
-          {Object.values (RoleUtilisateur).map (role => (
-            <MenuItem key={role} value={role}>
-              {role}
-            </MenuItem>
-          ))}
-        </Select>
-
-        <Select
-          label="Etat"
-          name="etatUtilisateur"
-          required
-          value={currentUser.etatUtilisateur}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.etatUtilisateur}
-          style={{marginTop: '1rem'}}
-        >
-          {Object.values (EtatUtilisateur).map (etat => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
-            </MenuItem>
-          ))}
-        </Select>
-
-        <TextField
-          label="Telephone Fixe"
-          name="telFix"
-          value={currentUser.telFix}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          type="tel"
-        />
-        <TextField
-          label="Telephone Mobile"
-          name="telMobile"
-          value={currentUser.telMobile}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          type="tel"
-        />
-
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{mt: 2}}
-          onClick={handleSave}
-        >
-          {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-          {isEditing ? '_ Enregistrer' : '_ Ajouter'}
-        </Button>
-      </Box>
-    </Modal>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={handleSave}
+          >
+            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+            {isEditing ? "_ Enregistrer" : "_ Ajouter"}
+          </Button>
+        </Box>
+      </Modal>
       <DataGrid
-        rows={users}
+        rows={specialites}
         columns={columns}
         loading={loading}
-        getRowId={row => row.idUtilisateur}
+        getRowId={(row) => row.idSpecialite}
         initialState={{
           pagination: {
             paginationModel: {

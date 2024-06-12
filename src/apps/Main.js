@@ -142,6 +142,7 @@ export default function Main() {
             { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
             // { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
             { label: "Materiels", path: "/materiel", icon: <StorageOutlined /> },
+            { label: "Spécialités", path: "/specialite", icon: <StorageOutlined /> },
           ].map((elem, index) => (
             <Nav.Link as={Link} to={elem.path}>
               <ListItem
