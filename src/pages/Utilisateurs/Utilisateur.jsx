@@ -97,21 +97,6 @@ const Utilisateur = () => {
       });
   };
 
-  // const toggleStatus = () => {
-  //   const updatedUser = {
-  //     ...user,
-  //     etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
-  //   };
-  //   axios
-  //     .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
-  //     .then((response) => {
-  //       setUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erreur Mise à jours etat utilisateur !!! ", error);
-  //     });
-  // };
-
   const handleModalClose = () => {
     setModalOpen(false);
   };

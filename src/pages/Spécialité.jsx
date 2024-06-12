@@ -27,19 +27,6 @@ const Spécialité = () => {
     idDepartement: "",
   });
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    maxHeight: '90vh', // Allows the modal to scroll if content overflows
-    overflowY: 'auto',
-  };
-
   useEffect(() => {
     axios
       .get("http://localhost:3000/specialite")
@@ -86,14 +73,12 @@ const Spécialité = () => {
     };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
-      console.error(
-        "Veuillez remplir tous les champs obligatoires!"
-      );
+      console.error("Veuillez remplir tous les champs obligatoires!");
       return;
     }
 
     if (isEditing) {
-      const { Departement,...rest } = specialiteToSave;
+      const { Departement, ...rest } = specialiteToSave;
       //delete userToSave.Specialite;
       axios
         .patch(
@@ -130,7 +115,8 @@ const Spécialité = () => {
     axios
       .delete(`http://localhost:3000/specialite/${id}`)
       .then((response) => {
-        setSpecialites(specialites.filter((specialite) => specialite.idSpecialite !== id)
+        setSpecialites(
+          specialites.filter((specialite) => specialite.idSpecialite !== id)
         );
       })
       .catch((error) => {
@@ -144,25 +130,34 @@ const Spécialité = () => {
     validate(name, value);
   };
 
-  const handleView = (id) => {
-    Navigate(`/specialite/${id}`);
-  };
-
   const columns = [
-    { field: "idSpecialite", headerName: "#ID", width: 90 },
-    { field: "nom", headerName: "Designation", width: 150 },
-    { field: "idDepartement", headerName: "Département", width: 150 },
+    {
+      field: "idSpecialite",
+      headerName: "#ID",
+      width: 90,
+      headerAlign: "center",
+    },
+    {
+      field: "nom",
+      headerName: "Designation",
+      width: 300,
+      headerAlign: "center",
+    },
+    {
+      field: "idDepartement",
+      headerName: "Département",
+      width: 150,
+      headerAlign: "center",
+    },
     {
       field: "actions",
       headerName: "Actions",
-      width: 250,
+      headerAlign: "center",
+      width: 150,
       renderCell: (params) => (
         <div>
           <Button onClick={() => handleOpen(params.row)}>
             <LuClipboardEdit />
-          </Button>
-          <Button onClick={() => handleView(params.row.idSpecialite)}>
-            <TbEyeSearch />
           </Button>
           <Button onClick={() => handleDelete(params.row.idSpecialite)}>
             <RiDeleteBin6Line />
@@ -171,15 +166,16 @@ const Spécialité = () => {
       ),
     },
   ];
+  
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: 560, width: "100%" }}>
       <Button variant="contained" color="primary" onClick={() => handleOpen()}>
         + Ajouter Spécialité
       </Button>
       <Modal open={open} onClose={handleClose}>
         {/*<Box sx={Style}>*/}
-        <Box sx={style}>
+        <Box>
           <h2>{isEditing ? "Modifier Spécialité" : "Ajouter Spécialité"}</h2>
 
           <TextField

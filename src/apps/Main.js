@@ -17,6 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
+import { FaComputer } from "react-icons/fa6";
 
 
 import { Link, Outlet } from "react-router-dom";
@@ -141,8 +142,15 @@ export default function Main() {
             { label: "Accueil", path: "/", icon: <HomeOutlined /> },
             { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
             // { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
-            { label: "Materiels", path: "/materiel", icon: <StorageOutlined /> },
-            { label: "Spécialités", path: "/specialite", icon: <StorageOutlined /> },
+            { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+            {
+              label: "Management",
+              icon: <StorageOutlined />,
+              items: [
+                { label: "Spécialités", path: "/specialite", icon: <StorageOutlined /> },
+                { label: "Département", path: "/departement", icon: <StorageOutlined /> },
+              ]
+            }
           ].map((elem, index) => (
             <Nav.Link as={Link} to={elem.path}>
               <ListItem
