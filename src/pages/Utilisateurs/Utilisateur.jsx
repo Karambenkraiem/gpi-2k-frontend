@@ -1,51 +1,3 @@
-// import { CircularProgress, Typography } from "@mui/material";
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-
-// export default function Utilisateur() {
-
-//   const { idUtilisateur } = useParams();
-//   const [user, setUser] = useState(null);
-//  const [state, setState] = useState(); // Removed as it is not used
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     console.log(`Recuperation de donnée de l'utilisateur avec le id: ${idUtilisateur}`);
-//     axios.get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
-//     .then((res) => {
-//       console.log('API response:', res.data);
-
-//       setUser(res.data);
-//       setLoading(false);
-//     })
-//     .catch(error => {
-//       console.error('Error recuperation donnée utilisateur !!!', error);
-//       setLoading(false);
-//     });
-//   }, [idUtilisateur]); // Updated dependencies to include idUtilisateur
-
-//   if (loading) {
-//     return <CircularProgress />;
-//   }
-
-//   if (!user) {
-//     return <Typography variant="h6">User not found.</Typography>;
-//   }
-
-//   return (
-//     <div>{user.fullName}</div>
-//   );
-// }
-
-//-------------------------------------------
-
-//-----------------------------------------------------------------
-
-//
-
-//----------------------***************************-----
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Breadcrumb, Button, Card, Col, Container, Row } from "react-bootstrap";
@@ -127,19 +79,39 @@ const Utilisateur = () => {
   };
 
   const toggleStatus = () => {
+    if (!user) {
+      console.error('Données Introuvable !!!');
+      return;
+    }
     const updatedUser = {
       ...user,
-      etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
+      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'inactif' : 'actif',
     };
     axios
       .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
-      .then((response) => {
-        setUser(response.data);
+      .then(() => {
+        fetchUser();
       })
       .catch((error) => {
-        console.error("Erreur Mise à jours etat utilisateur !!! ", error);
+        console.error('Erreur Mise à jours etat utilisateur !!!', error);
       });
   };
+
+  // const toggleStatus = () => {
+  //   const updatedUser = {
+  //     ...user,
+  //     etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
+  //   };
+  //   axios
+  //     .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
+  //     .then((response) => {
+  //       setUser(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur Mise à jours etat utilisateur !!! ", error);
+  //     });
+  // };
+
   const handleModalClose = () => {
     setModalOpen(false);
   };
@@ -284,3 +256,57 @@ const Utilisateur = () => {
 };
 
 export default Utilisateur;
+
+
+
+
+//Code fourni par Khalil
+// import { CircularProgress, Typography } from "@mui/material";
+// import axios from "axios";
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+
+// export default function Utilisateur() {
+
+//   const { idUtilisateur } = useParams();
+//   const [user, setUser] = useState(null);
+//  const [state, setState] = useState(); // Removed as it is not used
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     console.log(`Recuperation de donnée de l'utilisateur avec le id: ${idUtilisateur}`);
+//     axios.get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
+//     .then((res) => {
+//       console.log('API response:', res.data);
+
+//       setUser(res.data);
+//       setLoading(false);
+//     })
+//     .catch(error => {
+//       console.error('Error recuperation donnée utilisateur !!!', error);
+//       setLoading(false);
+//     });
+//   }, [idUtilisateur]); // Updated dependencies to include idUtilisateur
+
+//   if (loading) {
+//     return <CircularProgress />;
+//   }
+
+//   if (!user) {
+//     return <Typography variant="h6">User not found.</Typography>;
+//   }
+
+//   return (
+//     <div>{user.fullName}</div>
+//   );
+// }
+
+//-------------------------------------------
+
+//-----------------------------------------------------------------
+
+//
+
+//----------------------***************************-----
+
+

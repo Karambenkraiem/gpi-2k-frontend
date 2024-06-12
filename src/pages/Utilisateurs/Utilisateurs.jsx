@@ -170,6 +170,7 @@ const Utilisateurs = () => {
         console.error ('Erreur Mise à jours etat utilisateur !!! ', error);
       });
   };
+  
   const handleView = id => {
     Navigate (`/utilisateur/${id}`);
   };
