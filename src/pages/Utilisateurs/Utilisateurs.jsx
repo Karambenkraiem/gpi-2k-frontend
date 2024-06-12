@@ -157,7 +157,7 @@ const Utilisateurs = () => {
     }
     const updatedUser = {
       ...user,
-      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'desactif' : 'actif',
+      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'inactif' : 'actif',
     };
     axios
       .patch (`http://localhost:3000/utilisateur/${userId}`, updatedUser)

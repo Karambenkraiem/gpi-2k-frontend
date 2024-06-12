@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
-import {Box, MenuItem, Select} from '@mui/material';
+import {Box, InputLabel, MenuItem, Select} from '@mui/material';
 import axios from 'axios';
 import {ip} from 'constants/ip';
 
@@ -106,6 +106,7 @@ const EtatUtilisateur = {
           error={!!errors.email}
           helperText={errors.email}
         />
+        <InputLabel htmlFor="specialite">Specialité</InputLabel>
 
         <Select
           label="Specialité"
@@ -123,6 +124,7 @@ const EtatUtilisateur = {
             </MenuItem>
           ))}
         </Select>
+        <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
 
         <Select
           label="Role"
@@ -140,6 +142,7 @@ const EtatUtilisateur = {
             </MenuItem>
           ))}
         </Select>
+        <InputLabel htmlFor="etatUtilisateur">Etat</InputLabel>
 
         <Select
           label="Etat"

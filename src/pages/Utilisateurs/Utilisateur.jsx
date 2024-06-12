@@ -47,7 +47,7 @@
 //----------------------***************************-----
 
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Breadcrumb, Button, Card, Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import { VscActivateBreakpoints } from "react-icons/vsc";
@@ -63,7 +63,6 @@ const Utilisateur = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
 
   const [errors, setErrors] = useState ({});
   const validate = (name, value) => {
@@ -130,7 +129,7 @@ const Utilisateur = () => {
   const toggleStatus = () => {
     const updatedUser = {
       ...user,
-      etatUtilisateur: user.etatUtilisateur === "actif" ? "desactif" : "actif",
+      etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
     };
     axios
       .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
@@ -206,19 +205,19 @@ const Utilisateur = () => {
           <Col lg={4}>
             <Card className="mb-4">
               <Card.Body className="text-left">
-                <h4 className="my-3">{user.fullName}</h4>
-                <h5 className="my-3">Matricule: {user.idUtilisateur}</h5>
-                <p className="text-muted mb-1">Email: {user.email}</p>
+                <h4 className="my-3">{user?.fullName}</h4>
+                <h5 className="my-3">Matricule: {user?.idUtilisateur}</h5>
+                <p className="text-muted mb-1">Email: {user?.email}</p>
                 <p className="text-muted mb-1">
-                  Specialilté: {user?.Specialite.nom}
+                  Specialilté: {user?.Specialite?.nom}
                 </p>
                 <p className="text-muted mb-1">
-                  Departement: {user?.Specialite.Departement?.nom}
+                  Departement: {user?.Specialite?.Departement?.nom}
                 </p>
-                <p className="text-muted mb-1">Role: {user.roleUtilisateur}</p>
-                <p className="text-muted mb-1">Etat: {user.etatUtilisateur}</p>
-                <p className="text-muted mb-0">Tel Fix: {user.telFix}</p>
-                <p className="text-muted mb-0">Tel Mobile: {user.telMobile}</p>
+                <p className="text-muted mb-1">Role: {user?.roleUtilisateur}</p>
+                <p className="text-muted mb-1">Etat: {user?.etatUtilisateur}</p>
+                <p className="text-muted mb-0">Tel Fix: {user?.telFix}</p>
+                <p className="text-muted mb-0">Tel Mobile: {user?.telMobile}</p>
               </Card.Body>
             </Card>
             <Card>
