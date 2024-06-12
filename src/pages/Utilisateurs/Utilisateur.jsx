@@ -42,78 +42,48 @@
 
 //-----------------------------------------------------------------
 
-
-
-
-
-
-
-// 
+//
 
 //----------------------***************************-----
 
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Breadcrumb, Button, Card, Col, Container, Row } from 'react-bootstrap';
-import axios from 'axios';
-import { VscActivateBreakpoints } from 'react-icons/vsc';
-import { LuClipboardEdit } from 'react-icons/lu';
-import { RxDividerVertical } from 'react-icons/rx';
-import UtilisateurModal from '../../components/UtilisateurModal';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { Breadcrumb, Button, Card, Col, Container, Row } from "react-bootstrap";
+import axios from "axios";
+import { VscActivateBreakpoints } from "react-icons/vsc";
+import { LuClipboardEdit } from "react-icons/lu";
+import { RxDividerVertical } from "react-icons/rx";
+import UtilisateurModal from "../../components/UtilisateurModal";
 
 const Utilisateur = () => {
   const { idUtilisateur } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
-      .then((response) => {
-        setUser(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Erreur recupération données !!!', error);
-        setLoading(false);
-      });
-  }, [idUtilisateur]);
-
-  const handleDelete = () => {
-    axios
-      .delete(`http://localhost:3000/utilisateur/${idUtilisateur}`)
-      .then(() => {
-        navigate('/utilisateurs');
-      })
-      .catch((error) => {
-        console.error('Erreur suppression Utilisateur', error);
-      });
-  };
-  const handleEdit = () => {
-    setCurrentUser(user); 
-    setModalOpen(true); 
-  };
-
-  const toggleStatus = () => {
-    const updatedUser = {
-      ...user,
-      etatUtilisateur: user.etatUtilisateur === 'actif' ? 'desactif' : 'actif',
-    };
-    axios
-      .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.error('Erreur Mise à jours etat utilisateur !!! ', error);
-      });
-  };
-  const handleModalClose = () => {
-    setModalOpen(false);
+  const [errors, setErrors] = useState ({});
+  const validate = (name, value) => {
+    let errorMsg = '';
+    if (name === 'idUtilisateur' && !value) {
+      errorMsg = 'Matricule est obligatoire !!!';
+    } else if (name === 'fullName' && !value) {
+      errorMsg = 'Nom & Prénom est obligatoire';
+    } else if (name === 'password' && !value) {
+      errorMsg = 'Mot de Passe est obligatoire';
+    } else if (name === 'email' && (!value || !/\S+@\S+\.\S+/.test (value))) {
+      errorMsg = "Email n'est pas valide";
+    } else if (name === 'idSpecialite' && !value) {
+      errorMsg = 'Specialité est obligatoire';
+    } else if (name === 'roleUtilisateur' && !value) {
+      errorMsg = 'Role est obligatoire';
+    } else if (name === 'etatUtilisateur' && !value) {
+      errorMsg = 'Etat est obligatoire';
+    }
+    setErrors (prevErrors => ({...prevErrors, [name]: errorMsg}));
   };
 
   const handleChange = (e) => {
@@ -122,20 +92,94 @@ const Utilisateur = () => {
       ...prev,
       [name]: value,
     }));
+    validate (name, value);
+  };
+
+  const fetchUser = () => {
+    axios
+      .get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
+      .then((response) => {
+        setUser(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur recupération données !!!", error);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [idUtilisateur]);
+
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:3000/utilisateur/${idUtilisateur}`)
+      .then(() => {
+        navigate(`/utilisateur`);
+      })
+      .catch((error) => {
+        console.error("Erreur suppression Utilisateur", error);
+      });
+  };
+  const handleEdit = () => {
+    setCurrentUser(user);
+    setModalOpen(true);
+  };
+
+  const toggleStatus = () => {
+    const updatedUser = {
+      ...user,
+      etatUtilisateur: user.etatUtilisateur === "actif" ? "desactif" : "actif",
+    };
+    axios
+      .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur Mise à jours etat utilisateur !!! ", error);
+      });
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
   };
 
   const handleSave = () => {
+    const userToSave = {
+      ...currentUser,
+      idUtilisateur: parseInt(currentUser.idUtilisateur, 10),
+    };
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    if (hasErrors) {
+      console.error(
+        "Il y  a des champs obligatoire veuillez les remplir SVP !!!"
+      );
+      return;
+    }
+    const { Specialite, ...rest } = userToSave;
+    //delete userToSave.Specialite;
     axios
-      .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, currentUser)
+      .patch(
+        `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
+        rest
+      )
       .then((response) => {
-        setUser(response.data);
-        setModalOpen(false);
+        setUsers(
+          users.map((user) =>
+            user.idUtilisateur === userToSave.idUtilisateur
+              ? response.data
+              : user
+          )
+        );
+        handleModalClose();
+        fetchUser();
       })
       .catch((error) => {
-        console.error('Erreur enregistrement Utilisateur !!! ', error);
-        setErrors(error.response.data.errors || {});
+        console.error("Problème modification Utilisateur", error);
       });
   };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -143,14 +187,18 @@ const Utilisateur = () => {
     return <div>User not found.</div>;
   }
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: "#eee" }}>
       <Container className="py-5">
         <Row>
           <Col>
             <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
               <Breadcrumb.Item href="/">Accueil</Breadcrumb.Item>
-              <Breadcrumb.Item href="/utilisateurs">Utilisateurs</Breadcrumb.Item>
-              <Breadcrumb.Item active aria-current="page">Détails Utilisateur</Breadcrumb.Item>
+              <Breadcrumb.Item href="/utilisateurs">
+                Utilisateurs
+              </Breadcrumb.Item>
+              <Breadcrumb.Item active aria-current="page">
+                Détails Utilisateur
+              </Breadcrumb.Item>
             </Breadcrumb>
           </Col>
         </Row>
@@ -161,8 +209,12 @@ const Utilisateur = () => {
                 <h4 className="my-3">{user.fullName}</h4>
                 <h5 className="my-3">Matricule: {user.idUtilisateur}</h5>
                 <p className="text-muted mb-1">Email: {user.email}</p>
-                <p className="text-muted mb-1">Specialilté: {user?.Specialite.nom}</p>
-                <p className="text-muted mb-1">Departement: {user?.Specialite.Departement?.nom}</p>
+                <p className="text-muted mb-1">
+                  Specialilté: {user?.Specialite.nom}
+                </p>
+                <p className="text-muted mb-1">
+                  Departement: {user?.Specialite.Departement?.nom}
+                </p>
                 <p className="text-muted mb-1">Role: {user.roleUtilisateur}</p>
                 <p className="text-muted mb-1">Etat: {user.etatUtilisateur}</p>
                 <p className="text-muted mb-0">Tel Fix: {user.telFix}</p>
@@ -171,11 +223,15 @@ const Utilisateur = () => {
             </Card>
             <Card>
               <Card.Body className="text-center">
-                <Button onClick={handleEdit}><LuClipboardEdit /></Button>
+                <Button onClick={handleEdit}>
+                  <LuClipboardEdit />
+                </Button>
                 <RxDividerVertical />
-                <Button onClick={toggleStatus}><VscActivateBreakpoints /></Button>
+                <Button onClick={toggleStatus}>
+                  <VscActivateBreakpoints />
+                </Button>
                 <RxDividerVertical />
-                <Button onClick={handleDelete} className='btn btn-danger'>
+                <Button onClick={handleDelete} className="btn btn-danger">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -207,7 +263,7 @@ const Utilisateur = () => {
                     <p className="mb-0">Dernière connexion</p>
                   </Col>
                   <Col sm={9}>
-                    <p className="text-muted mb-0">{user.lastLogin || 'N/A'}</p>
+                    <p className="text-muted mb-0">{user.lastLogin || "N/A"}</p>
                   </Col>
                 </Row>
               </Card.Body>

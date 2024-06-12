@@ -8,6 +8,17 @@ import {Box, MenuItem, Select} from '@mui/material';
 import axios from 'axios';
 import {ip} from 'constants/ip';
 
+const UtilisateurModal = ({
+  open,
+  handleClose,
+  isEditing,
+  currentUser,
+  handleChange,
+  handleSave,
+  errors,
+}) => {
+  const [specialites, setSpecialities] = useState ([]);
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -31,20 +42,9 @@ const RoleUtilisateur = {
 
 const EtatUtilisateur = {
   actif: 'actif',
-  desactif: 'desactif',
-  // suspendu: "Suspendu",
+  desactif: 'inactif',
+  suspendu: 'suspendu',
 };
-
-const UtilisateurModal = ({
-  open,
-  handleClose,
-  isEditing,
-  currentUser,
-  handleChange,
-  handleSave,
-  errors,
-}) => {
-  const [specialites, setSpecialities] = useState ([]);
   useEffect (() => {
     axios.get (ip + '/specialite').then (res => setSpecialities (res.data));
   }, []);
@@ -65,6 +65,7 @@ const UtilisateurModal = ({
           margin="normal"
           error={!!errors.idUtilisateur}
           helperText={errors.idUtilisateur}
+          disabled={isEditing ? true : false}
         />
 
         <TextField
@@ -106,14 +107,6 @@ const UtilisateurModal = ({
           helperText={errors.email}
         />
 
-        {/* <TextField
-          label="Specialité"
-          name="idSpecialite"
-          value={currentUser.idSpecialite}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        /> */}
         <Select
           label="Specialité"
           name="idSpecialite"

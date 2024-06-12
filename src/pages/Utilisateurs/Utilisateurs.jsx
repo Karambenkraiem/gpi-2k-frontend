@@ -98,12 +98,12 @@ const Utilisateurs = () => {
     }
 
     if (isEditing) {
-      // const {Specialite,...rest}=userToSave;
-      delete userToSave.Specialite;
+      const {Specialite,...rest}=userToSave;
+      //delete userToSave.Specialite;
       axios
         .patch (
           `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
-          userToSave
+          rest
         )
         .then (response => {
           setUsers (
