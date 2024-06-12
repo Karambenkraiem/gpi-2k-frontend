@@ -180,7 +180,7 @@ const Spécialité = () => {
       <Modal open={open} onClose={handleClose}>
         {/*<Box sx={Style}>*/}
         <Box sx={style}>
-          <h2>{isEditing ? "Modifier Utilisateur" : "Ajouter Utilisateur"}</h2>
+          <h2>{isEditing ? "Modifier Spécialité" : "Ajouter Spécialité"}</h2>
 
           <TextField
             label="Identifiant Spécialité"
@@ -197,9 +197,9 @@ const Spécialité = () => {
           />
 
           <TextField
-            label="Nom & Prénom"
+            label="Désignation"
             required
-            name="fullName"
+            name="nom"
             value={currentSpecialite.nom}
             onChange={handleChange}
             fullWidth
@@ -210,10 +210,10 @@ const Spécialité = () => {
           />
 
           <TextField
-            label="Mot de Passe"
+            label="Département"
             required
-            name="password"
-            type="password"
+            name="idDepartement"
+            type="text"
             value={currentSpecialite.idDepartement}
             onChange={handleChange}
             fullWidth
