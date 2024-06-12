@@ -11,10 +11,13 @@ import {useNavigate} from 'react-router-dom';
 import UtilisateurModal from '../../components/UtilisateurModal';
 
 const Utilisateurs = () => {
+  const [errors, setErrors] = useState ({});
+  const Navigate = useNavigate ();
   const [users, setUsers] = useState ([]);
   const [loading, setLoading] = useState (true);
   const [open, setOpen] = useState (false);
   const [isEditing, setIsEditing] = useState (false);
+  const handleClose = () => setOpen (false);
   const [currentUser, setCurrentUser] = useState ({
     idUtilisateur: '',
     password: '',
@@ -26,8 +29,7 @@ const Utilisateurs = () => {
     telFix: '',
     telMobile: '',
   });
-  const [errors, setErrors] = useState ({});
-  const Navigate = useNavigate ();
+
 
   useEffect (() => {
     axios
@@ -82,8 +84,6 @@ const Utilisateurs = () => {
     setOpen (true);
   };
 
-  const handleClose = () => setOpen (false);
-
   const handleSave = () => {
     const userToSave = {
       ...currentUser,
@@ -92,13 +92,13 @@ const Utilisateurs = () => {
     const hasErrors = Object.values (errors).some (errorMsg => errorMsg);
     if (hasErrors) {
       console.error (
-        'Il y  a des champs obligatoire veuillez les remplir SVP !!!'
+        'Veuillez remplir tous les champs obligatoires!'
       );
       return;
     }
 
     if (isEditing) {
-      const {Specialite,...rest}=userToSave;
+      const { Specialite, ...rest} = userToSave;
       //delete userToSave.Specialite;
       axios
         .patch (

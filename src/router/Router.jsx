@@ -8,6 +8,8 @@ import Accueil from '../pages/Accueil'
 import Utilisateurs from '../pages/Utilisateurs/Utilisateurs';
 import Utilisateur from "../pages/Utilisateurs/Utilisateur";
 import Materiel from "../pages/Materiel";
+import Spécialité from "pages/Spécialité";
+
 
 
 export default function Router() {
@@ -21,6 +23,7 @@ export default function Router() {
             <Route path="/utilisateurs" element={<Utilisateurs />} />
             <Route path="/utilisateur/:idUtilisateur" element={<Utilisateur />} />
             <Route path="/materiel" element={<Materiel />} />
+            <Route path="/specialite" element={<Spécialité />} />
           </Route>
           <Route path="*" element={<div>404</div>} />
         </Routes>
