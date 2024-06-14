@@ -95,8 +95,8 @@ const Utilisateurs = () => {
     }
 
     if (isEditing) {
+      // @ts-ignore
       const { Specialite, ...rest } = userToSave;
-      //delete userToSave.Specialite;
       axios
         .patch(
           `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
@@ -171,49 +171,31 @@ const Utilisateurs = () => {
     Navigate(`/utilisateur/${id}`);
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-    maxHeight: "90vh", // Allows the modal to scroll if content overflows
-    overflowY: "auto",
-  };
-
   const columns = [
     {
       field: "idUtilisateur",
       headerName: "Matricule",
       width: 90,
-      headerAlign: "center",
     },
     {
       field: "fullName",
       headerName: "Nom & Prénom",
       width: 250,
-      headerAlign: "center",
     },
     {
       field: "roleUtilisateur",
       headerName: "Role",
       width: 150,
-      headerAlign: "center",
     },
     {
       field: "etatUtilisateur",
       headerName: "Etat",
       width: 100,
-      headerAlign: "center",
     },
     {
       field: "idSpecialite",
       headerName: "Spécialité",
       width: 150,
-      headerAlign: "center",
     },
     {
       field: "actions",
@@ -240,36 +222,46 @@ const Utilisateurs = () => {
   ];
 
   return (
-    <Box sx={{ height: 560, width: "100%" }}>
-      <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-        + Ajouter Utilisateur
-      </Button>
-      <UtilisateurModal
-        open={open}
-        handleClose={() => setOpen(false)}
-        isEditing={isEditing}
-        currentUser={currentUser}
-        handleChange={handleChange}
-        handleSave={handleSave}
-        errors={errors}
-      />
-      <DataGrid
-        rows={users}
-        columns={columns}
-        loading={loading}
-        getRowId={(row) => row.idUtilisateur}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
+    <div>
+      <h1>Gestion des utilisateurs</h1>
+      <Box sx={{ height: 560, width: "100%" }}>
+      <Box sx={{ mb: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpen}
+        >
+          + Ajouter Utilisateur
+        </Button>
+      </Box>
+        <UtilisateurModal
+          open={open}
+          handleClose={() => setOpen(false)}
+          isEditing={isEditing}
+          currentUser={currentUser}
+          handleChange={handleChange}
+          handleSave={handleSave}
+          errors={errors}
+        />
+        <DataGrid
+          rows={users}
+          // @ts-ignore
+          columns={columns}
+          loading={loading}
+          getRowId={(row) => row.idUtilisateur}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[8]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
+          }}
+          pageSizeOptions={[8]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
+    </div>
   );
 };
 

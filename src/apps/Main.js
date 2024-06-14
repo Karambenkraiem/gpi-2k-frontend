@@ -18,11 +18,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
 import { FaComputer } from "react-icons/fa6";
-
-
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { HomeOutlined, PeopleOutline, StorageOutlined } from "@mui/icons-material";
+import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
 
 const drawerWidth = 240;
 
@@ -52,7 +51,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -90,9 +88,25 @@ const Drawer = styled(MuiDrawer, {
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
 }));
+
+const initialNavItems = [
+  { label: "Accueil", path: "/", icon: <HomeOutlined /> },
+  { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
+  { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+  {
+    label: "Management",
+    icon: <BsBuildingGear />,
+    items: [
+      { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
+      { label: "Départements", path: "/departement", icon: <BsBuildings /> },
+    ]
+  }
+];
+
 export default function Main() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [managementOpen, setManagementOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -100,6 +114,10 @@ export default function Main() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleManagementClick = () => {
+    setManagementOpen(!managementOpen);
   };
 
   return (
@@ -120,8 +138,8 @@ export default function Main() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          <Link component={RouterLink} to="/" underline="none" style={{ color: 'hsl(150, 100%, 50%)' }}>
-            GPI-2K-IsetRades-TECI
+            <Link component={RouterLink} to="/" underline="none" style={{ color: 'hsl(150, 100%, 50%)' }}>
+              GPI-2K-IsetRades-TECI
             </Link>
           </Typography>
         </Toolbar>
@@ -138,57 +156,96 @@ export default function Main() {
         </DrawerHeader>
         <Divider />
         <List>
-          {[
-            { label: "Accueil", path: "/", icon: <HomeOutlined /> },
-            { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
-            // { label: "khalil", path: "/khalil",icon:<AddHomeWorkIcon/>  },
-            { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
-            {
-              label: "Management",
-              icon: <StorageOutlined />,
-              items: [
-                { label: "Spécialités", path: "/specialite", icon: <StorageOutlined /> },
-                { label: "Département", path: "/departement", icon: <StorageOutlined /> },
-              ]
-            }
-          ].map((elem, index) => (
-            <Nav.Link as={Link} to={elem.path}>
-              <ListItem
-                key={elem.label}
-                disablePadding
-                sx={{ display: "block" }}
-              >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {elem.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={elem.label}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Nav.Link>
+          {initialNavItems.map((elem) => (
+            <React.Fragment key={elem.label}>
+              {elem.path ? (
+                <Nav.Link as={Link} to={elem.path}>
+                  <ListItem disablePadding sx={{ display: "block" }}>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {elem.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={elem.label}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Nav.Link>
+              ) : (
+                <>
+                  <ListItem disablePadding sx={{ display: "block" }} onClick={handleManagementClick}>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {elem.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={elem.label}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                      {managementOpen ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  {managementOpen && elem.items && elem.items.map((subItem) => (
+                    <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
+                      <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
+                        <ListItemButton
+                          sx={{
+                            minHeight: 48,
+                            justifyContent: open ? "initial" : "center",
+                            px: 2.5,
+                          }}
+                        >
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                              mr: open ? 3 : "auto",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {subItem.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={subItem.label}
+                            sx={{ opacity: open ? 1 : 0 }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    </Nav.Link>
+                  ))}
+                </>
+              )}
+            </React.Fragment>
           ))}
         </List>
         <Divider />
-        
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        {/* les sousroutes */}
         <Outlet />
       </Box>
     </Box>

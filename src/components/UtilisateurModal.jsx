@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import {FaRegSave} from 'react-icons/fa';
-import {IoPersonAddOutline} from 'react-icons/io5';
-import {Box, InputLabel, MenuItem, Select} from '@mui/material';
-import axios from 'axios';
-import {ip} from 'constants/ip';
+import React, { useEffect, useState } from "react";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { FaRegSave } from "react-icons/fa";
+import { IoPersonAddOutline } from "react-icons/io5";
+import { Box, InputLabel, MenuItem, Select } from "@mui/material";
+import axios from "axios";
+import { ip } from "constants/ip";
 
 const UtilisateurModal = ({
   open,
@@ -17,42 +17,43 @@ const UtilisateurModal = ({
   handleSave,
   errors,
 }) => {
-  const [specialites, setSpecialities] = useState ([]);
+  const [specialites, setSpecialities] = useState([]);
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  maxHeight: '90vh', // Allows the modal to scroll if content overflows
-  overflowY: 'auto',
-};
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+    maxHeight: "90vh", // Allows the modal to scroll if content overflows
+    overflowY: "auto",
+  };
 
-const RoleUtilisateur = {
-  DIRECTEUR: 'DIRECTEUR',
-  ADMINISTRATEUR: 'ADMINISTRATEUR',
-  TECHNICIEN: 'TECHNICIEN',
-  EMPLOYE: 'EMPLOYE',
-  RMQ: 'RMQ',
-};
+  const RoleUtilisateur = {
+    DIRECTEUR: "DIRECTEUR",
+    ADMINISTRATEUR: "ADMINISTRATEUR",
+    TECHNICIEN: "TECHNICIEN",
+    EMPLOYE: "EMPLOYE",
+    RMQ: "RMQ",
+  };
 
-const EtatUtilisateur = {
-  actif: 'actif',
-  desactif: 'inactif',
-  suspendu: 'suspendu',
-};
-  useEffect (() => {
-    axios.get (ip + '/specialite').then (res => setSpecialities (res.data));
+  const EtatUtilisateur = {
+    actif: "actif",
+    desactif: "inactif",
+    suspendu: "suspendu",
+  };
+
+  useEffect(() => {
+    axios.get(ip + "/specialite").then((res) => setSpecialities(res.data));
   }, []);
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
-        <h2>{isEditing ? 'Modifier Utilisateur' : 'Ajouter Utilisateur'}</h2>
+        <h2>{isEditing ? "Modifier Utilisateur" : "Ajouter Utilisateur"}</h2>
 
         <TextField
           label="Matricule"
@@ -65,7 +66,6 @@ const EtatUtilisateur = {
           margin="normal"
           error={!!errors.idUtilisateur}
           helperText={errors.idUtilisateur}
-          disabled={isEditing ? true : false}
         />
 
         <TextField
@@ -106,19 +106,19 @@ const EtatUtilisateur = {
           error={!!errors.email}
           helperText={errors.email}
         />
-        <InputLabel htmlFor="specialite">Specialité</InputLabel>
+        <InputLabel htmlFor="specialite">Spécialité</InputLabel>
 
         <Select
-          label="Specialité"
+          label="Spécialité"
           name="idSpecialite"
           required
           value={currentUser.idSpecialite}
           onChange={handleChange}
           fullWidth
           error={!!errors.idSpecialite}
-          style={{marginTop: '1rem'}}
+          style={{ marginTop: "1rem" }}
         >
-          {specialites.map (elem => (
+          {specialites.map((elem) => (
             <MenuItem key={elem.idSpecialite} value={elem.idSpecialite}>
               {elem.nom}
             </MenuItem>
@@ -134,9 +134,9 @@ const EtatUtilisateur = {
           onChange={handleChange}
           fullWidth
           error={!!errors.roleUtilisateur}
-          style={{marginTop: '1rem'}}
+          style={{ marginTop: "1rem" }}
         >
-          {Object.values (RoleUtilisateur).map (role => (
+          {Object.values(RoleUtilisateur).map((role) => (
             <MenuItem key={role} value={role}>
               {role}
             </MenuItem>
@@ -152,9 +152,9 @@ const EtatUtilisateur = {
           onChange={handleChange}
           fullWidth
           error={!!errors.etatUtilisateur}
-          style={{marginTop: '1rem'}}
+          style={{ marginTop: "1rem" }}
         >
-          {Object.values (EtatUtilisateur).map (etat => (
+          {Object.values(EtatUtilisateur).map((etat) => (
             <MenuItem key={etat} value={etat}>
               {etat}
             </MenuItem>
@@ -184,11 +184,11 @@ const EtatUtilisateur = {
           variant="contained"
           color="primary"
           fullWidth
-          sx={{mt: 2}}
+          sx={{ mt: 2 }}
           onClick={handleSave}
         >
           {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-          {isEditing ? '_ Enregistrer' : '_ Ajouter'}
+          {isEditing ? "_ Enregistrer" : "_ Ajouter"}
         </Button>
       </Box>
     </Modal>

@@ -5,13 +5,12 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import { LuClipboardEdit } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { VscActivateBreakpoints } from "react-icons/vsc";
-import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
+import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
+import { ip } from "constants/ip";
 
 const Spécialité = () => {
   const [errors, setErrors] = useState({});
@@ -26,6 +25,11 @@ const Spécialité = () => {
     nom: "",
     idDepartement: "",
   });
+  const [departements, setDepartements] = useState([]);
+
+  // const fetchDepartement= ()=>{
+  //   axios.get(ip + "/departement").then((res) => setDepartements(res.data));
+  // };
 
   useEffect(() => {
     axios
@@ -37,7 +41,8 @@ const Spécialité = () => {
       .catch((error) => {
         console.error("Error Fetching Data", error);
       });
-  }, []);
+  // @ts-ignore
+  },axios.get(ip + "/departement").then((res) => setDepartements(res.data)),[]);
 
   const validate = (name, value) => {
     let errorMsg = "";
@@ -69,7 +74,7 @@ const Spécialité = () => {
   const handleSave = () => {
     const specialiteToSave = {
       ...currentSpecialite,
-      idUtilisateur: parseInt(currentSpecialite.idSpecialite, 10),
+      idSpecialite: currentSpecialite.idSpecialite,
     };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
@@ -78,8 +83,9 @@ const Spécialité = () => {
     }
 
     if (isEditing) {
+      // @ts-ignore
       const { Departement, ...rest } = specialiteToSave;
-      //delete userToSave.Specialite;
+
       axios
         .patch(
           `http://localhost:3000/specialite/${specialiteToSave.idSpecialite}`,
@@ -135,19 +141,16 @@ const Spécialité = () => {
       field: "idSpecialite",
       headerName: "#ID",
       width: 90,
-      headerAlign: "center",
     },
     {
       field: "nom",
       headerName: "Designation",
       width: 300,
-      headerAlign: "center",
     },
     {
       field: "idDepartement",
       headerName: "Département",
       width: 150,
-      headerAlign: "center",
     },
     {
       field: "actions",
@@ -166,87 +169,144 @@ const Spécialité = () => {
       ),
     },
   ];
-  
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+    maxHeight: "90vh",
+    overflowY: "auto",
+  };
 
   return (
-    <Box sx={{ height: 560, width: "100%" }}>
-      <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-        + Ajouter Spécialité
-      </Button>
-      <Modal open={open} onClose={handleClose}>
-        {/*<Box sx={Style}>*/}
-        <Box>
-          <h2>{isEditing ? "Modifier Spécialité" : "Ajouter Spécialité"}</h2>
-
-          <TextField
-            label="Identifiant Spécialité"
-            name="idSpecialite"
-            required
-            value={currentSpecialite.idSpecialite}
-            type="text"
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            //   error={!!errors.idSpecialite}
-            //   helperText={errors.idSpecialite}
-            disabled={isEditing ? true : false}
-          />
-
-          <TextField
-            label="Désignation"
-            required
-            name="nom"
-            value={currentSpecialite.nom}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type="text"
-            //   error={!!errors.nom}
-            //   helperText={errors.nom}
-          />
-
-          <TextField
-            label="Département"
-            required
-            name="idDepartement"
-            type="text"
-            value={currentSpecialite.idDepartement}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            //   error={!!errors.password}
-            //   helperText={errors.password}
-          />
-
+    <div>
+      <h1>Gestion des spécialités</h1>
+      <Box sx={{ height: 560, width: "100%" }}>
+        <Box sx={{ mb: 2 }}>
           <Button
             variant="contained"
             color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={handleSave}
+            onClick={() => handleOpen()}
           >
-            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-            {isEditing ? "_ Enregistrer" : "_ Ajouter"}
+            + Ajouter Spécialité
           </Button>
         </Box>
-      </Modal>
-      <DataGrid
-        rows={specialites}
-        columns={columns}
-        loading={loading}
-        getRowId={(row) => row.idSpecialite}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+        <Modal open={open} onClose={handleClose}>
+          <Box sx={style}>
+            <h2>{isEditing ? "Modifier Spécialité" : "Ajouter Spécialité"}</h2>
+
+            <TextField
+              label="Identifiant Spécialité"
+              name="idSpecialite"
+              required
+              value={currentSpecialite.idSpecialite}
+              type="text"
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              //   error={!!errors.idSpecialite}
+              //   helperText={errors.idSpecialite}
+              disabled={isEditing ? true : false}
+            />
+
+            <TextField
+              label="Désignation"
+              required
+              name="nom"
+              value={currentSpecialite.nom}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              type="text"
+              //   error={!!errors.nom}
+              //   helperText={errors.nom}
+            />
+
+            {/* <TextField
+              label="Département"
+              required
+              name="idDepartement"
+              type="text"
+              value={currentSpecialite.idDepartement}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              //   error={!!errors.password}
+              //   helperText={errors.password}
+            /> */}
+
+            {/* <InputLabel htmlFor="departement">Département</InputLabel>
+
+            <Select
+              label="Département"
+              name="idDepartement"
+              required
+              value={currentSpecialite.idDepartement}
+              onChange={handleChange}
+              fullWidth
+              // error={!!errors.idSpecialite}
+              // style={{ marginTop: "1rem" }}
+            >
+              {departements.map((elem) => (
+                <MenuItem key={elem.idDepartement} value={elem.idDepartement}>
+                  {elem.nom}
+                </MenuItem>
+              ))}
+            </Select> */}
+
+            <InputLabel htmlFor="departement">Département</InputLabel>
+            <Select
+              label="Département"
+              name="idDepartement"
+              required
+              value={currentSpecialite.idDepartement}
+              onChange={handleChange}
+              fullWidth
+              // error={!!errors.idSpecialite}
+            >
+              {departements.map((elem) => (
+                <MenuItem key={elem.idDepartement} value={elem.idDepartement}>
+                  {elem.nom}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+              onClick={handleSave}
+            >
+              {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+              {isEditing ? "_ Enregistrer" : "_ Ajouter"}
+            </Button>
+          </Box>
+        </Modal>
+        <DataGrid
+          rows={specialites}
+          // @ts-ignore
+          columns={columns}
+          loading={loading}
+          getRowId={(row) => row.idSpecialite}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
+    </div>
   );
 };
 
