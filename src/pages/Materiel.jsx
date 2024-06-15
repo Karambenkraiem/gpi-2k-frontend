@@ -6,8 +6,6 @@ import {
   Box,
   TextField,
   MenuItem,
-  InputLabel,
-  FormLabel,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -15,6 +13,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { ip } from 'constants/ip';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { LuClipboardEdit } from 'react-icons/lu';
 
 const MaterielPage = () => {
  
@@ -35,6 +35,18 @@ const MaterielPage = () => {
     enPanne: 'enPanne',
     rebut: 'rebut',
   };
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    maxHeight: '90vh', // Allows the modal to scroll if content overflows
+    overflowY: 'auto',
+  };
 
   const [materiels, setMateriels] = useState ([]);
   const [open, setOpen] = useState (false);
@@ -42,7 +54,7 @@ const MaterielPage = () => {
   const [societies, setSocieties] = useState ([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState ({
-    numeroSerie: "",
+        numeroSerie: "",
         categorie: "",
         marque: "",
         modele: "",
@@ -153,55 +165,48 @@ const materialToSave={
     setIsEditing (true);
     setOpen (true);
   };
-  const handleDelete = (id) => {
+
+
+  const handleDelete = id => {
     axios
-      .delete (`http://localhost:3000/materiel/${id}`)
-      .then ((response) => {
-        setMateriels(materiels.filter((materiel)=> materiel.numeroSerie !== id));
-        // fetchMateriels ();
-      })
-      .catch (error => console.error ('Error deleting data:', error));
-  };
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    maxHeight: '90vh', // Allows the modal to scroll if content overflows
-    overflowY: 'auto',
+      .delete(`http://localhost:3000/materiel/${id}`)
+        .then((response) => {
+          setMateriels (
+            materiels.filter ((materiel) => materiel.numeroSerie !== id))
+         
+        })
+          .catch(error =>{
+            console.error('Erreur suppression de materiel ....', error);
+          });     
   };
 
   const columns = [
-    { field: 'numeroSerie', headerName: 'Numero Serie', width: 150 },
-    { field: 'categorie', headerName: 'Categorie', width: 150 },
-    { field: 'marque', headerName: 'Marque', width: 150 },
-    { field: 'modele', headerName: 'Modele', width: 150 },
-    { field: 'prix', headerName: 'Prix', type: 'number', width: 110 },
+    { field: 'numeroSerie', headerName: 'Numero Serie', width: 90 },
+    { field: 'categorie', headerName: 'Categorie', width: 90 },
+    { field: 'marque', headerName: 'Marque', width: 90 },
+    { field: 'modele', headerName: 'Modele', width: 90 },
+    { field: 'prix', headerName: 'Prix', type: 'number', width: 100 },
     {
       field: 'actions',
       headerName: 'Actions',
       width: 300,
       renderCell: (params) => (
-        <>
+        <div>
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleEdit(params.row)}
+            onClick={() => handleEdit(params.row.id)}
           >
-            Modifier
-          </Button>
+            <LuClipboardEdit />
+            </Button>
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row)}
+            onClick={() => handleDelete(params.row.numeroSerie)}
           >
-            Supprimer
+            <RiDeleteBin6Line />
           </Button>
-        </>
+        </div>
       ),
     },
   ];

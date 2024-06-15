@@ -132,7 +132,8 @@ const Utilisateurs = () => {
     axios
       .delete(`http://localhost:3000/utilisateur/${id}`)
       .then((response) => {
-        setUsers(users.filter((user) => user.idUtilisateur !== id));
+        setUsers(
+          users.filter((user) => user.idUtilisateur !== id));
       })
       .catch((error) => {
         console.error("Erreur Suppression de utilisateur....", error);
