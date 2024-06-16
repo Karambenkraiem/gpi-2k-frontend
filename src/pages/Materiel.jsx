@@ -15,6 +15,8 @@ import axios from 'axios';
 import { ip } from 'constants/ip';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { LuClipboardEdit } from 'react-icons/lu';
+import { FaRegSave } from 'react-icons/fa';
+import { IoPersonAddOutline } from 'react-icons/io5';
 
 const MaterielPage = () => {
  
@@ -29,12 +31,7 @@ const MaterielPage = () => {
     Serveur: 'Serveur',
     Switch: 'Switch',
   };
-  const EtatMateriel = {
-    nouveau: 'nouveau',
-    fonctionnel: 'fonctionnel',
-    enPanne: 'enPanne',
-    rebut: 'rebut',
-  };
+  
   const style = {
     position: 'absolute',
     top: '50%',
@@ -47,6 +44,34 @@ const MaterielPage = () => {
     maxHeight: '90vh', // Allows the modal to scroll if content overflows
     overflowY: 'auto',
   };
+  const EtatMateriel = {
+    nouveau: 'nouveau',
+    fonctionnel: 'fonctionnel',
+    enPanne: 'enPanne',
+    rebut: 'rebut',
+  };
+  const ConnexionWLU = {
+    WIFI : 'WIFI',
+    LAN:'LAN',
+    USB:'USB'
+  }
+  const TechnologieOnduleur ={
+   
+    off_line :' off_line',
+    on_line :'on_line',
+    in_line : 'in_line'
+  }
+  const TypeScanner={
+    Aplat:"Aplat",
+  ChargeAutomatique: "ChargeAutomatique"
+  }
+  const TechnologieImpression={
+    inkTank:"inkTank",
+  ecoTank:"ecoTank",
+  Laser:"Laser",
+  JetEncre:"JetEncre"
+  }
+
 
   const [materiels, setMateriels] = useState ([]);
   const [open, setOpen] = useState (false);
@@ -61,7 +86,7 @@ const MaterielPage = () => {
         prix: "",
         garantie: "",
         etatMateriel: "",
-        dateAcquisition: "",
+        // dateAcquisition: new Date(),
         idSociete:"" ,
         nombrePortSwitch: "",
         debitSwitch: "",
@@ -72,16 +97,16 @@ const MaterielPage = () => {
         disque: "",
         carteGraphique: "",
         nombreDisque: "",
-        tailleEcran: 24,
+        tailleEcran: "",
         etatBatteriePcPortable: "",
         vitesseImpression: "",
-        connexionWLU: "",
-        technologieOnduleur: "",
+        connexionWLU:ConnexionWLU.null,
+        technologieOnduleur: TechnologieOnduleur.null,
         fonctionSupplementaireScanImp: "",
         vitesseScanner: "",
-        typeScanner: "",
+        typeScanner: TypeScanner.null,
         resolutionScanImpVideoP: "",
-        technologieImpression: "",
+        technologieImpression: TechnologieImpression.null,
         formatScanImp: "",
         poidsOnduleur: "",
         autonomieOnduleur: "",
@@ -120,9 +145,15 @@ const MaterielPage = () => {
   const handleSave = () => {
 const materialToSave={
   ...formData,
-
+  prix:parseFloat(formData.prix),
+  nombrePortSwitch:parseInt(formData.nombrePortSwitch),
+  debitSwitch:parseInt(formData.debitSwitch),
+  tailleEcran:parseFloat(formData.tailleEcran),
+  
 }
+
     if (isEditing) {
+     // @ts-ignore
       const {Societe, ...rest } = materialToSave;
       axios
         .patch (
@@ -140,16 +171,16 @@ const materialToSave={
           // fetchMateriels ();
           handleCloseModal ();
         })
-        .catch (error => console.error ('Error updating data:', error));
+        .catch (error => console.error ('Probleme modification Materiel', error));
     } else {
       axios
-        .post ('http://localhost:3000/materiel', materialToSave)
+        .post ("http://localhost:3000/materiel", materialToSave)
         .then ((response) => {
           setMateriels([...materiels,response.data]);
           // fetchMateriels ();
           handleCloseModal ();
         })
-        .catch (error => console.error ('Error adding data:', error));
+        .catch (error => console.error ('Erreur ajout Materiel', error));
     }
   };
   const handleChange = e => {
@@ -319,7 +350,7 @@ const materialToSave={
             ))}
           </TextField>
 
-          <TextField
+          {/* <TextField
             label="Date d'acquisition"
             name="dateAcquisition"
             type="date"
@@ -327,7 +358,7 @@ const materialToSave={
             onChange={handleChange}
             fullWidth
             margin="normal"
-          />
+          /> */}
 
 
           <Select
@@ -516,7 +547,7 @@ const materialToSave={
               select
               label="Type de Connexion "
               name="connexionWLU"
-              value={formData.connexionWLU || ''}
+              value={formData.connexionWLU}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -570,7 +601,7 @@ const materialToSave={
               select
               label="Type de Connexion "
               name="connexionWLU"
-              value={formData.connexionWLU || ''}
+              value={formData.connexionWLU}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -585,7 +616,7 @@ const materialToSave={
               select
               label="Type Scanner "
               name="typeScanner"
-              value={formData.typeScanner || ''}
+              value={formData.typeScanner}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -658,7 +689,7 @@ const materialToSave={
               select
               label="Technologie Onduleur "
               name="technologieOnduleur"
-              value={formData.technologieOnduleur || ''}
+              value={formData.technologieOnduleur}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -778,7 +809,7 @@ const materialToSave={
               select
               label="RAM "
               name="ram"
-              value={formData.ram || ''}
+              value={formData.ram}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -857,13 +888,19 @@ const materialToSave={
 </>
           )}
 
-          <Button onClick={handleSave} variant="contained" color="primary">
-            Enregistrer
+          <Button 
+          onClick={handleSave} 
+          variant="contained" 
+          sx={{ mt: 2 }}
+          color="primary">
+           {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+           {isEditing ? "_ Enregistrer" : "_ Ajouter"}
           </Button>
           <Button
             onClick={handleCloseModal}
             variant="contained"
             color="secondary"
+            sx={{ mt: 2 }}
           >
             Annuler
           </Button>
