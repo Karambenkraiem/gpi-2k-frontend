@@ -61,6 +61,7 @@ const Utilisateurs = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
+///////////////////////////////////////////////
 
   const handleOpen = (user = null) => {
     if (user) {
@@ -176,27 +177,27 @@ const Utilisateurs = () => {
     {
       field: "idUtilisateur",
       headerName: "Matricule",
-      width: 90,
+      flex:1,
     },
     {
       field: "fullName",
       headerName: "Nom & Prénom",
-      width: 250,
+      flex:1,
     },
     {
       field: "roleUtilisateur",
       headerName: "Role",
-      width: 150,
+      flex:1,
     },
     {
       field: "etatUtilisateur",
       headerName: "Etat",
-      width: 100,
+      flex:1,
     },
     {
       field: "idSpecialite",
       headerName: "Spécialité",
-      width: 150,
+      width: 100,
     },
     {
       field: "actions",
@@ -205,7 +206,8 @@ const Utilisateurs = () => {
       width: 250,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleOpen(params.row)}>
+          <Button 
+          onClick={() => handleOpen(params.row)}>
             <LuClipboardEdit />
           </Button>
           <Button onClick={() => toggleStatus(params.row.idUtilisateur)}>
@@ -225,7 +227,7 @@ const Utilisateurs = () => {
   return (
     <div>
       <h1>Gestion des utilisateurs</h1>
-      <Box sx={{ height: 560, width: "100%" }}>
+      <Box sx={{ height: "100%", width: "100%" }}>
       <Box sx={{ mb: 2 }}>
         <Button
           variant="contained"
@@ -253,12 +255,12 @@ const Utilisateurs = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 8,
+                pageSize: 5,
               },
             },
           }}
-          pageSizeOptions={[8]}
-          checkboxSelection
+          pageSizeOptions={[100]}
+          // checkboxSelection
           disableRowSelectionOnClick
         />
       </Box>
