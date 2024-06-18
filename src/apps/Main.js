@@ -20,8 +20,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import { FaComputer } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { HomeOutlined, PeopleOutline, ExpandLess, ExpandMore, LaptopChromebookOutlined } from "@mui/icons-material";
 import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import CreditScoreOutlinedIcon from '@mui/icons-material/CreditScoreOutlined';
 
 const drawerWidth = 240;
 
@@ -101,12 +103,15 @@ const initialNavItems = [
       { label: "Départements", path: "/departement", icon: <BsBuildings /> },
     ]
   },
+    
+
   {
     label: "Opérations",
-    icon: <BsBuildingGear />,
+    icon: <LaptopChromebookOutlined />,
     items: [
-      { label: "Affectations", path: "/affectation", icon: <BsCardList /> },
-      { label: "Emprunt ", path: "/emprunt", icon: <BsBuildings /> },
+      { label: "Affectations", path: "/affectation", icon: <AssignmentOutlinedIcon />
+      },
+      { label: "Emprunt ", path: "/emprunt", icon: <CreditScoreOutlinedIcon/> },
     ]
   }
 ];
@@ -214,6 +219,7 @@ export default function Main() {
                       >
                         {elem.icon}
                       </ListItemIcon>
+
                       <ListItemText
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}

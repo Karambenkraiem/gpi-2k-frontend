@@ -310,12 +310,12 @@ const MaterielPage = () => {
   };
 
   const columns = [
-    { field: "numeroSerie", headerName: "Numero Serie", flex: 1 },
-    { field: "categorie", headerName: "Categorie", flex: 1 },
-    { field: "marque", headerName: "Marque", flex: 1 },
-    { field: "modele", headerName: "Modele", flex: 1 },
-    {field: 'etatMateriel', headerName: 'Etat Materiel', flex:1},
-    { field: "prix", headerName: "Prix", type: "number", flex: 1 },
+    { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
+    { field: "categorie", headerName: "Categorie", width: 140 },
+    { field: "marque", headerName: "Marque", width: 130 },
+    { field: "modele", headerName: "Modele", width: 250 },
+    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
+    { field: "prix", headerName: "Prix", type: "number", width: 100},
     {
       field: "actions",
       headerName: "Actions",
@@ -366,8 +366,15 @@ const MaterielPage = () => {
             + Ajouter Materiel
           </Button>
         </Box>
-
+        <Box
+  
+>
       <DataGrid
+      sx={{
+    display: 'flex',
+    justifyContent: 'center',
+   
+  }}
         rows={materiels}
          // @ts-ignore
          pageSize={pageSize}
@@ -385,7 +392,11 @@ const MaterielPage = () => {
           loading={loading}        
           disableSelectionOnClick
           getRowId={row => row.numeroSerie}
+          
       />
+
+
+</Box>
       <Modal open={open} onClose={handleCloseModal}>
         <Box sx={style}>
           <h2>{isEditing ? 'Edit Materiel' : 'Add Materiel'}</h2>

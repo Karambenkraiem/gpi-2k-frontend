@@ -38,13 +38,7 @@ const Utilisateur = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
-  //Code pour switch activer désactiver compte fonctionnel
-  // const [checkedSwitch, setCheckedSwitch] = React.useState(true);
-
-  // const handleChangeSwitch = (event) => {
-  //   setCheckedSwitch(event.target.checked);
-  // };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentUser((prev) => ({
