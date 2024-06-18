@@ -17,13 +17,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
-import { FaComputer } from "react-icons/fa6";
+import { FaArrowsDownToPeople, FaArrowsTurnToDots, FaComputer } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
-
-const drawerWidth = 240;
+import { GiExplosiveMaterials } from "react-icons/gi";
+import { SiNginxproxymanager } from "react-icons/si";
+const drawerWidth = 280;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -92,7 +93,15 @@ const Drawer = styled(MuiDrawer, {
 const initialNavItems = [
   { label: "Accueil", path: "/", icon: <HomeOutlined /> },
   { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
-  { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+  {
+    label: "Ressources materielles",
+    icon: <SiNginxproxymanager />,
+    items: [
+      { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+      { label: "Affectation", path: "/affectation", icon: <FaArrowsDownToPeople /> },
+      { label: "Emprunt", path: "/emprunt", icon: <FaArrowsTurnToDots /> },
+    ]
+  },
   {
     label: "Management",
     icon: <BsBuildingGear />,
@@ -106,7 +115,7 @@ const initialNavItems = [
 export default function Main() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [managementOpen, setManagementOpen] = React.useState(false);
+  const [submenuOpen, setSubmenuOpen] = React.useState({});
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -116,8 +125,8 @@ export default function Main() {
     setOpen(false);
   };
 
-  const handleManagementClick = () => {
-    setManagementOpen(!managementOpen);
+  const handleSubmenuToggle = (label) => {
+    setSubmenuOpen((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
   return (
@@ -186,7 +195,7 @@ export default function Main() {
                 </Nav.Link>
               ) : (
                 <>
-                  <ListItem disablePadding sx={{ display: "block" }} onClick={handleManagementClick}>
+                  <ListItem disablePadding sx={{ display: "block" }} onClick={() => handleSubmenuToggle(elem.label)}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,
@@ -207,10 +216,10 @@ export default function Main() {
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-                      {managementOpen ? <ExpandLess /> : <ExpandMore />}
+                      {submenuOpen[elem.label] ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                   </ListItem>
-                  {managementOpen && elem.items && elem.items.map((subItem) => (
+                  {submenuOpen[elem.label] && elem.items && elem.items.map((subItem) => (
                     <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
                       <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
                         <ListItemButton

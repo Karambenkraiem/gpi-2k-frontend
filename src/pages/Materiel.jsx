@@ -18,6 +18,8 @@ import { LuClipboardEdit } from "react-icons/lu";
 import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { VscActivateBreakpoints } from 'react-icons/vsc';
+import { TbEyeSearch } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -25,7 +27,7 @@ const MaterielPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [societies, setSocieties] = useState([]);
   const [errors, setErrors] = useState({});
-
+  const Navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const Categorie = {
     UniteCentrale: "UniteCentrale",
@@ -303,6 +305,9 @@ const MaterielPage = () => {
       });
   };
 
+  const handleView = (numeroSerie) => {
+    Navigate(`/detailsMateriel/${numeroSerie}`);
+  };
 
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", flex: 1 },
@@ -318,6 +323,9 @@ const MaterielPage = () => {
       flex: 1,
       renderCell: (params) => (
         <div text-align="center">
+          <Button onClick={() => handleView(params.row.numeroSerie)}>
+            <TbEyeSearch />
+          </Button>
           <Button onClick={() => handleEdit(params.row)}>
             <LuClipboardEdit />
           </Button>

@@ -45,6 +45,7 @@ const Spécialité = () => {
       // @ts-ignore
     },
     axios.get (ip + '/departement').then (res => setDepartements (res.data)),
+    // @ts-ignore
     []
   );
 
