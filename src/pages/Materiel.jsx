@@ -24,6 +24,7 @@ const MaterielPage = () => {
   const [open, setOpen] = useState (false);
   const [isEditing, setIsEditing] = useState (false);
   const [societies, setSocieties] = useState ([]);
+  const [errors, setErrors] = useState({});
 
 
   const [loading, setLoading] = useState (true);
@@ -244,11 +245,36 @@ const handleOpen = (materiel = null) => {
         .catch (error => console.error ('Erreur ajout Materiel', error));
     }
   };
+  const validateMateriel = (name, value) => {
+    let errorMsg = "";
+  
+    if (name === "numeroSerie" && !value) {
+      errorMsg = "Numéro de Série est obligatoire !!!";
+    } else if (name === "categorie" && !value) {
+      errorMsg = "Catégorie est obligatoire";
+    } else if (name === "marque" && !value) {
+      errorMsg = "Marque est obligatoire";
+    } else if (name === "modele" && !value) {
+      errorMsg = "Modèle est obligatoire";
+    } else if (name === "prix" && (!value || isNaN(value) || value <= 0)) {
+      errorMsg = "Prix doit être un nombre positif";
+    } else if (name === "garantie" && !value) {
+      errorMsg = "Garantie est obligatoire";
+    } else if (name === "etatMateriel" && !value) {
+      errorMsg = "État Matériel est obligatoire";
+    } else if (name === "dateAcquisition" && !value) {
+      errorMsg = "Date d'Acquisition est obligatoire";
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
+};
+
   const handleChange = e => {
+    const {name,value} = e.target;
     setFormData ({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    validateMateriel(name, value);
   };
   const handleEdit = rowData => {
     setFormData (rowData);
@@ -335,6 +361,8 @@ const handleOpen = (materiel = null) => {
     id: index, // or use a unique field from your data, e.g., row.numeroSerie
     ...row,
   }));
+  
+
   const [pageSize, setPageSize] = useState(25);
   return (
     <div>
@@ -379,6 +407,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.categorie}
+            helperText={errors.categorie}
           >
             {Object.values (Categorie).map (category => (
               <MenuItem key={category} value={category}>
@@ -394,6 +424,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.numeroSerie}
+            helperText={errors.numeroSerie}
           />
           <TextField
             label="Marque"
@@ -402,6 +434,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.marque}
+            helperText={errors.marque}
           />
           <TextField
             label="Modèle"
@@ -410,6 +444,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.modele}
+            helperText={errors.modele}
           />
           <TextField
             label="Prix"
@@ -418,6 +454,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.prix}
+            helperText={errors.prix}
           />
           <TextField
             label="Garantie"
@@ -426,6 +464,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.garantie}
+            helperText={errors.garantie}
           />
           <TextField
             select
@@ -435,6 +475,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.etatMateriel}
+            helperText={errors.etatMateriel}
           >
             {Object.values (EtatMateriel).map (category => (
               <MenuItem key={category} value={category}>
@@ -451,6 +493,8 @@ const handleOpen = (materiel = null) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            error={!!errors.dateAcquisition}
+            helperText={errors.dateAcquisition}
           />
 
           <Select
