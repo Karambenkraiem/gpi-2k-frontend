@@ -114,7 +114,7 @@ const initialNavItems = [
 
 export default function Main() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [submenuOpen, setSubmenuOpen] = React.useState({});
 
   const handleDrawerOpen = () => {

@@ -259,6 +259,7 @@ const Utilisateurs = () => {
               },
             },
           }}
+          // @ts-ignore
           columns={columns}
           loading={loading}
           disableRowSelectionOnClick
