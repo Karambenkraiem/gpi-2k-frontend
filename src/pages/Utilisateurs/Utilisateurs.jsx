@@ -227,16 +227,16 @@ const Utilisateurs = () => {
   return (
     <div>
       <h1>Gestion des utilisateurs</h1>
-      <Box sx={{ height: 800, width: "100%" }}>
-      <Box sx={{ mb: 2 }}>
-        <Button onClick={handleOpen}
-          variant="contained"
-          color="primary">
-          + Ajouter Utilisateur
-        </Button>
-      </Box>
-
-
+      <Box sx={{ height: 560, width: "100%" }}>
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpen(null)}
+          >
+            + Ajouter Utilisateur
+          </Button>
+        </Box>
         <UtilisateurModal
           open={open}
           handleClose={() => setOpen(false)}
