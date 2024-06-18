@@ -298,6 +298,7 @@ const handleOpen = (materiel = null) => {
     {field: 'categorie', headerName: 'Categorie', flex:1},
     {field: 'marque', headerName: 'Marque', flex:1},
     {field: 'modele', headerName: 'Modele', flex:1},
+    {field: 'etatMateriel', headerName: 'Etat Materiel', flex:1},
     {field: 'prix', headerName: 'Prix', type: 'number',flex:1},
     {
       field: 'actions',
