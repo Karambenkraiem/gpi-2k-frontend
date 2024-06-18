@@ -486,16 +486,17 @@ const handleOpen = (materiel = null) => {
           </TextField>
 
           <TextField
-            label="Date d'acquisition"
-            name="dateAcquisition"
-            type="date"
-            value={formData.dateAcquisition || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
+              label={open ? "Date d'acquisition" : ""}
+              placeholder="Sélectionner une date"
+              name="dateAcquisition"
+              value={!open ? "" : "_"}
+              type="date"
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
             error={!!errors.dateAcquisition}
             helperText={errors.dateAcquisition}
-          />
+            />
 
           <Select
             label="Fournisseur"
