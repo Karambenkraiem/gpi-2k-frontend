@@ -115,6 +115,7 @@ export default function Main() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [managementOpen, setManagementOpen] = React.useState(false);
+  const [operationsOpen, setOperationsOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,6 +127,10 @@ export default function Main() {
 
   const handleManagementClick = () => {
     setManagementOpen(!managementOpen);
+  };
+
+  const handleOperationsClick = () => {
+    setOperationsOpen(!operationsOpen);
   };
 
   return (
@@ -170,10 +175,7 @@ export default function Main() {
                 <Nav.Link as={Link} to={elem.path}>
                   <ListItem disablePadding sx={{ display: "block" }}>
                     <ListItemButton
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2.5,
+                      sx={{minHeight: 48,justifyContent: open ? "initial" : "center", px: 2.5,
                       }}
                     >
                       <ListItemIcon
@@ -194,7 +196,7 @@ export default function Main() {
                 </Nav.Link>
               ) : (
                 <>
-                  <ListItem disablePadding sx={{ display: "block" }} onClick={handleManagementClick}>
+                  <ListItem disablePadding sx={{ display: "block" }} onClick={elem.label === "Management" ? handleManagementClick : handleOperationsClick}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,
@@ -215,10 +217,10 @@ export default function Main() {
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-                      {managementOpen ? <ExpandLess /> : <ExpandMore />}
+                      {elem.label === "Management" ? (managementOpen ? <ExpandLess /> : <ExpandMore />) : (operationsOpen ? <ExpandLess /> : <ExpandMore />)}
                     </ListItemButton>
                   </ListItem>
-                  {managementOpen && elem.items && elem.items.map((subItem) => (
+                  {(elem.label === "Management" && managementOpen && elem.items) || (elem.label === "Opérations" && operationsOpen && elem.items) ? elem.items.map((subItem) => (
                     <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
                       <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
                         <ListItemButton
@@ -244,7 +246,7 @@ export default function Main() {
                         </ListItemButton>
                       </ListItem>
                     </Nav.Link>
-                  ))}
+                  )) : null}
                 </>
               )}
             </React.Fragment>
