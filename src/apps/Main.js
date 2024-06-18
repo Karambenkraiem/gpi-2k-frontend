@@ -17,15 +17,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
-import { FaComputer } from "react-icons/fa6";
+import { FaArrowsDownToPeople, FaArrowsTurnToDots, FaComputer } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { HomeOutlined, PeopleOutline, ExpandLess, ExpandMore, LaptopChromebookOutlined } from "@mui/icons-material";
+import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import CreditScoreOutlinedIcon from '@mui/icons-material/CreditScoreOutlined';
+import { SiNginxproxymanager } from "react-icons/si";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -94,7 +93,15 @@ const Drawer = styled(MuiDrawer, {
 const initialNavItems = [
   { label: "Accueil", path: "/", icon: <HomeOutlined /> },
   { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
-  { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+  {
+    label: "Ressources materielles",
+    icon: <SiNginxproxymanager />,
+    items: [
+      { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
+      { label: "Affectation", path: "/affectation", icon: <FaArrowsDownToPeople /> },
+      { label: "Emprunt", path: "/emprunt", icon: <FaArrowsTurnToDots /> },
+    ]
+  },
   {
     label: "Management",
     icon: <BsBuildingGear />,
@@ -102,26 +109,13 @@ const initialNavItems = [
       { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
       { label: "Départements", path: "/departement", icon: <BsBuildings /> },
     ]
-  },
-    
-
-  {
-    label: "Opérations",
-    icon: <LaptopChromebookOutlined />,
-    items: [
-      { label: "Affectations", path: "/affectation", icon: <AssignmentOutlinedIcon />
-      },
-      { label: "Emprunt ", path: "/emprunt", icon: <CreditScoreOutlinedIcon/> },
-    ]
   }
 ];
 
 export default function Main() {
-
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true); // changé en true ¨Par Karam pour faire le side bar ouvert par defaut 
-  const [managementOpen, setManagementOpen] = React.useState(false);
-  const [operationsOpen, setOperationsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [submenuOpen, setSubmenuOpen] = React.useState({});
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,12 +125,8 @@ export default function Main() {
     setOpen(false);
   };
 
-  const handleManagementClick = () => {
-    setManagementOpen(!managementOpen);
-  };
-
-  const handleOperationsClick = () => {
-    setOperationsOpen(!operationsOpen);
+  const handleSubmenuToggle = (label) => {
+    setSubmenuOpen((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
   return (
@@ -181,7 +171,10 @@ export default function Main() {
                 <Nav.Link as={Link} to={elem.path}>
                   <ListItem disablePadding sx={{ display: "block" }}>
                     <ListItemButton
-                      sx={{minHeight: 48,justifyContent: open ? "initial" : "center", px: 2.5,
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
                       }}
                     >
                       <ListItemIcon
@@ -202,7 +195,7 @@ export default function Main() {
                 </Nav.Link>
               ) : (
                 <>
-                  <ListItem disablePadding sx={{ display: "block" }} onClick={elem.label === "Management" ? handleManagementClick : handleOperationsClick}>
+                  <ListItem disablePadding sx={{ display: "block" }} onClick={() => handleSubmenuToggle(elem.label)}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,
@@ -219,15 +212,14 @@ export default function Main() {
                       >
                         {elem.icon}
                       </ListItemIcon>
-
                       <ListItemText
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-                      {elem.label === "Management" ? (managementOpen ? <ExpandLess /> : <ExpandMore />) : (operationsOpen ? <ExpandLess /> : <ExpandMore />)}
+                      {submenuOpen[elem.label] ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                   </ListItem>
-                  {(elem.label === "Management" && managementOpen && elem.items) || (elem.label === "Opérations" && operationsOpen && elem.items) ? elem.items.map((subItem) => (
+                  {submenuOpen[elem.label] && elem.items && elem.items.map((subItem) => (
                     <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
                       <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
                         <ListItemButton
@@ -253,7 +245,7 @@ export default function Main() {
                         </ListItemButton>
                       </ListItem>
                     </Nav.Link>
-                  )) : null}
+                  ))}
                 </>
               )}
             </React.Fragment>
