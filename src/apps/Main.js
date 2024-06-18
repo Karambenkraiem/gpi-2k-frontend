@@ -17,14 +17,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
-import { FaArrowsDownToPeople, FaArrowsTurnToDots, FaComputer } from "react-icons/fa6";
+import { FaComputer } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
-import { SiNginxproxymanager } from "react-icons/si";
 
-const drawerWidth = 280;
+const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -93,15 +92,7 @@ const Drawer = styled(MuiDrawer, {
 const initialNavItems = [
   { label: "Accueil", path: "/", icon: <HomeOutlined /> },
   { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
-  {
-    label: "Ressources materielles",
-    icon: <SiNginxproxymanager />,
-    items: [
-      { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
-      { label: "Affectation", path: "/affectation", icon: <FaArrowsDownToPeople /> },
-      { label: "Emprunt", path: "/emprunt", icon: <FaArrowsTurnToDots /> },
-    ]
-  },
+  { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
   {
     label: "Management",
     icon: <BsBuildingGear />,
@@ -109,20 +100,23 @@ const initialNavItems = [
       { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
       { label: "Départements", path: "/departement", icon: <BsBuildings /> },
     ]
+  },
+  {
+    label: "Opérations",
+    icon: <BsBuildingGear />,
+    items: [
+      { label: "Affectations", path: "/affectation", icon: <BsCardList /> },
+      { label: "Emprunt ", path: "/emprunt", icon: <BsBuildings /> },
+    ]
   }
 ];
 
 export default function Main() {
 
   const theme = useTheme();
-<<<<<<< HEAD
-  const [open, setOpen] = React.useState(true); // changé en true Par Karam pour faire le side bar ouvert par defaut 
+  const [open, setOpen] = React.useState(true); // changé en true ¨Par Karam pour faire le side bar ouvert par defaut 
   const [managementOpen, setManagementOpen] = React.useState(false);
   const [operationsOpen, setOperationsOpen] = React.useState(false);
-=======
-  const [open, setOpen] = React.useState(false);
-  const [submenuOpen, setSubmenuOpen] = React.useState({});
->>>>>>> 7489b1a4d275ad23128de5befd54a697dc5af86b
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,8 +126,8 @@ export default function Main() {
     setOpen(false);
   };
 
-  const handleSubmenuToggle = (label) => {
-    setSubmenuOpen((prev) => ({ ...prev, [label]: !prev[label] }));
+  const handleManagementClick = () => {
+    setManagementOpen(!managementOpen);
   };
 
   const handleOperationsClick = () => {
@@ -203,11 +197,7 @@ export default function Main() {
                 </Nav.Link>
               ) : (
                 <>
-<<<<<<< HEAD
                   <ListItem disablePadding sx={{ display: "block" }} onClick={elem.label === "Management" ? handleManagementClick : handleOperationsClick}>
-=======
-                  <ListItem disablePadding sx={{ display: "block" }} onClick={() => handleSubmenuToggle(elem.label)}>
->>>>>>> 7489b1a4d275ad23128de5befd54a697dc5af86b
                     <ListItemButton
                       sx={{
                         minHeight: 48,
@@ -228,17 +218,10 @@ export default function Main() {
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-<<<<<<< HEAD
                       {elem.label === "Management" ? (managementOpen ? <ExpandLess /> : <ExpandMore />) : (operationsOpen ? <ExpandLess /> : <ExpandMore />)}
                     </ListItemButton>
                   </ListItem>
                   {(elem.label === "Management" && managementOpen && elem.items) || (elem.label === "Opérations" && operationsOpen && elem.items) ? elem.items.map((subItem) => (
-=======
-                      {submenuOpen[elem.label] ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  {submenuOpen[elem.label] && elem.items && elem.items.map((subItem) => (
->>>>>>> 7489b1a4d275ad23128de5befd54a697dc5af86b
                     <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
                       <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
                         <ListItemButton
