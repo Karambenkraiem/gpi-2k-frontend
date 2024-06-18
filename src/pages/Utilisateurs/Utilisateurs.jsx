@@ -61,6 +61,7 @@ const Utilisateurs = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
+///////////////////////////////////////////////
 
   const handleOpen = (user = null) => {
     //console.log("handleOpen called with user:", user);
@@ -136,7 +137,8 @@ const Utilisateurs = () => {
     axios
       .delete(`http://localhost:3000/utilisateur/${id}`)
       .then((response) => {
-        setUsers(users.filter((user) => user.idUtilisateur !== id));
+        setUsers(
+          users.filter((user) => user.idUtilisateur !== id));
       })
       .catch((error) => {
         console.error("Erreur Suppression de utilisateur....", error);
@@ -179,27 +181,27 @@ const Utilisateurs = () => {
     {
       field: "idUtilisateur",
       headerName: "Matricule",
-      width: 90,
+      flex:1,
     },
     {
       field: "fullName",
       headerName: "Nom & Prénom",
-      width: 250,
+      flex:1,
     },
     {
       field: "roleUtilisateur",
       headerName: "Role",
-      width: 150,
+      flex:1,
     },
     {
       field: "etatUtilisateur",
       headerName: "Etat",
-      width: 100,
+      flex:1,
     },
     {
       field: "idSpecialite",
       headerName: "Spécialité",
-      width: 150,
+      width: 100,
     },
     {
       field: "actions",
@@ -208,7 +210,8 @@ const Utilisateurs = () => {
       width: 250,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleOpen(params.row)}>
+          <Button 
+          onClick={() => handleOpen(params.row)}>
             <LuClipboardEdit />
           </Button>
           <Button onClick={() => toggleStatus(params.row.idUtilisateur)}>
@@ -256,12 +259,12 @@ const Utilisateurs = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 8,
+                pageSize: 5,
               },
             },
           }}
-          pageSizeOptions={[8]}
-          checkboxSelection
+          pageSizeOptions={[100]}
+          // checkboxSelection
           disableRowSelectionOnClick
         />
       </Box>
