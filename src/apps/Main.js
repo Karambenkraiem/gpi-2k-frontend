@@ -112,8 +112,9 @@ const initialNavItems = [
 ];
 
 export default function Main() {
+
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true); // changé en true Par Karam pour faire le side bar ouvert par defaut 
   const [managementOpen, setManagementOpen] = React.useState(false);
   const [operationsOpen, setOperationsOpen] = React.useState(false);
 
