@@ -64,14 +64,10 @@ const Utilisateurs = () => {
 ///////////////////////////////////////////////
 
   const handleOpen = (user = null) => {
-    //console.log("handleOpen called with user:", user);
-    console.log("Opening modal", user);
-    console.log(isEditing);
     if (user) {
       setCurrentUser(user);
       setIsEditing(true);
     } else {
-      setIsEditing(false);
       setCurrentUser({
         idUtilisateur: "",
         password: "",

@@ -876,6 +876,7 @@ const handleOpen = (materiel = null) => {
                   '64 Go',
                   '128 Go',
                   '256 Go',
+                  '512 Go',
                 ].map (conn => (
                   <MenuItem key={conn} value={conn}>
                     {conn}
