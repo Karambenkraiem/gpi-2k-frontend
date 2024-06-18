@@ -223,7 +223,7 @@ const Utilisateurs = () => {
       ),
     },
   ];
-
+  const [pageSize, setPageSize] = useState(25);
   return (
     <div>
       <h1>Gestion des utilisateurs</h1>
@@ -246,22 +246,26 @@ const Utilisateurs = () => {
           handleSave={handleSave}
           errors={errors}
         />
+
+        
         <DataGrid
           rows={users}
           // @ts-ignore
-          columns={columns}
-          loading={loading}
-          getRowId={(row) => row.idUtilisateur}
+          pageSize={pageSize}
+         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[5,10, 25,50,100]}
+          pagination
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 25,
               },
             },
           }}
-          pageSizeOptions={[100]}
-          // checkboxSelection
+          columns={columns}
+          loading={loading}
           disableRowSelectionOnClick
+          getRowId={(row) => row.idUtilisateur}    
         />
       </Box>
     </div>
