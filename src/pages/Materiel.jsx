@@ -15,8 +15,9 @@ import axios from 'axios';
 import {ip} from 'constants/ip';
 import {RiDeleteBin6Line} from 'react-icons/ri';
 import {LuClipboardEdit} from 'react-icons/lu';
-import {FaRegSave} from 'react-icons/fa';
+import {FaArchive, FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
+import { VscActivateBreakpoints } from 'react-icons/vsc';
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState ([]);
@@ -209,6 +210,7 @@ const handleOpen = (materiel = null) => {
       nombrePortSwitch: parseInt (formData.nombrePortSwitch),
       debitSwitch: parseInt (formData.debitSwitch),
       tailleEcran: parseFloat (formData.tailleEcran),
+      idSociete: formData.idSociete === '' ? null : formData.idSociete,
     };
 
     if (isEditing) {
@@ -266,6 +268,30 @@ const handleOpen = (materiel = null) => {
         console.error ('Erreur suppression de materiel ....', error);
       });
   };
+  const toggleStatus = (numeroSerie) => {
+    const materiel = materiels.find((m) => m.numeroSerie === numeroSerie);
+    if (!materiel) {
+      console.error("Données Introuvable !!!");
+      return;
+    }
+    const updatedMateriel = {
+      ...materiel,
+      etatMateriel: ["nouveau", "fonctionnel", "enPanne"].includes(materiel.etatMateriel) 
+        ? "rebut" 
+        : materiel.etatMateriel,
+    };
+    axios
+      .patch(`http://localhost:3000/materiel/${numeroSerie}`, updatedMateriel)
+      .then((response) => {
+        setMateriels(
+          materiels.map((m) => (m.numeroSerie === numeroSerie ? response.data : m))
+        );
+      })
+      .catch((error) => {
+        console.error("Erreur archivage etat Materiel !!! ", error);
+      });
+  };
+
 
   const columns = [
     {field: 'numeroSerie', headerName: 'Numero Serie', flex:1},
@@ -286,6 +312,9 @@ const handleOpen = (materiel = null) => {
           <Button onClick={() => handleDelete (params.row.numeroSerie)}>
             <RiDeleteBin6Line />
           </Button>
+          <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
+          <FaArchive />
+          </Button>
         </div>
       ),
     },
@@ -305,6 +334,7 @@ const handleOpen = (materiel = null) => {
     id: index, // or use a unique field from your data, e.g., row.numeroSerie
     ...row,
   }));
+  const [pageSize, setPageSize] = useState(25);
   return (
     <div>
       <h1>Gestion de Matériel</h1>
@@ -320,23 +350,21 @@ const handleOpen = (materiel = null) => {
       <DataGrid
         rows={materiels}
          // @ts-ignore
-         // pageSize={5}
-        // rowsPerPageOptions={[5, 10, 20]}
-        // checkboxSelection
-        columns={columns}
-        loading={loading}        
-        disableSelectionOnClick
-        onRowDoubleClick={handleEdit}
-        getRowId={row => row.numeroSerie}
-        initialState={{
-          pagination : {
-            paginationModel:{
-              pageSize:5,
-            }
-          }
-        }}
-        pageSizeOptions={[100]}
-
+         pageSize={pageSize}
+         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[5,10, 25,50,100]}
+          pagination
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 25,
+              },
+            },
+          }}
+          columns={columns}
+          loading={loading}        
+          disableSelectionOnClick
+          getRowId={row => row.numeroSerie}
       />
       <Modal open={open} onClose={handleCloseModal}>
         <Box sx={style}>
@@ -434,12 +462,15 @@ const handleOpen = (materiel = null) => {
             // error={!!errors.idSpecialite}
             // style={{marginTop: '1rem'}}
           >
-            {societies.map (elem => (
-              <MenuItem key={elem.idSociete} value={elem.idSociete}>
-                {elem.raisonSociale}
-              </MenuItem>
-            ))}
-          </Select>
+            <MenuItem value="">
+        <em>None</em>
+        </MenuItem>
+        {societies.map(elem => (
+         <MenuItem key={elem.idSociete} value={elem.idSociete}>
+        {elem.raisonSociale}
+         </MenuItem>
+         ))}
+</Select>
 
           {/* <TextField
             label="Fournisseur"
