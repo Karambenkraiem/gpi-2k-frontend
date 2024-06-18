@@ -63,10 +63,14 @@ const Utilisateurs = () => {
   };
 
   const handleOpen = (user = null) => {
+    //console.log("handleOpen called with user:", user);
+    console.log("Opening modal", user);
+    console.log(isEditing);
     if (user) {
       setCurrentUser(user);
       setIsEditing(true);
     } else {
+      setIsEditing(false);
       setCurrentUser({
         idUtilisateur: "",
         password: "",
@@ -225,15 +229,15 @@ const Utilisateurs = () => {
     <div>
       <h1>Gestion des utilisateurs</h1>
       <Box sx={{ height: 560, width: "100%" }}>
-      <Box sx={{ mb: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpen}
-        >
-          + Ajouter Utilisateur
-        </Button>
-      </Box>
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpen(null)}
+          >
+            + Ajouter Utilisateur
+          </Button>
+        </Box>
         <UtilisateurModal
           open={open}
           handleClose={() => setOpen(false)}

@@ -187,6 +187,7 @@ const UtilisateurModal = ({
           sx={{ mt: 2 }}
           onClick={handleSave}
         >
+          {console.log(isEditing)}
           {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
           {isEditing ? "_ Enregistrer" : "_ Ajouter"}
         </Button>
