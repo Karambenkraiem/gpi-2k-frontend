@@ -35,11 +35,12 @@ const Affectations = () => {
     { field: 'motifRetour', headerName: 'Motif Retour', width: 200 },
   ];
 
- 
-  
 
   return (
+
     <div style={{ height: 600, width: '100%' }}>
+            <h1>Historique des Affectations</h1>
+
       <DataGrid
         rows={rows}
         columns={columns}
