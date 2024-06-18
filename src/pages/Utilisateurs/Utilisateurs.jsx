@@ -61,7 +61,7 @@ const Utilisateurs = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
-///////////////////////////////////////////////
+  ///////////////////////////////////////////////
 
   const handleOpen = (user = null) => {
     if (user) {
@@ -133,8 +133,7 @@ const Utilisateurs = () => {
     axios
       .delete(`http://localhost:3000/utilisateur/${id}`)
       .then((response) => {
-        setUsers(
-          users.filter((user) => user.idUtilisateur !== id));
+        setUsers(users.filter((user) => user.idUtilisateur !== id));
       })
       .catch((error) => {
         console.error("Erreur Suppression de utilisateur....", error);
@@ -177,22 +176,22 @@ const Utilisateurs = () => {
     {
       field: "idUtilisateur",
       headerName: "Matricule",
-      flex:1,
+      flex: 1,
     },
     {
       field: "fullName",
       headerName: "Nom & Prénom",
-      flex:1,
+      flex: 1,
     },
     {
       field: "roleUtilisateur",
       headerName: "Role",
-      flex:1,
+      flex: 1,
     },
     {
       field: "etatUtilisateur",
       headerName: "Etat",
-      flex:1,
+      flex: 1,
     },
     {
       field: "idSpecialite",
@@ -206,15 +205,14 @@ const Utilisateurs = () => {
       width: 250,
       renderCell: (params) => (
         <div>
-          <Button 
-          onClick={() => handleOpen(params.row)}>
+          <Button onClick={() => handleView(params.row.idUtilisateur)}>
+            <TbEyeSearch />
+          </Button>
+          <Button onClick={() => handleOpen(params.row)}>
             <LuClipboardEdit />
           </Button>
           <Button onClick={() => toggleStatus(params.row.idUtilisateur)}>
             <VscActivateBreakpoints />
-          </Button>
-          <Button onClick={() => handleView(params.row.idUtilisateur)}>
-            <TbEyeSearch />
           </Button>
           <Button onClick={() => handleDelete(params.row.idUtilisateur)}>
             <RiDeleteBin6Line />
@@ -247,13 +245,12 @@ const Utilisateurs = () => {
           errors={errors}
         />
 
-        
         <DataGrid
           rows={users}
           // @ts-ignore
           pageSize={pageSize}
-         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5,10, 25,50,100]}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           pagination
           initialState={{
             pagination: {
@@ -265,7 +262,7 @@ const Utilisateurs = () => {
           columns={columns}
           loading={loading}
           disableRowSelectionOnClick
-          getRowId={(row) => row.idUtilisateur}    
+          getRowId={(row) => row.idUtilisateur}
         />
       </Box>
     </div>
