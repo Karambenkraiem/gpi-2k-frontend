@@ -10,6 +10,8 @@ import Utilisateur from "../pages/Utilisateurs/Utilisateur";
 import Materiel from "../pages/Materiel";
 import Spécialité from "../pages/Spécialité";
 import Département from "pages/Département";
+import Affectation from "pages/Affectation";
+import Emprunt from "pages/Emprunt";
 
 
 export default function Router() {
@@ -25,6 +27,9 @@ export default function Router() {
             <Route path="/materiel" element={<Materiel />} />
             <Route path="/specialite" element={<Spécialité />} />
             <Route path="/departement" element={<Département />} />
+            <Route path="/affectation" element={<Affectation />} />
+            <Route path="/emprunt" element={< Emprunt/>} />
+
           </Route>
           <Route path="*" element={<div>404</div>} />
         </Routes>

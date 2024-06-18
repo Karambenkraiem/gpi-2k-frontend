@@ -100,6 +100,14 @@ const initialNavItems = [
       { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
       { label: "Départements", path: "/departement", icon: <BsBuildings /> },
     ]
+  },
+  {
+    label: "Opérations",
+    icon: <BsBuildingGear />,
+    items: [
+      { label: "Affectations", path: "/affectation", icon: <BsCardList /> },
+      { label: "Emprunt ", path: "/emprunt", icon: <BsBuildings /> },
+    ]
   }
 ];
 
