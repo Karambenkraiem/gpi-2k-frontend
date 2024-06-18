@@ -22,8 +22,8 @@ import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
-import { GiExplosiveMaterials } from "react-icons/gi";
 import { SiNginxproxymanager } from "react-icons/si";
+
 const drawerWidth = 280;
 
 const openedMixin = (theme) => ({
@@ -108,14 +108,6 @@ const initialNavItems = [
     items: [
       { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
       { label: "Départements", path: "/departement", icon: <BsBuildings /> },
-    ]
-  },
-  {
-    label: "Opérations",
-    icon: <BsBuildingGear />,
-    items: [
-      { label: "Affectations", path: "/affectation", icon: <BsCardList /> },
-      { label: "Emprunt ", path: "/emprunt", icon: <BsBuildings /> },
     ]
   }
 ];

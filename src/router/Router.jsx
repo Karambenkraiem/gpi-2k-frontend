@@ -9,10 +9,11 @@ import Utilisateurs from '../pages/Utilisateurs/Utilisateurs';
 import Utilisateur from "../pages/Utilisateurs/Utilisateur";
 import Materiel from "../pages/Materiel";
 import Spécialité from "../pages/Spécialité";
-import Département from "pages/Département";
+import Département from "../pages/Département";
 // @ts-ignore
-import DetailsMateriel from "../pages/DetailsMateriel";import Affectation from "pages/Affectation";
-import Emprunt from "pages/Emprunt";
+import DetailsMateriel from "../pages/DetailsMateriel";
+import Affectation from "../pages/Affectation";
+import Emprunt from "../pages/Emprunt";
 
 
 export default function Router() {
