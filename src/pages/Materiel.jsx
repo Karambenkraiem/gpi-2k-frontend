@@ -158,7 +158,8 @@ const MaterielPage = () => {
 
     if (isEditing) {
       // @ts-ignore
-      const { Societe, ...rest } = materialToSave;
+      const { Affectation, Emprunt, idSociete, statut, ...rest } =
+      materialToSave;
       axios
         .patch(`http://localhost:3000/materiel/${formData.numeroSerie}`, rest)
         .then((response) => {
@@ -471,13 +472,11 @@ const MaterielPage = () => {
               placeholder="Sélectionner une date"
               name="dateAcquisition"
               value={formData.dateAcquisition || "_"}
-              type="date"
+              type="Date"
               onChange={handleChange}
               fullWidth
               margin="normal"
-              // @ts-ignore
               error={!!errors.dateAcquisition}
-              // @ts-ignore
               helperText={errors.dateAcquisition}
             />
 
