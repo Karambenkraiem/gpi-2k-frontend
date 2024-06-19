@@ -1,5 +1,9 @@
+// @ts-ignore
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
+// @ts-ignore
+// @ts-ignore
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
@@ -60,7 +64,7 @@ const DetailsMateriel = () => {
     fetchAffectations();
     fetchEmprunts();
     fetchSocieties();
-  }, [numeroSerie]);
+  });
 
   const rowsAffectations = affectations.map((affectation, index) => ({
     id: index,
@@ -94,7 +98,11 @@ const DetailsMateriel = () => {
     { field: "dateEmprunt", headerName: "Date Emprunt", width: 150 },
     { field: "dateRestitution", headerName: "Date Restitution", width: 150 },
     { field: "refProjet", headerName: "Référence Projet", width: 150 },
-    {field: "etatMatRestitution", headerName: "État Matériel Restitution", width: 220 },
+    {
+      field: "etatMatRestitution",
+      headerName: "État Matériel Restitution",
+      width: 220,
+    },
   ];
 
   const formatDate = (dateString) => {
@@ -107,6 +115,7 @@ const DetailsMateriel = () => {
   };
 
   const nomSociete = societies.find(
+    // @ts-ignore
     (society) => society.idSociete === materiel.idSociete
   )?.raisonSociale;
 
@@ -131,137 +140,347 @@ const DetailsMateriel = () => {
               <Card className="mb-6">
                 <Card.Body className="text-left">
                   <h6 className="my-1">
-                    <b>{materiel?.categorie}</b>
+                    <b>
+                      {
+                        // @ts-ignore
+                        materiel?.categorie
+                      }
+                    </b>
                   </h6>
                   <h6 className="my-1">
-                    <b>{materiel?.marque + " " + materiel?.modele}</b>
+                    <b>
+                      {
+                        // @ts-ignore
+                        materiel?.marque + " " + materiel?.modele
+                      }
+                    </b>
                   </h6>
                   <h6 className="my-3">
-                    <b>Numéro de série:</b> {materiel?.numeroSerie}
+                    <b>Numéro de série:</b>{" "}
+                    {
+                      // @ts-ignore
+                      materiel?.numeroSerie
+                    }
                   </h6>
                   <p className="text-muted mb-1">
-                    <b>Prix:</b> {materiel?.prix + " Dinars"}
+                    <b>Prix:</b>{" "}
+                    {
+                      // @ts-ignore
+                      materiel?.prix + " Dinars"
+                    }
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Garantie:</b> {materiel?.garantie + " an(s)"}
+                    <b>Garantie:</b>{" "}
+                    {
+                      // @ts-ignore
+                      materiel?.garantie + " an(s)"
+                    }
                   </p>
                   <p className="text-muted mb-1">
-                    <b>État: </b> {materiel?.etatMateriel}
+                    <b>État: </b>{" "}
+                    {
+                      // @ts-ignore
+                      materiel?.etatMateriel
+                    }
                   </p>
                   <p className="text-muted mb-0">
                     <b>Date d'acquisition:</b>{" "}
-                    {formatDate(materiel?.dateAcquisition)}
+                    {formatDate(
+                      // @ts-ignore
+                      materiel?.dateAcquisition
+                    )}
                   </p>
                   <p className="text-muted mb-0">
                     <b>Société:</b> {nomSociete || "N/A"}
                   </p>
-                  {(materiel?.categorie === "UniteCentrale" ||
-                    materiel?.categorie === "PcPortable" ||
-                    materiel?.categorie === "Serveur" ) && (
-                    <>
+                  {
+                    // @ts-ignore
+                    (materiel?.categorie === "UniteCentrale" ||
+                      // @ts-ignore
+                      materiel?.categorie === "PcPortable" ||
+                      // @ts-ignore
+                      materiel?.categorie === "Serveur") && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Processeur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.processeurPC
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Mémoire cache:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.memoireCache
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>RAM:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.ram
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Disque dur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.disque
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Nombre de disques:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.nombreDisque
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Carte Graphique:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.carteGraphique
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "Ecran" && (
                       <p className="text-muted mb-0">
-                        <b>Processeur:</b> {materiel?.processeurPC}
+                        <b>Taille Écran:</b>{" "}
+                        {
+                          // @ts-ignore
+                          materiel?.tailleEcran + '"'
+                        }
                       </p>
-                      <p className="text-muted mb-0">
-                        <b>Mémoire cache:</b> {materiel?.memoireCache}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>RAM:</b> {materiel?.ram}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Disque dur:</b> {materiel?.disque}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Nombre de disques:</b> {materiel?.nombreDisque}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Carte Graphique:</b> {materiel?.carteGraphique}
-                      </p>
-                      
-                    </>
-                  )}
-                  {materiel?.categorie === "Ecran" && (
-                    <p className="text-muted mb-0">
-                      <b>Taille Écran:</b> {materiel?.tailleEcran + '"'}
-                    </p>
-                  )}
-                  {materiel?.categorie === "PcPortable" && (
-                    <>
-                    <p className="text-muted mb-0">
-                      <b>Taille de l'écran:</b> {materiel?.tailleEcran}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Etat de batterie:</b> {materiel?.etatBatteriePcPortable}
-                    </p>
-                    </>
-                  )}
-                  {materiel?.categorie === "Imprimante" && (
-                    <>
-                    <p className="text-muted mb-0">
-                      <b>Vitesse d'impression:</b> {materiel?.vitesseImpression}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Technologie d'impression:</b> {materiel?.technologieImpression}
-                    </p>
-                    </>
-                  )}
-                  {materiel?.categorie === "Scanner" && (
-                    <>
-                    <p className="text-muted mb-0">
-                      <b>Vitesse de scan:</b> {materiel?.vitesseScanner}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Type de Scanner:</b> {materiel?.typeScanner}
-                    </p>
-                    </>
-                  )}
-                  {(materiel?.categorie === "Imprimante" ||
-                    materiel?.categorie === "Scanner") && (
-                    <>
-                      <p className="text-muted mb-0">
-                        <b>Type de Connexion:</b> {materiel?.connexionWLU}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Résolution:</b> {materiel?.resolutionScanImpVideoP}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Format:</b> {materiel?.formatScanImp}
-                      </p>
-                      <p className="text-muted mb-0">
-                        <b>Fonctions Supplémentaires:</b> {materiel?.fonctionSupplementaireScanImp}
-                      </p>
-                    </>
-                  )}
-                  {materiel?.categorie === "Onduleur" && (
-                    <>
-                    <p className="text-muted mb-0">
-                      <b>Poids Onduleur:</b> {materiel?.poidsOnduleur}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Autonomie Onduleur:</b> {materiel?.autonomieOnduleur}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Capacité Onduleur:</b> {materiel?.capaciteChargeOnduleur}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Technologie Onduleur:</b> {materiel?.technologieOnduleur}
-                    </p>
-                    </>
-                  )}
-                  {materiel?.categorie === "Switch" && (
-                    <>
-                    <p className="text-muted mb-0">
-                      <b>Nombre de Ports:</b> {materiel?.nombrePortSwitch}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Débit:</b> {materiel?.debitSwitch}
-                    </p>
-                    <p className="text-muted mb-0">
-                      <b>Technologie Switch:</b> {materiel?.technologieSwitch}
-                    </p>
-                    </>
-                  )}
-                  
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "PcPortable" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Taille de l'écran:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.tailleEcran
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Etat de batterie:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.etatBatteriePcPortable
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "Imprimante" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Vitesse d'impression:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.vitesseImpression
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Technologie d'impression:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.technologieImpression
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "Scanner" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Vitesse de scan:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.vitesseScanner
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Type de Scanner:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.typeScanner
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    (materiel?.categorie === "Imprimante" ||
+                      // @ts-ignore
+                      materiel?.categorie === "Scanner") && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Type de Connexion:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.connexionWLU
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Résolution:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.resolutionScanImpVideoP
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Format:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.formatScanImp
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Fonctions Supplémentaires:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.fonctionSupplementaireScanImp
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "Onduleur" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Poids Onduleur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.poidsOnduleur
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Autonomie Onduleur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.autonomieOnduleur
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Capacité Onduleur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.capaciteChargeOnduleur
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Technologie Onduleur:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.technologieOnduleur
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "Switch" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Nombre de Ports:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.nombrePortSwitch
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Débit:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.debitSwitch
+                          }
+                        </p>
+                        <p className="text-muted mb-0">
+                          <b>Technologie Switch:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.technologieSwitch
+                          }
+                        </p>
+                      </>
+                    )
+                  }
+                  {
+                    // @ts-ignore
+                    materiel?.categorie === "VideoProjecteur" && (
+                      <>
+                        <p className="text-muted mb-0">
+                          <b>Résolution:</b>{" "}
+                          {
+                            // @ts-ignore
+                            materiel?.resolutionScanImpVideoP
+                          }
+                        </p>
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={
+                                  // @ts-ignore
+                                  materiel?.entreeHDMI_VideoProjecteur || false
+                                }
+                              />
+                            }
+                            label="HDMI"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={
+                                  // @ts-ignore
+                                  materiel?.entreeLAN_VideoProjecteur || false
+                                }
+                              />
+                            }
+                            label="LAN"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={
+                                  // @ts-ignore
+                                  materiel?.entreeUSB_VideoProjecteur || false
+                                }
+                              />
+                            }
+                            label="USB"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={
+                                  // @ts-ignore
+                                  materiel?.entreeVGA_VideoProjecteur || false
+                                }
+                              />
+                            }
+                            label="VGA"
+                          />
+                        </FormGroup>
+                      </>
+                    )
+                  }
                 </Card.Body>
               </Card>
             </Col>
@@ -277,6 +496,7 @@ const DetailsMateriel = () => {
                         <DataGrid
                           rows={rowsAffectations}
                           columns={columnsAffectations}
+                          // @ts-ignore
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
@@ -297,6 +517,7 @@ const DetailsMateriel = () => {
                         <DataGrid
                           rows={rowsEmprunts}
                           columns={columnsEmprunts}
+                          // @ts-ignore
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
