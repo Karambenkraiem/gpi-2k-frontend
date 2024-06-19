@@ -11,6 +11,9 @@ import {
   Checkbox,
   Select,
 } from "@mui/material";
+import QueuePlayNextOutlinedIcon from '@mui/icons-material/QueuePlayNextOutlined';
+import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import axios from "axios";
 import { ip } from "constants/ip";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -292,8 +295,9 @@ const MaterielPage = () => {
         ? "rebut" 
         : materiel.etatMateriel,
     };
+    const {Affectation,Emprunt,idSociete,statut, ...rest}=updatedMateriel;
     axios
-      .patch(`http://localhost:3000/materiel/${numeroSerie}`, updatedMateriel)
+      .patch(`http://localhost:3000/materiel/${numeroSerie}`, rest)
       .then((response) => {
         setMateriels(
           materiels.map((m) => (m.numeroSerie === numeroSerie ? response.data : m))
@@ -303,6 +307,19 @@ const MaterielPage = () => {
         console.error("Erreur archivage etat Materiel !!! ", error);
       });
   };
+
+  const handleAffectation = (numeroSerie) => {
+    
+  }
+  const handleEmprunt = (numeroSerie) => {
+
+  }
+
+
+
+
+
+
 
   const handleView = (numeroSerie) => {
     Navigate(`/detailsMateriel/${numeroSerie}`);
@@ -331,17 +348,17 @@ const MaterielPage = () => {
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
     { field: "categorie", headerName: "Categorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 130 },
-    { field: "modele", headerName: "Modele", width: 250 },
+    { field: "modele", headerName: "Modele", width: 200 },
     { field: "prix", headerName: "Prix", type: "number", width: 100},
     {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
-    { field: 'statut', headerName: "Statut", width: 200 },
+    { field: 'statut', headerName: "Statut", width: 150 },
     {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-     width:250,
+     width:350,
       renderCell: (params) => (
-        <div text-align="center">
+        <div text-align="letf">
           <Button onClick={() => handleView(params.row.numeroSerie)}>
             <TbEyeSearch />
           </Button>
@@ -353,6 +370,12 @@ const MaterielPage = () => {
           </Button>
           <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
           <FaArchive />
+          </Button>
+          <Button onClick={() => handleAffectation(params.row)}>
+          <QueuePlayNextOutlinedIcon/>
+          </Button>
+          <Button onClick={() => handleEmprunt(params.row)}>
+          <ManageHistoryOutlinedIcon/>
           </Button>
         </div>
       ),
@@ -1075,3 +1098,5 @@ const MaterielPage = () => {
   );
 };
 export default MaterielPage;
+
+
