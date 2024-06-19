@@ -1,11 +1,11 @@
 // @ts-ignore
 // @ts-ignore
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridVisibilityOffIcon } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   Button,
   Modal,
@@ -328,7 +328,7 @@ const MaterielPage = () => {
       renderCell: (params) => (
         <div text-align="letf">
           <Button title="Voir Détails Matériel" onClick={() => handleView(params.row.numeroSerie)}>
-            <VisibilityIcon />
+            < VisibilityOutlinedIcon  />
           </Button>
           <Button title="Modifier Matériel" onClick={() => handleEdit(params.row)}>
             <EditNoteIcon />
