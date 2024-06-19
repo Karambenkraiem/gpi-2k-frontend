@@ -100,7 +100,7 @@ const MaterielPage = () => {
     prix: "",
     garantie: "",
     etatMateriel: "",
-    dateAcquisition: new Date().toISOString(),
+    dateAcquisition: "",
     idSociete: "",
     nombrePortSwitch: "",
     debitSwitch: "",
@@ -346,7 +346,7 @@ const MaterielPage = () => {
     },
   ];
   const [pageSize, setPageSize] = useState(25);
-
+  console.log(formData.dateAcquisition);
   return (
     <div>
       <h1>Gestion de Matériel</h1>
@@ -487,11 +487,11 @@ const MaterielPage = () => {
             </TextField>
 
             <TextField
-              label={open ? "Date d'acquisition" : ""}
+              label={"Date d'acquisition"}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
-              value={formData.dateAcquisition || "_"}
-              type="Date"
+              value={isEditing ? formData.dateAcquisition : " "}
+              type="date"
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -886,7 +886,8 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={state.entreeHDMI_VideoProjecteur}
+                      
+                        checked={formData?.entreeHDMI_VideoProjecteur ?? state.entreeHDMI_VideoProjecteur}
                         onChange={handleCheckboxChange}
                         name="entreeHDMI_VideoProjecteur"
                       />
@@ -896,7 +897,7 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={state.entreeVGA_VideoProjecteur}
+                        checked={formData?.entreeVGA_VideoProjecteur ?? state.entreeVGA_VideoProjecteur}
                         onChange={handleCheckboxChange}
                         name="entreeVGA_VideoProjecteur"
                       />
@@ -906,7 +907,7 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={state.entreeUSB_VideoProjecteur}
+                        checked={formData?.entreeUSB_VideoProjecteur ?? state.entreeUSB_VideoProjecteur}
                         onChange={handleCheckboxChange}
                         name="entreeUSB_VideoProjecteur"
                       />
@@ -916,7 +917,7 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={state.entreeLAN_VideoProjecteur}
+                        checked={formData?.entreeLAN_VideoProjecteur ?? state.entreeLAN_VideoProjecteur}
                         onChange={handleCheckboxChange}
                         name="entreeLAN_VideoProjecteur"
                       />
