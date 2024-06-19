@@ -1,7 +1,11 @@
 // @ts-ignore
 // @ts-ignore
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridVisibilityOffIcon } from "@mui/x-data-grid";
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import {
   Button,
   Modal,
@@ -320,25 +324,25 @@ const MaterielPage = () => {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-      width: 350,
+      width: 400,
       renderCell: (params) => (
         <div text-align="letf">
-          <Button onClick={() => handleView(params.row.numeroSerie)}>
-            <TbEyeSearch />
+          <Button title="Voir Détails Matériel" onClick={() => handleView(params.row.numeroSerie)}>
+            <VisibilityIcon />
           </Button>
-          <Button onClick={() => handleEdit(params.row)}>
-            <LuClipboardEdit />
+          <Button title="Modifier Matériel" onClick={() => handleEdit(params.row)}>
+            <EditNoteIcon />
           </Button>
-          <Button onClick={() => handleDelete(params.row.numeroSerie)}>
-            <RiDeleteBin6Line />
+          <Button title="Supprimer Materiel" onClick={() => handleDelete(params.row.numeroSerie)}>
+            <DeleteOutlineOutlinedIcon />
           </Button>
-          <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
-            <FaArchive />
+          <Button title="Archiver Matériel" onClick={() => toggleStatus(params.row.numeroSerie)}>
+            <Inventory2OutlinedIcon />
           </Button>
-          <Button onClick={() => handleAffectation(params.row)}>
+          <Button title="Affecter Matériel" onClick={() => handleAffectation(params.row)}>
             <QueuePlayNextOutlinedIcon />
           </Button>
-          <Button onClick={() => handleEmprunt(params.row)}>
+          <Button title="Emprunter Matériel" onClick={() => handleEmprunt(params.row)}>
             <ManageHistoryOutlinedIcon />
           </Button>
         </div>
