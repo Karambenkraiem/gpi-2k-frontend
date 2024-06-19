@@ -17,11 +17,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { LuClipboardEdit } from "react-icons/lu";
 import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
-import { VscActivateBreakpoints } from 'react-icons/vsc';
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import Affectations from "./Affectation";
-import Emprunt from "./Emprunt";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -129,8 +126,8 @@ const MaterielPage = () => {
       .get("http://localhost:3000/materiel")
       .then((response) => {
         setMateriels(response.data);
-        setLoading(false);
-      })
+        setLoading(false); 
+            })
       .catch((error) => console.error("Error fetching data:", error));
   };
 
@@ -325,47 +322,19 @@ const MaterielPage = () => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
   }, []);
 
+  // const rows = materiels.map((materiel, index) => ({
+  //   id: index, // or use a unique field from your data, e.g., row.numeroSerie
+  //   ...materiel,
+  // }));
 
-
-  const rows = materiels.map((materiel, index) => ({
-    id: index, // or use a unique field from your data, e.g., row.numeroSerie
-    ...materiel,
-    aff: materiel.Affectation && materiel.Affectation.length > 0,
-    emprunt: materiel.Emprunt && materiel.Emprunt.length > 0,
-  }));
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
     { field: "categorie", headerName: "Categorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 130 },
     { field: "modele", headerName: "Modele", width: 250 },
+    { field: "prix", headerName: "Prix", type: "number", width: 100},
     {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
-    {
-      field: 'statut',
-      headerName: 'Statut',
-      width: 200,
-      valueGetter: (params) => {
-        console.log('params:', params); // Log the params for debugging
-
-        if (!params || !params.row) {
-          return 'Disponible'; // Default value if params or params.row is undefined
-        }
-
-        const aff = params.row.aff;
-        const emprunt = params.row.emprunt;
-
-        console.log('aff:', aff); // Debugging aff value
-        console.log('emprunt:', emprunt); // Debugging emprunt value
-
-        if (aff) {
-          return 'Affecté';
-        } else if (emprunt) {
-          return 'Emprunté';
-        } else {
-          return 'Disponible';
-        }
-      }
-    },
-    // { field: "prix", headerName: "Prix", type: "number", width: 100},
+    { field: 'statut', headerName: "Statut", width: 200 },
     {
       field: "actions",
       headerName: "Actions",
