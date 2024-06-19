@@ -12,8 +12,8 @@ import {
   Checkbox,
   Select,
 } from "@mui/material";
-import QueuePlayNextOutlinedIcon from '@mui/icons-material/QueuePlayNextOutlined';
-import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined';
+import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
+import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 import axios from "axios";
 import { ip } from "constants/ip";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -22,6 +22,7 @@ import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { Today } from "@mui/icons-material";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -31,7 +32,7 @@ const MaterielPage = () => {
   const [errors, setErrors] = useState({});
   const Navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  
+
   const Categorie = {
     UniteCentrale: "UniteCentrale",
     Ecran: "Ecran",
@@ -53,7 +54,7 @@ const MaterielPage = () => {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    maxHeight: "90vh", // Allows the modal to scroll if content overflows
+    maxHeight: "90vh", 
     overflowY: "auto",
   };
   const EtatMateriel = {
@@ -130,8 +131,8 @@ const MaterielPage = () => {
       .get("http://localhost:3000/materiel")
       .then((response) => {
         setMateriels(response.data);
-        setLoading(false); 
-            })
+        setLoading(false);
+      })
       .catch((error) => console.error("Error fetching data:", error));
   };
 
@@ -250,7 +251,8 @@ const MaterielPage = () => {
         ? "rebut"
         : materiel.etatMateriel,
     };
-    const {Affectation,Emprunt,idSociete,statut, ...rest}=updatedMateriel;
+    const { Affectation, Emprunt, idSociete, statut, ...rest } =
+      updatedMateriel;
     axios
       .patch(`http://localhost:3000/materiel/${numeroSerie}`, rest)
       .then((response) => {
@@ -265,25 +267,12 @@ const MaterielPage = () => {
       });
   };
 
-  const handleAffectation = (numeroSerie) => {
-    
-  }
-  const handleEmprunt = (numeroSerie) => {
-
-  }
-
-
-
-
-
-
+  const handleAffectation = (numeroSerie) => {};
+  const handleEmprunt = (numeroSerie) => {};
 
   const handleView = (numeroSerie) => {
     Navigate(`/detailMateriel/${numeroSerie}`);
   };
- 
-
-
 
   const [state, setState] = useState({
     entreeHDMI_VideoProjecteur: false,
@@ -306,14 +295,14 @@ const MaterielPage = () => {
     { field: "categorie", headerName: "Categorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 100 },
     { field: "modele", headerName: "Modele", width: 200 },
-    { field: "prix", headerName: "Prix", type: "number", width: 100},
-    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 120},
-    { field: 'statut', headerName: "Statut", width: 90 },
+    { field: "prix", headerName: "Prix", type: "number", width: 100 },
+    { field: "etatMateriel", headerName: "Etat Materiel", width: 120 },
+    { field: "statut", headerName: "Statut", width: 90 },
     {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-     width:350,
+      width: 350,
       renderCell: (params) => (
         <div text-align="letf">
           <Button onClick={() => handleView(params.row.numeroSerie)}>
@@ -329,17 +318,15 @@ const MaterielPage = () => {
             <FaArchive />
           </Button>
           <Button onClick={() => handleAffectation(params.row)}>
-          <QueuePlayNextOutlinedIcon/>
+            <QueuePlayNextOutlinedIcon />
           </Button>
           <Button onClick={() => handleEmprunt(params.row)}>
-          <ManageHistoryOutlinedIcon/>
+            <ManageHistoryOutlinedIcon />
           </Button>
         </div>
       ),
     },
   ];
-  
-
   const [pageSize, setPageSize] = useState(25);
   return (
     <div>
@@ -480,13 +467,11 @@ const MaterielPage = () => {
               ))}
             </TextField>
 
-            
-
             <TextField
               label={open ? "Date d'acquisition" : ""}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
-              value={!open ? "" : "_"}
+              value={formData.dateAcquisition || "_"}
               type="date"
               onChange={handleChange}
               fullWidth
@@ -497,27 +482,26 @@ const MaterielPage = () => {
               helperText={errors.dateAcquisition}
             />
 
-          <Select
-            label="Fournisseur"
-            name="idSociete"
-            required
-            value={formData.idSociete}
-            onChange={handleChange}
-            fullWidth
-            // error={!!errors.idSpecialite}
-            // style={{marginTop: '1rem'}}
-          >
-            <MenuItem value="">
-        <em>None</em>
-        </MenuItem>
-        {societies.map(elem => (
-         <MenuItem key={elem.idSociete} value={elem.idSociete}>
-        {elem.raisonSociale}
-         </MenuItem>
-         ))}
-</Select>
+            <Select
+              label="Fournisseur"
+              name="idSociete"
+              required
+              value={formData.idSociete}
+              onChange={handleChange}
+              fullWidth
+              // error={!!errors.idSpecialite}
+              // style={{marginTop: '1rem'}}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {societies.map((elem) => (
+                <MenuItem key={elem.idSociete} value={elem.idSociete}>
+                  {elem.raisonSociale}
+                </MenuItem>
+              ))}
+            </Select>
 
-           
             {/* ------------------------------------------------------- */}
             {/*Unite Centrale */}
             {/* ------------------------------------------------------- */}
@@ -548,20 +532,21 @@ const MaterielPage = () => {
                   fullWidth
                   margin="normal"
                 >
-                  {["2 Go",
+                  {[
+                    "2 Go",
                     "4 Go",
                     "8 Go",
                     "16 Go",
                     "32 Go",
                     "64 Go",
                     "128 Go",
-                    "256 Go",].map(
-                    (conn) => (
-                      <MenuItem key={conn} value={conn}>
-                        {conn}
-                      </MenuItem>
-                    )
-                  )}
+                    "256 Go",
+                    "512 Go",
+                  ].map((conn) => (
+                    <MenuItem key={conn} value={conn}>
+                      {conn}
+                    </MenuItem>
+                  ))}
                 </TextField>
                 <TextField
                   label="Disque dur"
@@ -634,6 +619,7 @@ const MaterielPage = () => {
                     "64 Go",
                     "128 Go",
                     "256 Go",
+                    "512 Go",
                   ].map((conn) => (
                     <MenuItem key={conn} value={conn}>
                       {conn}
@@ -680,7 +666,7 @@ const MaterielPage = () => {
             {formData.categorie === Categorie.Imprimante && (
               <>
                 <TextField
-                  label="Vitesse de l'impression"
+                  label="Vitesse d'impression"
                   name="vitesseImpression"
                   value={formData.vitesseImpression || ""}
                   onChange={handleChange}
@@ -720,7 +706,23 @@ const MaterielPage = () => {
                   )}
                 </TextField>
                 <TextField
-                  label="Fonction Supplementaire"
+                  label="Résolution"
+                  name="resolutionScanImpVideoP"
+                  value={formData.resolutionScanImpVideoP || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  label="Format de scan"
+                  name="formatScanImp"
+                  value={formData.formatScanImp || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  label="Fonctions Supplémentaires"
                   name="fonctionSupplementaireScanImp"
                   value={formData.fonctionSupplementaireScanImp || ""}
                   onChange={handleChange}
@@ -773,7 +775,7 @@ const MaterielPage = () => {
                   ))}
                 </TextField>
                 <TextField
-                  label="Resolution"
+                  label="Résolution"
                   name="resolutionScanImpVideoP"
                   value={formData.resolutionScanImpVideoP || ""}
                   onChange={handleChange}
@@ -789,7 +791,7 @@ const MaterielPage = () => {
                   margin="normal"
                 />
                 <TextField
-                  label="Fonction Supplementaire"
+                  label="Fonctions Supplémentaires"
                   name="fonctionSupplementaireScanImp"
                   value={formData.fonctionSupplementaireScanImp || ""}
                   onChange={handleChange}
@@ -1022,7 +1024,7 @@ const MaterielPage = () => {
                 />
 
                 <TextField
-                  label=" Debit"
+                  label=" Débit"
                   name="debitSwitch"
                   value={formData.debitSwitch || ""}
                   onChange={handleChange}
@@ -1066,5 +1068,3 @@ const MaterielPage = () => {
   );
 };
 export default MaterielPage;
-
-

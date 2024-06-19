@@ -74,7 +74,6 @@ const DetailsMateriel = () => {
   const columnsAffectations = [
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
-    { field: "numeroSerie", headerName: "Numéro Série Matériel", width: 150 },
     { field: "dateAttribution", headerName: "Date Attribution", width: 150 },
     { field: "dateRetour", headerName: "Date Retour", width: 150 },
     { field: "motifRetour", headerName: "Motif Retour", width: 220 },
@@ -90,17 +89,12 @@ const DetailsMateriel = () => {
   }));
 
   const columnsEmprunts = [
-    { field: "idUtilisateur", headerName: "Matricule", width: 150 },
+    { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
-    { field: "numeroSerie", headerName: "Numéro Série Matériel", width: 150 },
-    { field: "dateEmprunt", headerName: "Date Emprunt", width: 200 },
-    { field: "dateRestitution", headerName: "Date Restitution", width: 200 },
-    { field: "refProjet", headerName: "Référence Projet", width: 200 },
-    {
-      field: "etatMatRestitution",
-      headerName: "État Matériel Restitution",
-      width: 200,
-    },
+    { field: "dateEmprunt", headerName: "Date Emprunt", width: 150 },
+    { field: "dateRestitution", headerName: "Date Restitution", width: 150 },
+    { field: "refProjet", headerName: "Référence Projet", width: 150 },
+    {field: "etatMatRestitution", headerName: "État Matériel Restitution", width: 220 },
   ];
 
   const formatDate = (dateString) => {
@@ -161,9 +155,113 @@ const DetailsMateriel = () => {
                   <p className="text-muted mb-0">
                     <b>Société:</b> {nomSociete || "N/A"}
                   </p>
-                  <p className="text-muted mb-0">
-                    <b>taille Ecran:</b> {materiel?.tailleEcran + '"'}
-                  </p>
+                  {(materiel?.categorie === "UniteCentrale" ||
+                    materiel?.categorie === "PcPortable" ||
+                    materiel?.categorie === "Serveur" ) && (
+                    <>
+                      <p className="text-muted mb-0">
+                        <b>Processeur:</b> {materiel?.processeurPC}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Mémoire cache:</b> {materiel?.memoireCache}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>RAM:</b> {materiel?.ram}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Disque dur:</b> {materiel?.disque}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Nombre de disques:</b> {materiel?.nombreDisque}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Carte Graphique:</b> {materiel?.carteGraphique}
+                      </p>
+                      
+                    </>
+                  )}
+                  {materiel?.categorie === "Ecran" && (
+                    <p className="text-muted mb-0">
+                      <b>Taille Écran:</b> {materiel?.tailleEcran + '"'}
+                    </p>
+                  )}
+                  {materiel?.categorie === "PcPortable" && (
+                    <>
+                    <p className="text-muted mb-0">
+                      <b>Taille de l'écran:</b> {materiel?.tailleEcran}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Etat de batterie:</b> {materiel?.etatBatteriePcPortable}
+                    </p>
+                    </>
+                  )}
+                  {materiel?.categorie === "Imprimante" && (
+                    <>
+                    <p className="text-muted mb-0">
+                      <b>Vitesse d'impression:</b> {materiel?.vitesseImpression}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Technologie d'impression:</b> {materiel?.technologieImpression}
+                    </p>
+                    </>
+                  )}
+                  {materiel?.categorie === "Scanner" && (
+                    <>
+                    <p className="text-muted mb-0">
+                      <b>Vitesse de scan:</b> {materiel?.vitesseScanner}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Type de Scanner:</b> {materiel?.typeScanner}
+                    </p>
+                    </>
+                  )}
+                  {(materiel?.categorie === "Imprimante" ||
+                    materiel?.categorie === "Scanner") && (
+                    <>
+                      <p className="text-muted mb-0">
+                        <b>Type de Connexion:</b> {materiel?.connexionWLU}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Résolution:</b> {materiel?.resolutionScanImpVideoP}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Format:</b> {materiel?.formatScanImp}
+                      </p>
+                      <p className="text-muted mb-0">
+                        <b>Fonctions Supplémentaires:</b> {materiel?.fonctionSupplementaireScanImp}
+                      </p>
+                    </>
+                  )}
+                  {materiel?.categorie === "Onduleur" && (
+                    <>
+                    <p className="text-muted mb-0">
+                      <b>Poids Onduleur:</b> {materiel?.poidsOnduleur}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Autonomie Onduleur:</b> {materiel?.autonomieOnduleur}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Capacité Onduleur:</b> {materiel?.capaciteChargeOnduleur}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Technologie Onduleur:</b> {materiel?.technologieOnduleur}
+                    </p>
+                    </>
+                  )}
+                  {materiel?.categorie === "Switch" && (
+                    <>
+                    <p className="text-muted mb-0">
+                      <b>Nombre de Ports:</b> {materiel?.nombrePortSwitch}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Débit:</b> {materiel?.debitSwitch}
+                    </p>
+                    <p className="text-muted mb-0">
+                      <b>Technologie Switch:</b> {materiel?.technologieSwitch}
+                    </p>
+                    </>
+                  )}
+                  
                 </Card.Body>
               </Card>
             </Col>
