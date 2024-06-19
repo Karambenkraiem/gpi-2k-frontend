@@ -22,7 +22,6 @@ import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { Today } from "@mui/icons-material";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -159,7 +158,8 @@ const MaterielPage = () => {
 
     if (isEditing) {
       // @ts-ignore
-      const { Societe, ...rest } = materialToSave;
+      const { Affectation, Emprunt, idSociete, statut, ...rest } =
+      materialToSave;
       axios
         .patch(`http://localhost:3000/materiel/${formData.numeroSerie}`, rest)
         .then((response) => {
@@ -472,13 +472,11 @@ const MaterielPage = () => {
               placeholder="Sélectionner une date"
               name="dateAcquisition"
               value={formData.dateAcquisition || "_"}
-              type="date"
+              type="Date"
               onChange={handleChange}
               fullWidth
               margin="normal"
-              // @ts-ignore
               error={!!errors.dateAcquisition}
-              // @ts-ignore
               helperText={errors.dateAcquisition}
             />
 
