@@ -7,8 +7,13 @@ import { LuClipboardEdit } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { VscActivateBreakpoints } from "react-icons/vsc";
 import { TbEyeSearch } from "react-icons/tb";
+import ToggleOffOutlinedIcon from '@mui/icons-material/ToggleOffOutlined';
 import { useNavigate } from "react-router-dom";
 import UtilisateurModal from "../../components/UtilisateurModal";
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 const Utilisateurs = () => {
   const [errors, setErrors] = useState({});
@@ -152,10 +157,27 @@ const Utilisateurs = () => {
       console.error("Données Introuvable !!!");
       return;
     }
+  
+    let newStatus;
+    switch (user.etatUtilisateur) {
+      case "actif":
+        newStatus = "inactif";
+        break;
+      case "inactif":
+        newStatus = "suspendu";
+        break;
+      case "suspendu":
+        newStatus = "actif";
+        break;
+      default:
+        newStatus = "actif"; 
+    }
+  
     const updatedUser = {
       ...user,
-      etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
+      etatUtilisateur: newStatus,
     };
+  
     axios
       .patch(`http://localhost:3000/utilisateur/${userId}`, updatedUser)
       .then((response) => {
@@ -176,46 +198,46 @@ const Utilisateurs = () => {
     {
       field: "idUtilisateur",
       headerName: "Matricule",
-      flex: 1,
+      width: 150,
     },
     {
       field: "fullName",
       headerName: "Nom & Prénom",
-      flex: 1,
+      width: 210,
     },
     {
       field: "roleUtilisateur",
       headerName: "Role",
-      flex: 1,
+      width: 160,
     },
     {
       field: "etatUtilisateur",
       headerName: "Etat",
-      flex: 1,
+      width: 160,
     },
     {
       field: "idSpecialite",
       headerName: "Spécialité",
-      width: 100,
+      width: 200,
     },
     {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-      width: 250,
+      width: 300,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleView(params.row.idUtilisateur)}>
-            <TbEyeSearch />
+          <Button title="Visualiser Utilisateur" onClick={() => handleView(params.row.idUtilisateur)}>
+            <VisibilityOutlinedIcon />
           </Button>
-          <Button onClick={() => handleOpen(params.row)}>
-            <LuClipboardEdit />
+          <Button title="Modifier Utilisateur" onClick={() => handleOpen(params.row)}>
+            <EditNoteIcon />
           </Button>
-          <Button onClick={() => toggleStatus(params.row.idUtilisateur)}>
-            <VscActivateBreakpoints />
+          <Button title="Activer / Desactiver Utilisateur" onClick={() => toggleStatus(params.row.idUtilisateur)}>
+            <ToggleOffOutlinedIcon />
           </Button>
-          <Button onClick={() => handleDelete(params.row.idUtilisateur)}>
-            <RiDeleteBin6Line />
+          <Button title="Supprimer Utilisateur" onClick={() => handleDelete(params.row.idUtilisateur)}>
+            <DeleteOutlineOutlinedIcon />
           </Button>
         </div>
       ),
