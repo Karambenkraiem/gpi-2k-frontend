@@ -1,4 +1,5 @@
 // @ts-ignore
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -53,7 +54,7 @@ const MaterielPage = () => {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    maxHeight: "90vh", 
+    maxHeight: "90vh",
     overflowY: "auto",
   };
   const EtatMateriel = {
@@ -82,6 +83,15 @@ const MaterielPage = () => {
     Laser: "Laser",
     JetEncre: "JetEncre",
   };
+
+  const [state, setState] = useState({
+    // @ts-ignore
+    entreeHDMI_VideoProjecteur: false,
+    entreeVGA_VideoProjecteur: false,
+    entreeUSB_VideoProjecteur: false,
+    entreeLAN_VideoProjecteur: false,
+  });
+
   const [formData, setFormData] = useState({
     numeroSerie: "",
     categorie: "",
@@ -115,11 +125,23 @@ const MaterielPage = () => {
     poidsOnduleur: "",
     autonomieOnduleur: "",
     capaciteChargeOnduleur: "",
-    entreeHDMI_VideoProjecteur: false,
-    entreeVGA_VideoProjecteur: false,
-    entreeUSB_VideoProjecteur: false,
-    entreeLAN_VideoProjecteur: false,
+    entreeHDMI_VideoProjecteur: state.entreeHDMI_VideoProjecteur,
+    entreeVGA_VideoProjecteur: state.entreeVGA_VideoProjecteur,
+    entreeUSB_VideoProjecteur: state.entreeUSB_VideoProjecteur,
+    entreeLAN_VideoProjecteur: state.entreeLAN_VideoProjecteur,
   });
+
+  const handleCheckboxChange = (event) => {
+    const { name } = event.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: true,
+    }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: true,
+    }));
+  };
 
   useEffect(() => {
     fetchMateriels();
@@ -159,7 +181,7 @@ const MaterielPage = () => {
     if (isEditing) {
       // @ts-ignore
       const { Affectation, Emprunt, idSociete, statut, ...rest } =
-      materialToSave;
+        materialToSave;
       axios
         .patch(`http://localhost:3000/materiel/${formData.numeroSerie}`, rest)
         .then((response) => {
@@ -228,6 +250,7 @@ const MaterielPage = () => {
     axios
       .delete(`http://localhost:3000/materiel/${id}`)
       // @ts-ignore
+      // @ts-ignore
       .then((response) => {
         setMateriels(
           materiels.filter((materiel) => materiel.numeroSerie !== id)
@@ -267,19 +290,14 @@ const MaterielPage = () => {
       });
   };
 
+  // @ts-ignore
   const handleAffectation = (numeroSerie) => {};
+  // @ts-ignore
   const handleEmprunt = (numeroSerie) => {};
 
   const handleView = (numeroSerie) => {
     Navigate(`/detailMateriel/${numeroSerie}`);
   };
-
-  const [state, setState] = useState({
-    entreeHDMI_VideoProjecteur: false,
-    entreeVGA_VideoProjecteur: false,
-    entreeUSB_VideoProjecteur: false,
-    entreeLAN_VideoProjecteur: false,
-  });
 
   useEffect(() => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
@@ -328,6 +346,7 @@ const MaterielPage = () => {
     },
   ];
   const [pageSize, setPageSize] = useState(25);
+
   return (
     <div>
       <h1>Gestion de Matériel</h1>
@@ -476,7 +495,9 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.dateAcquisition}
+              // @ts-ignore
               helperText={errors.dateAcquisition}
             />
 
@@ -861,19 +882,13 @@ const MaterielPage = () => {
                   fullWidth
                   margin="normal"
                 />
-
                 <FormGroup>
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={state.entreeHDMI_VideoProjecteur}
-                        onChange={() =>
-                          setState((prevState) => ({
-                            ...prevState,
-                            entreeHDMI_VideoProjecteur:
-                              !prevState.entreeHDMI_VideoProjecteur,
-                          }))
-                        }
+                        onChange={handleCheckboxChange}
+                        name="entreeHDMI_VideoProjecteur"
                       />
                     }
                     label="HDMI"
@@ -882,13 +897,8 @@ const MaterielPage = () => {
                     control={
                       <Checkbox
                         checked={state.entreeVGA_VideoProjecteur}
-                        onChange={() =>
-                          setState((prevState) => ({
-                            ...prevState,
-                            entreeVGA_VideoProjecteur:
-                              !prevState.entreeVGA_VideoProjecteur,
-                          }))
-                        }
+                        onChange={handleCheckboxChange}
+                        name="entreeVGA_VideoProjecteur"
                       />
                     }
                     label="VGA"
@@ -897,13 +907,8 @@ const MaterielPage = () => {
                     control={
                       <Checkbox
                         checked={state.entreeUSB_VideoProjecteur}
-                        onChange={() =>
-                          setState((prevState) => ({
-                            ...prevState,
-                            entreeUSB_VideoProjecteur:
-                              !prevState.entreeUSB_VideoProjecteur,
-                          }))
-                        }
+                        onChange={handleCheckboxChange}
+                        name="entreeUSB_VideoProjecteur"
                       />
                     }
                     label="USB"
@@ -912,13 +917,8 @@ const MaterielPage = () => {
                     control={
                       <Checkbox
                         checked={state.entreeLAN_VideoProjecteur}
-                        onChange={() =>
-                          setState((prevState) => ({
-                            ...prevState,
-                            entreeLAN_VideoProjecteur:
-                              !prevState.entreeLAN_VideoProjecteur,
-                          }))
-                        }
+                        onChange={handleCheckboxChange}
+                        name="entreeLAN_VideoProjecteur"
                       />
                     }
                     label="LAN"
