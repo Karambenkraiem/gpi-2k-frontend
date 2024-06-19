@@ -17,12 +17,16 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from 'react-router-dom';
-import { FaArrowsDownToPeople, FaArrowsTurnToDots, FaComputer } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { HomeOutlined, PeopleOutline, StorageOutlined, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { BsBuildingGear, BsBuildings, BsCardList } from "react-icons/bs";
-import { SiNginxproxymanager } from "react-icons/si";
+import { HomeOutlined, PeopleOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
+import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
+import MultipleStopIcon from '@mui/icons-material/MultipleStop';
+import TextRotationNoneIcon from '@mui/icons-material/TextRotationNone';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const drawerWidth = 280;
 
@@ -95,19 +99,19 @@ const initialNavItems = [
   { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
   {
     label: "Ressources materielles",
-    icon: <SiNginxproxymanager />,
+    icon: <ManageSearchIcon />,
     items: [
-      { label: "Materiels", path: "/materiel", icon: <FaComputer /> },
-      { label: "Affectation", path: "/affectation", icon: <FaArrowsDownToPeople /> },
-      { label: "Emprunt", path: "/emprunt", icon: <FaArrowsTurnToDots /> },
+      { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> },
+      { label: "Affectation", path: "/affectation", icon: <TextRotationNoneIcon /> },
+      { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
     ]
   },
   {
     label: "Management",
-    icon: <BsBuildingGear />,
+    icon: <RoomPreferencesIcon />,
     items: [
-      { label: "Spécialités", path: "/specialite", icon: <BsCardList /> },
-      { label: "Départements", path: "/departement", icon: <BsBuildings /> },
+      { label: "Spécialités", path: "/specialite", icon: <ListAltIcon /> },
+      { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
     ]
   }
 ];

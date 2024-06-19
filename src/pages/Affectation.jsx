@@ -15,6 +15,7 @@ const Affectations = () => {
         console.error('There was an error fetching the affectations!', error);
       });
   }, []);
+
   const rows = affectations.map((affectation, index) => ({
     id: index,
     ...affectation,
@@ -44,6 +45,7 @@ const Affectations = () => {
       <DataGrid
         rows={rows}
         columns={columns}
+        // @ts-ignore
         pageSize={10}
         rowsPerPageOptions={[10]}
         disableSelectionOnClick

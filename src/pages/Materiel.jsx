@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -17,7 +18,6 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { LuClipboardEdit } from "react-icons/lu";
 import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
-import { VscActivateBreakpoints } from 'react-icons/vsc';
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 
@@ -132,62 +132,13 @@ const MaterielPage = () => {
       .catch((error) => console.error("Error fetching data:", error));
   };
 
-  /////////////////////////////////////////////////
-  const handleOpen = (materiel = null) => {
-    if (materiel) {
-      setFormData(materiel);
-      setIsEditing(true);
-    } else {
-      setFormData({
-        numeroSerie: "",
-        categorie: "",
-        marque: "",
-        modele: "",
-        prix: "",
-        garantie: "",
-        etatMateriel: "",
-        dateAcquisition: new Date().toISOString(),
-        idSociete: "",
-        nombrePortSwitch: "",
-        debitSwitch: "",
-        technologieSwitch: "",
-        processeurPC: "",
-        memoireCache: "",
-        ram: "",
-        disque: "",
-        carteGraphique: "",
-        nombreDisque: "",
-        tailleEcran: "",
-        etatBatteriePcPortable: "",
-        vitesseImpression: "",
-        connexionWLU: ConnexionWLU.null,
-        technologieOnduleur: TechnologieOnduleur.null,
-        fonctionSupplementaireScanImp: "",
-        vitesseScanner: "",
-        typeScanner: TypeScanner.null,
-        resolutionScanImpVideoP: "",
-        technologieImpression: TechnologieImpression.null,
-        formatScanImp: "",
-        poidsOnduleur: "",
-        autonomieOnduleur: "",
-        capaciteChargeOnduleur: "",
-        entreeHDMI_VideoProjecteur: false,
-        entreeVGA_VideoProjecteur: false,
-        entreeUSB_VideoProjecteur: false,
-        entreeLAN_VideoProjecteur: false,
-      });
-      setIsEditing(false);
-    }
-    setOpen(true);
-  };
-  //////////////////////////////////
-
   const handleOpenModal = () => {
     setOpen(true);
   };
 
   const handleCloseModal = () => {
     setOpen(false);
+    // @ts-ignore
     setFormData({});
     setIsEditing(false);
   };
@@ -199,7 +150,7 @@ const MaterielPage = () => {
       nombrePortSwitch: parseInt(formData.nombrePortSwitch),
       debitSwitch: parseInt(formData.debitSwitch),
       tailleEcran: parseFloat(formData.tailleEcran),
-      idSociete: formData.idSociete === '' ? null : formData.idSociete,
+      idSociete: formData.idSociete === "" ? null : formData.idSociete,
     };
 
     if (isEditing) {
@@ -234,7 +185,7 @@ const MaterielPage = () => {
   };
   const validateMateriel = (name, value) => {
     let errorMsg = "";
-  
+
     if (name === "numeroSerie" && !value) {
       errorMsg = "Numéro de Série est obligatoire !!!";
     } else if (name === "categorie" && !value) {
@@ -253,10 +204,10 @@ const MaterielPage = () => {
       errorMsg = "Date d'Acquisition est obligatoire";
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
-};
+  };
 
   const handleChange = (e) => {
-    const {name,value} = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -272,6 +223,7 @@ const MaterielPage = () => {
   const handleDelete = (id) => {
     axios
       .delete(`http://localhost:3000/materiel/${id}`)
+      // @ts-ignore
       .then((response) => {
         setMateriels(
           materiels.filter((materiel) => materiel.numeroSerie !== id)
@@ -289,15 +241,19 @@ const MaterielPage = () => {
     }
     const updatedMateriel = {
       ...materiel,
-      etatMateriel: ["nouveau", "fonctionnel", "enPanne"].includes(materiel.etatMateriel) 
-        ? "rebut" 
+      etatMateriel: ["nouveau", "fonctionnel", "enPanne"].includes(
+        materiel.etatMateriel
+      )
+        ? "rebut"
         : materiel.etatMateriel,
     };
     axios
       .patch(`http://localhost:3000/materiel/${numeroSerie}`, updatedMateriel)
       .then((response) => {
         setMateriels(
-          materiels.map((m) => (m.numeroSerie === numeroSerie ? response.data : m))
+          materiels.map((m) =>
+            m.numeroSerie === numeroSerie ? response.data : m
+          )
         );
       })
       .catch((error) => {
@@ -306,7 +262,7 @@ const MaterielPage = () => {
   };
 
   const handleView = (numeroSerie) => {
-    Navigate(`/detailsMateriel/${numeroSerie}`);
+    Navigate(`/detailMateriel/${numeroSerie}`);
   };
 
   const columns = [
@@ -314,8 +270,8 @@ const MaterielPage = () => {
     { field: "categorie", headerName: "Categorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 130 },
     { field: "modele", headerName: "Modele", width: 250 },
-    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
-    { field: "prix", headerName: "Prix", type: "number", width: 100},
+    { field: "etatMateriel", headerName: "Etat Materiel", width: 150 },
+    { field: "prix", headerName: "Prix", type: "number", width: 100 },
     {
       field: "actions",
       headerName: "Actions",
@@ -333,7 +289,7 @@ const MaterielPage = () => {
             <RiDeleteBin6Line />
           </Button>
           <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
-          <FaArchive />
+            <FaArchive />
           </Button>
         </div>
       ),
@@ -350,11 +306,7 @@ const MaterielPage = () => {
   useEffect(() => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
   }, []);
-  const rows = materiels.map((row, index) => ({
-    id: index, // or use a unique field from your data, e.g., row.numeroSerie
-    ...row,
-  }));
-  
+
 
   const [pageSize, setPageSize] = useState(25);
   return (
@@ -366,40 +318,35 @@ const MaterielPage = () => {
             + Ajouter Materiel
           </Button>
         </Box>
-        <Box
-  
->
-      <DataGrid
-      sx={{
-    display: 'flex',
-    justifyContent: 'center',
-   
-  }}
-        rows={materiels}
-         // @ts-ignore
-         pageSize={pageSize}
-         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5,10, 25,50,100]}
-          pagination
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 25,
+        <Box>
+          <DataGrid
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            rows={materiels}
+            // @ts-ignore
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            pagination
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 25,
+                },
               },
-            },
-          }}
-          columns={columns}
-          loading={loading}        
-          disableSelectionOnClick
-          getRowId={row => row.numeroSerie}
-          
-      />
-
-
-</Box>
-      <Modal open={open} onClose={handleCloseModal}>
-        <Box sx={style}>
-          <h2>{isEditing ? 'Edit Materiel' : 'Add Materiel'}</h2>
+            }}
+            // @ts-ignore
+            columns={columns}
+            loading={loading}
+            disableSelectionOnClick
+            getRowId={(row) => row.numeroSerie}
+          />
+        </Box>
+        <Modal open={open} onClose={handleCloseModal}>
+          <Box sx={style}>
+            <h2>{isEditing ? "Edit Materiel" : "Add Materiel"}</h2>
 
             <TextField
               select
@@ -409,9 +356,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.categorie}
-            helperText={errors.categorie}
-          >
+              // @ts-ignore
+              helperText={errors.categorie}
+            >
               {Object.values(Categorie).map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
@@ -426,9 +375,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.numeroSerie}
-            helperText={errors.numeroSerie}
-          />
+              // @ts-ignore
+              helperText={errors.numeroSerie}
+            />
             <TextField
               label="Marque"
               name="marque"
@@ -436,9 +387,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.marque}
-            helperText={errors.marque}
-          />
+              // @ts-ignore
+              helperText={errors.marque}
+            />
             <TextField
               label="Modèle"
               name="modele"
@@ -446,9 +399,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.modele}
-            helperText={errors.modele}
-          />
+              // @ts-ignore
+              helperText={errors.modele}
+            />
             <TextField
               label="Prix"
               name="prix"
@@ -456,9 +411,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.prix}
-            helperText={errors.prix}
-          />
+              // @ts-ignore
+              helperText={errors.prix}
+            />
             <TextField
               label="Garantie"
               name="garantie"
@@ -466,9 +423,11 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.garantie}
-            helperText={errors.garantie}
-          />
+              // @ts-ignore
+              helperText={errors.garantie}
+            />
             <TextField
               select
               label="Etat Materiel"
@@ -477,26 +436,17 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
+              // @ts-ignore
               error={!!errors.etatMateriel}
-            helperText={errors.etatMateriel}
-          >
+              // @ts-ignore
+              helperText={errors.etatMateriel}
+            >
               {Object.values(EtatMateriel).map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
                 </MenuItem>
               ))}
             </TextField>
-
-            {/* <TextField
-              label="Date d'acquisition"
-              placeholder="Sélectionner une date"
-              name="dateAcquisition"
-              type="date"
-              value={formData.dateAcquisition || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            /> */}
 
             <TextField
               label={open ? "Date d'acquisition" : ""}
@@ -507,41 +457,31 @@ const MaterielPage = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-            error={!!errors.dateAcquisition}
-            helperText={errors.dateAcquisition}
+              // @ts-ignore
+              error={!!errors.dateAcquisition}
+              // @ts-ignore
+              helperText={errors.dateAcquisition}
             />
 
-          <Select
-            label="Fournisseur"
-            name="idSociete"
-            required
-            value={formData.idSociete}
-            onChange={handleChange}
-            fullWidth
-            // error={!!errors.idSpecialite}
-            // style={{marginTop: '1rem'}}
-          >
-            <MenuItem value="">
-        <em>None</em>
-        </MenuItem>
-        {societies.map(elem => (
-         <MenuItem key={elem.idSociete} value={elem.idSociete}>
-        {elem.raisonSociale}
-         </MenuItem>
-         ))}
-</Select>
-
-            {/* <TextField
-            label="Fournisseur"
-            name="idSociete"
-            value={formData.idSociete || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          /> */}
-            {/* ------------------------------------------------------- */}
-            {/*Unite Centrale */}
-            {/* ------------------------------------------------------- */}
+            <Select
+              label="Fournisseur"
+              name="idSociete"
+              required
+              value={formData.idSociete}
+              onChange={handleChange}
+              fullWidth
+              // error={!!errors.idSpecialite}
+              // style={{marginTop: '1rem'}}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {societies.map((elem) => (
+                <MenuItem key={elem.idSociete} value={elem.idSociete}>
+                  {elem.raisonSociale}
+                </MenuItem>
+              ))}
+            </Select>
             {formData.categorie === Categorie.UniteCentrale && (
               <>
                 <TextField
