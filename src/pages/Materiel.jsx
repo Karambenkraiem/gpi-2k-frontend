@@ -20,6 +20,8 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { VscActivateBreakpoints } from 'react-icons/vsc';
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import Affectations from "./Affectation";
+import Emprunt from "./Emprunt";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -308,19 +310,67 @@ const MaterielPage = () => {
   const handleView = (numeroSerie) => {
     Navigate(`/detailsMateriel/${numeroSerie}`);
   };
+ 
 
+
+
+  const [state, setState] = useState({
+    entreeHDMI_VideoProjecteur: false,
+    entreeVGA_VideoProjecteur: false,
+    entreeUSB_VideoProjecteur: false,
+    entreeLAN_VideoProjecteur: false,
+  });
+
+  useEffect(() => {
+    axios.get(ip + "/societe").then((res) => setSocieties(res.data));
+  }, []);
+
+
+
+  const rows = materiels.map((materiel, index) => ({
+    id: index, // or use a unique field from your data, e.g., row.numeroSerie
+    ...materiel,
+    aff: materiel.Affectation && materiel.Affectation.length > 0,
+    emprunt: materiel.Emprunt && materiel.Emprunt.length > 0,
+  }));
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
     { field: "categorie", headerName: "Categorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 130 },
     { field: "modele", headerName: "Modele", width: 250 },
     {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
-    { field: "prix", headerName: "Prix", type: "number", width: 100},
+    {
+      field: 'statut',
+      headerName: 'Statut',
+      width: 200,
+      valueGetter: (params) => {
+        console.log('params:', params); // Log the params for debugging
+
+        if (!params || !params.row) {
+          return 'Disponible'; // Default value if params or params.row is undefined
+        }
+
+        const aff = params.row.aff;
+        const emprunt = params.row.emprunt;
+
+        console.log('aff:', aff); // Debugging aff value
+        console.log('emprunt:', emprunt); // Debugging emprunt value
+
+        if (aff) {
+          return 'Affecté';
+        } else if (emprunt) {
+          return 'Emprunté';
+        } else {
+          return 'Disponible';
+        }
+      }
+    },
+    // { field: "prix", headerName: "Prix", type: "number", width: 100},
     {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-      flex: 1,
+     width:250,
       renderCell: (params) => (
         <div text-align="center">
           <Button onClick={() => handleView(params.row.numeroSerie)}>
@@ -339,21 +389,6 @@ const MaterielPage = () => {
       ),
     },
   ];
-
-  const [state, setState] = useState({
-    entreeHDMI_VideoProjecteur: false,
-    entreeVGA_VideoProjecteur: false,
-    entreeUSB_VideoProjecteur: false,
-    entreeLAN_VideoProjecteur: false,
-  });
-
-  useEffect(() => {
-    axios.get(ip + "/societe").then((res) => setSocieties(res.data));
-  }, []);
-  const rows = materiels.map((row, index) => ({
-    id: index, // or use a unique field from your data, e.g., row.numeroSerie
-    ...row,
-  }));
   
 
   const [pageSize, setPageSize] = useState(25);
@@ -487,16 +522,7 @@ const MaterielPage = () => {
               ))}
             </TextField>
 
-            {/* <TextField
-              label="Date d'acquisition"
-              placeholder="Sélectionner une date"
-              name="dateAcquisition"
-              type="date"
-              value={formData.dateAcquisition || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            /> */}
+            
 
             <TextField
               label={open ? "Date d'acquisition" : ""}
@@ -531,14 +557,7 @@ const MaterielPage = () => {
          ))}
 </Select>
 
-            {/* <TextField
-            label="Fournisseur"
-            name="idSociete"
-            value={formData.idSociete || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          /> */}
+           
             {/* ------------------------------------------------------- */}
             {/*Unite Centrale */}
             {/* ------------------------------------------------------- */}
@@ -569,7 +588,14 @@ const MaterielPage = () => {
                   fullWidth
                   margin="normal"
                 >
-                  {["2", "4", "8", "16", "32", "64", "128", "256", "512"].map(
+                  {["2 Go",
+                    "4 Go",
+                    "8 Go",
+                    "16 Go",
+                    "32 Go",
+                    "64 Go",
+                    "128 Go",
+                    "256 Go",].map(
                     (conn) => (
                       <MenuItem key={conn} value={conn}>
                         {conn}

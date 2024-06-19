@@ -18,10 +18,10 @@ const Affectations = () => {
   const rows = affectations.map((affectation, index) => ({
     id: index,
     ...affectation,
-    'fullName': affectation.utilisateur.fullName,
-    'numeroSerie': affectation.materiel.numeroSerie,
-    'categorie': affectation.materiel.categorie,
-    'marque' : affectation.materiel.marque,
+    'fullName': affectation?.utilisateur?.fullName,
+    'numeroSerie': affectation?.materiel?.numeroSerie,
+    'categorie': affectation?.materiel?.categorie,
+    'marque' : affectation?.materiel?.marque,
 
   }));
   const columns = [
