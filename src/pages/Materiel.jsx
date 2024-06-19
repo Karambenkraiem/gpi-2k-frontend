@@ -27,10 +27,15 @@ import { FaArchive, FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
+  const [utilisateurs, setUtilisateurs] = useState([]);
   const [open, setOpen] = useState(false);
+  const [affectationData, setAffectationData] = useState({dateAttribution:'', dateRetour:null});
+  const [openAffectation, setOpenAffectation] = useState(false);
+
   const [isEditing, setIsEditing] = useState(false);
   const [societies, setSocieties] = useState([]);
   const [errors, setErrors] = useState({});
@@ -149,6 +154,8 @@ const MaterielPage = () => {
 
   useEffect(() => {
     fetchMateriels();
+    fetchUtilisateurs();
+
   }, []);
 
   const fetchMateriels = () => {
@@ -157,6 +164,16 @@ const MaterielPage = () => {
       .then((response) => {
         setMateriels(response.data);
         setLoading(false);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const fetchUtilisateurs = () => {
+    axios
+      .get("http://localhost:3000/utilisateur")
+      .then((response) => {
+        setUtilisateurs(response.data);
+        // setLoading(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -238,9 +255,10 @@ const MaterielPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(value);
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
     validateMateriel(name, value);
   };
@@ -295,18 +313,45 @@ const MaterielPage = () => {
   };
 
   // @ts-ignore
-  const handleAffectation = (numeroSerie) => {};
+  const handleAffectation = (numeroSerie) => {
+    setAffectationData({...affectationData, numeroSerie});
+    setOpenAffectation(true);
+
+  };
   // @ts-ignore
-  const handleEmprunt = (numeroSerie) => {};
+  const handleEmprunt = (row) => {};
 
   const handleView = (numeroSerie) => {
     Navigate(`/detailMateriel/${numeroSerie}`);
+  };
+
+  const handleChangeAffectation = (e) => {
+    const { name, value } = e.target;
+    console.log(value);
+    setAffectationData({
+      ...affectationData,
+      [name]: value,
+    });
+    validateMateriel(name, value);
   };
 
   useEffect(() => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
   }, []);
 
+
+
+
+
+  const handleSaveAffectation =()=>{
+    axios
+        .post("http://localhost:3000/affectation", affectationData)
+        .then((response) => {
+          fetchMateriels ();
+          setOpenAffectation(false);
+        })
+        .catch((error) => console.error("Erreur Affectation", error));
+  }
   // const rows = materiels.map((materiel, index) => ({
   //   id: index, // or use a unique field from your data, e.g., row.numeroSerie
   //   ...materiel,
@@ -339,7 +384,7 @@ const MaterielPage = () => {
           <Button title="Archiver Matériel" onClick={() => toggleStatus(params.row.numeroSerie)}>
             <Inventory2OutlinedIcon />
           </Button>
-          <Button title="Affecter Matériel" onClick={() => handleAffectation(params.row)}>
+          <Button title="Affecter Matériel" disabled={params.row.statut==='Affecté'} onClick={() => handleAffectation(params.row.numeroSerie)}>
             <QueuePlayNextOutlinedIcon />
           </Button>
           <Button title="Emprunter Matériel" onClick={() => handleEmprunt(params.row)}>
@@ -386,6 +431,93 @@ const MaterielPage = () => {
             getRowId={(row) => row.numeroSerie}
           />
         </Box>
+
+
+<Modal open={openAffectation }>
+<Box sx={style}>
+<TextField
+              select
+              label="Utilisateur"
+              name="idUtilisateur"
+              value={affectationData.idUtilisateur}
+              onChange={handleChangeAffectation}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.categorie}
+              // @ts-ignore
+              helperText={errors.categorie}
+            >
+              {utilisateurs.map((utilisateur) => (
+                <MenuItem key={utilisateur.idUtilisateur} value={utilisateur.idUtilisateur}>
+                  {utilisateur.fullName}
+                </MenuItem>
+              ))}
+            </TextField> 
+
+
+
+            <TextField
+              label={"Date d'affectation"}
+              placeholder="Sélectionner une date"
+              name="dateAttribution"
+              value={dayjs(affectationData?.dateAttribution).format('YYYY-MM-DD')}
+              type="date"
+              onChange={handleChangeAffectation}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.dateAttribution}
+              // @ts-ignore
+              helperText={errors.dateAttribution}
+            />
+            <TextField
+              label={"Date Retour"}
+              placeholder="Sélectionner une date"
+              name="dateRetour"
+              value={dayjs(affectationData?.dateRetour).format('YYYY-MM-DD')}
+              type="date"
+              onChange={handleChangeAffectation}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.dateRetour}
+              // @ts-ignore
+              helperText={errors.dateRetour}
+            />
+            <TextField
+              label="Motif Retour"
+              name="motifRetour"
+              value={affectationData.motifRetour || ""}
+              onChange={handleChangeAffectation}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.motifRetour}
+              // @ts-ignore
+              helperText={errors.motifRetour}
+            />
+            <Button
+              onClick={handleSaveAffectation}
+              variant="contained"
+              sx={{ mt: 2 }}
+              color="primary"
+            >
+             <FaRegSave /> 
+            _ Enregistrer
+            </Button>
+            <Button
+              onClick={()=> setOpenAffectation(false)}
+              variant="contained"
+              color="secondary"
+              sx={{ mt: 2 }}
+            >
+              Annuler
+            </Button>
+            
+            </Box>
+            </Modal>
+
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>
             <h2>{isEditing ? "Edit Materiel" : "Add Materiel"}</h2>
@@ -494,7 +626,7 @@ const MaterielPage = () => {
               label={"Date d'acquisition"}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
-              value={isEditing ? formData.dateAcquisition : " "}
+              value={dayjs(formData?.dateAcquisition).format('YYYY-MM-DD')}
               type="date"
               onChange={handleChange}
               fullWidth
