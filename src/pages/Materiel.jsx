@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import QueuePlayNextOutlinedIcon from '@mui/icons-material/QueuePlayNextOutlined';
 import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import axios from "axios";
 import { ip } from "constants/ip";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -32,6 +31,7 @@ const MaterielPage = () => {
   const [errors, setErrors] = useState({});
   const Navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  
   const Categorie = {
     UniteCentrale: "UniteCentrale",
     Ecran: "Ecran",
@@ -304,11 +304,11 @@ const MaterielPage = () => {
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
     { field: "categorie", headerName: "Categorie", width: 140 },
-    { field: "marque", headerName: "Marque", width: 130 },
+    { field: "marque", headerName: "Marque", width: 100 },
     { field: "modele", headerName: "Modele", width: 200 },
     { field: "prix", headerName: "Prix", type: "number", width: 100},
-    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
-    { field: 'statut', headerName: "Statut", width: 150 },
+    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 120},
+    { field: 'statut', headerName: "Statut", width: 90 },
     {
       field: "actions",
       headerName: "Actions",

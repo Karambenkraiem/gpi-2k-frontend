@@ -9,6 +9,7 @@ const DetailsMateriel = () => {
   const [materiel, setMateriel] = useState({});
   const [affectations, setAffectations] = useState([]);
   const [emprunts, setEmprunts] = useState([]);
+  const [societies, setSocieties] = useState([]);
 
   const fetchAffectations = () => {
     axios
@@ -17,7 +18,7 @@ const DetailsMateriel = () => {
         setAffectations(response.data);
       })
       .catch((error) => {
-        console.error("There was an error fetching the affectations!", error);
+        console.error("Erreur récupération des affectations!", error);
       });
   };
 
@@ -28,7 +29,7 @@ const DetailsMateriel = () => {
         setEmprunts(response.data);
       })
       .catch((error) => {
-        console.error("There was an error fetching the emprunts!", error);
+        console.error("Erreur récupération des emprunts!", error);
       });
   };
 
@@ -39,7 +40,18 @@ const DetailsMateriel = () => {
         setMateriel(response.data);
       })
       .catch((error) => {
-        console.error("Erreur recupération données !!!", error);
+        console.error("Erreur recupération matériels !!!", error);
+      });
+  };
+
+  const fetchSocieties = () => {
+    axios
+      .get(`http://localhost:3000/societe`)
+      .then((response) => {
+        setSocieties(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur récupération sociétés!", error);
       });
   };
 
@@ -47,9 +59,9 @@ const DetailsMateriel = () => {
     fetchMateriel();
     fetchAffectations();
     fetchEmprunts();
+    fetchSocieties();
   }, [numeroSerie]);
 
-  // Remplissage Tableau des affectations
   const rowsAffectations = affectations.map((affectation, index) => ({
     id: index,
     ...affectation,
@@ -62,27 +74,47 @@ const DetailsMateriel = () => {
   const columnsAffectations = [
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
-    { field: "numeroSerie", headerName: "Numéro Série Materiel", width: 150 },
+    { field: "numeroSerie", headerName: "Numéro Série Matériel", width: 150 },
     { field: "dateAttribution", headerName: "Date Attribution", width: 150 },
     { field: "dateRetour", headerName: "Date Retour", width: 150 },
     { field: "motifRetour", headerName: "Motif Retour", width: 220 },
   ];
 
-  // Remplissage Tableau des emprunts
   const rowsEmprunts = emprunts.map((emprunt, index) => ({
     id: index,
     ...emprunt,
+    fullName: emprunt.utilisateur?.fullName || "N/A",
+    numeroSerie: emprunt.materiel?.numeroSerie || "N/A",
+    categorie: emprunt.materiel?.categorie || "N/A",
+    marque: emprunt.materiel?.marque || "N/A",
   }));
 
   const columnsEmprunts = [
     { field: "idUtilisateur", headerName: "Matricule", width: 150 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
-    { field: "numeroSerie", headerName: "Numéro Série Materiel", width: 150 },
+    { field: "numeroSerie", headerName: "Numéro Série Matériel", width: 150 },
     { field: "dateEmprunt", headerName: "Date Emprunt", width: 200 },
     { field: "dateRestitution", headerName: "Date Restitution", width: 200 },
     { field: "refProjet", headerName: "Référence Projet", width: 200 },
-    { field: "etatMatRestitution", headerName: "État Matériel Restitution", width: 200 },
+    {
+      field: "etatMatRestitution",
+      headerName: "État Matériel Restitution",
+      width: 200,
+    },
   ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  const nomSociete = societies.find(
+    (society) => society.idSociete === materiel.idSociete
+  )?.raisonSociale;
 
   return (
     <div>
@@ -104,26 +136,33 @@ const DetailsMateriel = () => {
             <Col lg={4}>
               <Card className="mb-6">
                 <Card.Body className="text-left">
-                  <h4 className="my-3">
-                    <b>{materiel?.numeroSerie}</b>
-                  </h4>
-                  <h5 className="my-3">
-                    Numéro de série: {materiel?.numeroSerie}
-                  </h5>
+                  <h6 className="my-1">
+                    <b>{materiel?.categorie}</b>
+                  </h6>
+                  <h6 className="my-1">
+                    <b>{materiel?.marque + " " + materiel?.modele}</b>
+                  </h6>
+                  <h6 className="my-3">
+                    <b>Numéro de série:</b> {materiel?.numeroSerie}
+                  </h6>
                   <p className="text-muted mb-1">
-                    <b>Spécialité:</b> {materiel?.specialite}
+                    <b>Prix:</b> {materiel?.prix + " Dinars"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Département:</b> {materiel?.departement}
+                    <b>Garantie:</b> {materiel?.garantie + " an(s)"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>État: </b> {materiel?.etat}
+                    <b>État: </b> {materiel?.etatMateriel}
                   </p>
                   <p className="text-muted mb-0">
-                    <b>Tel Fix:</b> {materiel?.telFix}
+                    <b>Date d'acquisition:</b>{" "}
+                    {formatDate(materiel?.dateAcquisition)}
                   </p>
                   <p className="text-muted mb-0">
-                    <b>Tel Mobile:</b> {materiel?.telMobile}
+                    <b>Société:</b> {nomSociete || "N/A"}
+                  </p>
+                  <p className="text-muted mb-0">
+                    <b>taille Ecran:</b> {materiel?.tailleEcran + '"'}
                   </p>
                 </Card.Body>
               </Card>

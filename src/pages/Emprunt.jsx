@@ -44,6 +44,7 @@ const Emprunt = () => {
       <DataGrid
         rows={rows}
         columns={columns}
+        // @ts-ignore
         pageSize={10}
         rowsPerPageOptions={[10]}
         disableSelectionOnClick
