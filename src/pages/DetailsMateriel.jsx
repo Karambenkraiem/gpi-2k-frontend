@@ -449,11 +449,11 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeLAN_VideoProjecteur
+                                  materiel?.entreeVGA_VideoProjecteur
                                 }
                               />
                             }
-                            label="LAN"
+                            label="VGA"
                           />
                           <FormControlLabel
                             control={
@@ -471,12 +471,12 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeVGA_VideoProjecteur
+                                  materiel?.entreeLAN_VideoProjecteur
                                 }
                               />
                             }
-                            label="VGA"
-                          />
+                            label="LAN"
+                          />                          
                         </FormGroup>
                       </>
                     )
