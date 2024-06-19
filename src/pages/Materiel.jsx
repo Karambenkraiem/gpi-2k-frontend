@@ -12,6 +12,9 @@ import {
   Checkbox,
   Select,
 } from "@mui/material";
+import QueuePlayNextOutlinedIcon from '@mui/icons-material/QueuePlayNextOutlined';
+import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import axios from "axios";
 import { ip } from "constants/ip";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -127,8 +130,8 @@ const MaterielPage = () => {
       .get("http://localhost:3000/materiel")
       .then((response) => {
         setMateriels(response.data);
-        setLoading(false);
-      })
+        setLoading(false); 
+            })
       .catch((error) => console.error("Error fetching data:", error));
   };
 
@@ -247,8 +250,9 @@ const MaterielPage = () => {
         ? "rebut"
         : materiel.etatMateriel,
     };
+    const {Affectation,Emprunt,idSociete,statut, ...rest}=updatedMateriel;
     axios
-      .patch(`http://localhost:3000/materiel/${numeroSerie}`, updatedMateriel)
+      .patch(`http://localhost:3000/materiel/${numeroSerie}`, rest)
       .then((response) => {
         setMateriels(
           materiels.map((m) =>
@@ -261,40 +265,25 @@ const MaterielPage = () => {
       });
   };
 
+  const handleAffectation = (numeroSerie) => {
+    
+  }
+  const handleEmprunt = (numeroSerie) => {
+
+  }
+
+
+
+
+
+
+
   const handleView = (numeroSerie) => {
     Navigate(`/detailMateriel/${numeroSerie}`);
   };
+ 
 
-  const columns = [
-    { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
-    { field: "categorie", headerName: "Categorie", width: 140 },
-    { field: "marque", headerName: "Marque", width: 130 },
-    { field: "modele", headerName: "Modele", width: 250 },
-    { field: "etatMateriel", headerName: "Etat Materiel", width: 150 },
-    { field: "prix", headerName: "Prix", type: "number", width: 100 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      headerAlign: "center",
-      flex: 1,
-      renderCell: (params) => (
-        <div text-align="center">
-          <Button onClick={() => handleView(params.row.numeroSerie)}>
-            <TbEyeSearch />
-          </Button>
-          <Button onClick={() => handleEdit(params.row)}>
-            <LuClipboardEdit />
-          </Button>
-          <Button onClick={() => handleDelete(params.row.numeroSerie)}>
-            <RiDeleteBin6Line />
-          </Button>
-          <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
-            <FaArchive />
-          </Button>
-        </div>
-      ),
-    },
-  ];
+
 
   const [state, setState] = useState({
     entreeHDMI_VideoProjecteur: false,
@@ -307,6 +296,49 @@ const MaterielPage = () => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
   }, []);
 
+  // const rows = materiels.map((materiel, index) => ({
+  //   id: index, // or use a unique field from your data, e.g., row.numeroSerie
+  //   ...materiel,
+  // }));
+
+  const columns = [
+    { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
+    { field: "categorie", headerName: "Categorie", width: 140 },
+    { field: "marque", headerName: "Marque", width: 130 },
+    { field: "modele", headerName: "Modele", width: 200 },
+    { field: "prix", headerName: "Prix", type: "number", width: 100},
+    {field: 'etatMateriel', headerName: 'Etat Materiel', width: 150},
+    { field: 'statut', headerName: "Statut", width: 150 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      headerAlign: "center",
+     width:350,
+      renderCell: (params) => (
+        <div text-align="letf">
+          <Button onClick={() => handleView(params.row.numeroSerie)}>
+            <TbEyeSearch />
+          </Button>
+          <Button onClick={() => handleEdit(params.row)}>
+            <LuClipboardEdit />
+          </Button>
+          <Button onClick={() => handleDelete(params.row.numeroSerie)}>
+            <RiDeleteBin6Line />
+          </Button>
+          <Button onClick={() => toggleStatus(params.row.numeroSerie)}>
+            <FaArchive />
+          </Button>
+          <Button onClick={() => handleAffectation(params.row)}>
+          <QueuePlayNextOutlinedIcon/>
+          </Button>
+          <Button onClick={() => handleEmprunt(params.row)}>
+          <ManageHistoryOutlinedIcon/>
+          </Button>
+        </div>
+      ),
+    },
+  ];
+  
 
   const [pageSize, setPageSize] = useState(25);
   return (
@@ -448,6 +480,8 @@ const MaterielPage = () => {
               ))}
             </TextField>
 
+            
+
             <TextField
               label={open ? "Date d'acquisition" : ""}
               placeholder="Sélectionner une date"
@@ -463,25 +497,30 @@ const MaterielPage = () => {
               helperText={errors.dateAcquisition}
             />
 
-            <Select
-              label="Fournisseur"
-              name="idSociete"
-              required
-              value={formData.idSociete}
-              onChange={handleChange}
-              fullWidth
-              // error={!!errors.idSpecialite}
-              // style={{marginTop: '1rem'}}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {societies.map((elem) => (
-                <MenuItem key={elem.idSociete} value={elem.idSociete}>
-                  {elem.raisonSociale}
-                </MenuItem>
-              ))}
-            </Select>
+          <Select
+            label="Fournisseur"
+            name="idSociete"
+            required
+            value={formData.idSociete}
+            onChange={handleChange}
+            fullWidth
+            // error={!!errors.idSpecialite}
+            // style={{marginTop: '1rem'}}
+          >
+            <MenuItem value="">
+        <em>None</em>
+        </MenuItem>
+        {societies.map(elem => (
+         <MenuItem key={elem.idSociete} value={elem.idSociete}>
+        {elem.raisonSociale}
+         </MenuItem>
+         ))}
+</Select>
+
+           
+            {/* ------------------------------------------------------- */}
+            {/*Unite Centrale */}
+            {/* ------------------------------------------------------- */}
             {formData.categorie === Categorie.UniteCentrale && (
               <>
                 <TextField
@@ -509,7 +548,14 @@ const MaterielPage = () => {
                   fullWidth
                   margin="normal"
                 >
-                  {["2", "4", "8", "16", "32", "64", "128", "256", "512"].map(
+                  {["2 Go",
+                    "4 Go",
+                    "8 Go",
+                    "16 Go",
+                    "32 Go",
+                    "64 Go",
+                    "128 Go",
+                    "256 Go",].map(
                     (conn) => (
                       <MenuItem key={conn} value={conn}>
                         {conn}
@@ -1020,3 +1066,5 @@ const MaterielPage = () => {
   );
 };
 export default MaterielPage;
+
+
