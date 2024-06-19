@@ -438,7 +438,7 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeHDMI_VideoProjecteur || false
+                                  materiel?.entreeHDMI_VideoProjecteur
                                 }
                               />
                             }
@@ -449,7 +449,7 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeLAN_VideoProjecteur || false
+                                  materiel?.entreeLAN_VideoProjecteur
                                 }
                               />
                             }
@@ -460,7 +460,7 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeUSB_VideoProjecteur || false
+                                  materiel?.entreeUSB_VideoProjecteur
                                 }
                               />
                             }
@@ -471,7 +471,7 @@ const DetailsMateriel = () => {
                               <Checkbox
                                 checked={
                                   // @ts-ignore
-                                  materiel?.entreeVGA_VideoProjecteur || false
+                                  materiel?.entreeVGA_VideoProjecteur
                                 }
                               />
                             }
