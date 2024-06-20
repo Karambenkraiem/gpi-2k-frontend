@@ -5,7 +5,6 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import {LuClipboardEdit} from 'react-icons/lu';
 import {RiDeleteBin6Line} from 'react-icons/ri';
-import {useNavigate} from 'react-router-dom';
 import Modal from '@mui/material/Modal';
 import {InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import {FaRegSave} from 'react-icons/fa';
@@ -14,7 +13,6 @@ import {ip} from 'constants/ip';
 
 const Spécialité = () => {
   const [errors, setErrors] = useState ({});
-  const Navigate = useNavigate ();
   const [specialites, setSpecialites] = useState ([]);
   const [loading, setLoading] = useState (true);
   const [open, setOpen] = useState (false);
@@ -27,27 +25,24 @@ const Spécialité = () => {
   });
   const [departements, setDepartements] = useState ([]);
 
-  // const fetchDepartement= ()=>{
-  //   axios.get(ip + "/departement").then((res) => setDepartements(res.data));
-  // };
-
-  useEffect (
-    () => {
-      axios
-        .get ('http://localhost:3000/specialite')
-        .then (response => {
-          setSpecialites (response.data);
-          setLoading (false);
-        })
-        .catch (error => {
-          console.error ('Error Fetching Data', error);
-        });
-      // @ts-ignore
-    },
-    axios.get (ip + '/departement').then (res => setDepartements (res.data)),
-    // @ts-ignore
-    []
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const specialitesResponse = await axios.get('http://localhost:3000/specialite');
+        setSpecialites(specialitesResponse.data);
+  
+        const departementsResponse = await axios.get(ip + '/departement');
+        setDepartements(departementsResponse.data);
+  
+        setLoading(false);
+      } catch (error) {
+        console.error('Error Fetching Data', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   const validate = (name, value) => {
     let errorMsg = '';

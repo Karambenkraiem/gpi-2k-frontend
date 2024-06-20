@@ -1,11 +1,9 @@
-// @ts-ignore
-// @ts-ignore
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import {
   Button,
   Modal,
@@ -21,11 +19,8 @@ import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 import axios from "axios";
 import { ip } from "constants/ip";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { LuClipboardEdit } from "react-icons/lu";
-import { FaArchive, FaRegSave } from "react-icons/fa";
+import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
-import { TbEyeSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -33,7 +28,13 @@ const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [utilisateurs, setUtilisateurs] = useState([]);
   const [open, setOpen] = useState(false);
-  const [affectationData, setAffectationData] = useState({dateAttribution:'', dateRetour:null});
+  const [affectationData, setAffectationData] = useState({
+    idUtilisateur:"",
+    numeroSerie:"",
+    dateAttribution: "",
+    dateRetour: null,
+    motifRetour:null,
+  });
   const [openAffectation, setOpenAffectation] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -155,7 +156,6 @@ const MaterielPage = () => {
   useEffect(() => {
     fetchMateriels();
     fetchUtilisateurs();
-
   }, []);
 
   const fetchMateriels = () => {
@@ -271,8 +271,6 @@ const MaterielPage = () => {
   const handleDelete = (id) => {
     axios
       .delete(`http://localhost:3000/materiel/${id}`)
-      // @ts-ignore
-      // @ts-ignore
       .then((response) => {
         setMateriels(
           materiels.filter((materiel) => materiel.numeroSerie !== id)
@@ -312,13 +310,11 @@ const MaterielPage = () => {
       });
   };
 
-  // @ts-ignore
   const handleAffectation = (numeroSerie) => {
-    setAffectationData({...affectationData, numeroSerie});
+    setAffectationData({ ...affectationData, numeroSerie });
     setOpenAffectation(true);
-
   };
-  // @ts-ignore
+
   const handleEmprunt = (row) => {};
 
   const handleView = (numeroSerie) => {
@@ -339,23 +335,15 @@ const MaterielPage = () => {
     axios.get(ip + "/societe").then((res) => setSocieties(res.data));
   }, []);
 
-
-
-
-
-  const handleSaveAffectation =()=>{
+  const handleSaveAffectation = () => {
     axios
-        .post("http://localhost:3000/affectation", affectationData)
-        .then((response) => {
-          fetchMateriels ();
-          setOpenAffectation(false);
-        })
-        .catch((error) => console.error("Erreur Affectation", error));
-  }
-  // const rows = materiels.map((materiel, index) => ({
-  //   id: index, // or use a unique field from your data, e.g., row.numeroSerie
-  //   ...materiel,
-  // }));
+      .post("http://localhost:3000/affectation", affectationData)
+      .then((response) => {
+        fetchMateriels();
+        setOpenAffectation(false);
+      })
+      .catch((error) => console.error("Erreur Affectation", error));
+  };
 
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
@@ -372,22 +360,41 @@ const MaterielPage = () => {
       width: 400,
       renderCell: (params) => (
         <div text-align="letf">
-          <Button title="Voir Détails Matériel" onClick={() => handleView(params.row.numeroSerie)}>
-            < VisibilityOutlinedIcon  />
+          <Button
+            title="Voir Détails Matériel"
+            onClick={() => handleView(params.row.numeroSerie)}
+          >
+            <VisibilityOutlinedIcon />
           </Button>
-          <Button title="Modifier Matériel" onClick={() => handleEdit(params.row)}>
+          <Button
+            title="Modifier Matériel"
+            onClick={() => handleEdit(params.row)}
+          >
             <EditNoteIcon />
           </Button>
-          <Button title="Supprimer Materiel" onClick={() => handleDelete(params.row.numeroSerie)}>
+          <Button
+            title="Supprimer Materiel"
+            onClick={() => handleDelete(params.row.numeroSerie)}
+          >
             <DeleteOutlineOutlinedIcon />
           </Button>
-          <Button title="Archiver Matériel" onClick={() => toggleStatus(params.row.numeroSerie)}>
+          <Button
+            title="Archiver Matériel"
+            onClick={() => toggleStatus(params.row.numeroSerie)}
+          >
             <Inventory2OutlinedIcon />
           </Button>
-          <Button title="Affecter Matériel" disabled={params.row.statut==='Affecté'} onClick={() => handleAffectation(params.row.numeroSerie)}>
+          <Button
+            title="Affecter Matériel"
+            disabled={params.row.statut === "Affecté"}
+            onClick={() => handleAffectation(params.row.numeroSerie)}
+          >
             <QueuePlayNextOutlinedIcon />
           </Button>
-          <Button title="Emprunter Matériel" onClick={() => handleEmprunt(params.row)}>
+          <Button
+            title="Emprunter Matériel"
+            onClick={() => handleEmprunt(params.row)}
+          >
             <ManageHistoryOutlinedIcon />
           </Button>
         </div>
@@ -412,7 +419,6 @@ const MaterielPage = () => {
               justifyContent: "center",
             }}
             rows={materiels}
-            // @ts-ignore
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -432,10 +438,9 @@ const MaterielPage = () => {
           />
         </Box>
 
-
-<Modal open={openAffectation }>
-<Box sx={style}>
-<TextField
+        <Modal open={openAffectation}>
+          <Box sx={style}>
+            <TextField
               select
               label="Utilisateur"
               name="idUtilisateur"
@@ -449,19 +454,22 @@ const MaterielPage = () => {
               helperText={errors.categorie}
             >
               {utilisateurs.map((utilisateur) => (
-                <MenuItem key={utilisateur.idUtilisateur} value={utilisateur.idUtilisateur}>
+                <MenuItem
+                  key={utilisateur.idUtilisateur}
+                  value={utilisateur.idUtilisateur}
+                >
                   {utilisateur.fullName}
                 </MenuItem>
               ))}
-            </TextField> 
-
-
+            </TextField>
 
             <TextField
               label={"Date d'affectation"}
               placeholder="Sélectionner une date"
               name="dateAttribution"
-              value={dayjs(affectationData?.dateAttribution).format('YYYY-MM-DD')}
+              value={dayjs(affectationData?.dateAttribution).format(
+                "YYYY-MM-DD"
+              )}
               type="date"
               onChange={handleChangeAffectation}
               fullWidth
@@ -475,7 +483,7 @@ const MaterielPage = () => {
               label={"Date Retour"}
               placeholder="Sélectionner une date"
               name="dateRetour"
-              value={dayjs(affectationData?.dateRetour).format('YYYY-MM-DD')}
+              value={dayjs(affectationData?.dateRetour).format("YYYY-MM-DD")}
               type="date"
               onChange={handleChangeAffectation}
               fullWidth
@@ -503,20 +511,18 @@ const MaterielPage = () => {
               sx={{ mt: 2 }}
               color="primary"
             >
-             <FaRegSave /> 
-            _ Enregistrer
+              <FaRegSave />_ Enregistrer
             </Button>
             <Button
-              onClick={()=> setOpenAffectation(false)}
+              onClick={() => setOpenAffectation(false)}
               variant="contained"
               color="secondary"
               sx={{ mt: 2 }}
             >
               Annuler
             </Button>
-            
-            </Box>
-            </Modal>
+          </Box>
+        </Modal>
 
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>
@@ -626,7 +632,7 @@ const MaterielPage = () => {
               label={"Date d'acquisition"}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
-              value={dayjs(formData?.dateAcquisition).format('YYYY-MM-DD')}
+              value={dayjs(formData?.dateAcquisition).format("YYYY-MM-DD")}
               type="date"
               onChange={handleChange}
               fullWidth
@@ -1022,8 +1028,10 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                      
-                        checked={formData?.entreeHDMI_VideoProjecteur ?? state.entreeHDMI_VideoProjecteur}
+                        checked={
+                          formData?.entreeHDMI_VideoProjecteur ??
+                          state.entreeHDMI_VideoProjecteur
+                        }
                         onChange={handleCheckboxChange}
                         name="entreeHDMI_VideoProjecteur"
                       />
@@ -1033,7 +1041,10 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData?.entreeVGA_VideoProjecteur ?? state.entreeVGA_VideoProjecteur}
+                        checked={
+                          formData?.entreeVGA_VideoProjecteur ??
+                          state.entreeVGA_VideoProjecteur
+                        }
                         onChange={handleCheckboxChange}
                         name="entreeVGA_VideoProjecteur"
                       />
@@ -1043,7 +1054,10 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData?.entreeUSB_VideoProjecteur ?? state.entreeUSB_VideoProjecteur}
+                        checked={
+                          formData?.entreeUSB_VideoProjecteur ??
+                          state.entreeUSB_VideoProjecteur
+                        }
                         onChange={handleCheckboxChange}
                         name="entreeUSB_VideoProjecteur"
                       />
@@ -1053,7 +1067,10 @@ const MaterielPage = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData?.entreeLAN_VideoProjecteur ?? state.entreeLAN_VideoProjecteur}
+                        checked={
+                          formData?.entreeLAN_VideoProjecteur ??
+                          state.entreeLAN_VideoProjecteur
+                        }
                         onChange={handleCheckboxChange}
                         name="entreeLAN_VideoProjecteur"
                       />

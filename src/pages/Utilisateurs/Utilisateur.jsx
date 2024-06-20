@@ -63,7 +63,7 @@ const Utilisateur = () => {
 
   useEffect(() => {
     fetchUser();
-  }, [idUtilisateur]);
+  });
 
   const handleDelete = () => {
     axios

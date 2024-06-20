@@ -5,7 +5,6 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import { LuClipboardEdit } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
@@ -13,7 +12,6 @@ import { IoPersonAddOutline } from "react-icons/io5";
 
 const Département = () => {
   const [errors, setErrors] = useState({});
-  const Navigate = useNavigate();
   const [departements, setDepartements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);

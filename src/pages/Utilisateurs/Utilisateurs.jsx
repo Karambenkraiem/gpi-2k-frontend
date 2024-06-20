@@ -3,16 +3,11 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import { LuClipboardEdit } from "react-icons/lu";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { VscActivateBreakpoints } from "react-icons/vsc";
-import { TbEyeSearch } from "react-icons/tb";
 import ToggleOffOutlinedIcon from '@mui/icons-material/ToggleOffOutlined';
 import { useNavigate } from "react-router-dom";
 import UtilisateurModal from "../../components/UtilisateurModal";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 const Utilisateurs = () => {
