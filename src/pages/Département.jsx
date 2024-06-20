@@ -9,6 +9,7 @@ import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
+import { ip } from "constants/ip";
 
 const Département = () => {
   const [errors, setErrors] = useState({});
@@ -24,7 +25,7 @@ const Département = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/departement")
+      .get(ip + "/departement")
       .then((response) => {
         setDepartements(response.data);
         setLoading(false);
@@ -71,9 +72,7 @@ const Département = () => {
 
     if (isEditing) {
       axios
-        .patch(
-          `http://localhost:3000/departement/${departementToSave.idDepartement}`
-        )
+        .patch(ip + `/departement/${departementToSave.idDepartement}`)
         .then((response) => {
           setDepartements(
             departements.map((departement) =>
@@ -89,7 +88,7 @@ const Département = () => {
         });
     } else {
       axios
-        .post("http://localhost:3000/departement", departementToSave)
+        .post(ip + "/departement", departementToSave)
         .then((response) => {
           setDepartements([...departements, response.data]);
           handleClose();
@@ -102,7 +101,7 @@ const Département = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/departement/${id}`)
+      .delete(ip + `/departement/${id}`)
       .then((response) => {
         setDepartements(
           departements.filter((specialite) => specialite.idDepartement !== id)

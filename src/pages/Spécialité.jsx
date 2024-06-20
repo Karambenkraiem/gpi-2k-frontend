@@ -28,7 +28,7 @@ const Spécialité = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const specialitesResponse = await axios.get('http://localhost:3000/specialite');
+        const specialitesResponse = await axios.get(ip + '/specialite');
         setSpecialites(specialitesResponse.data);
   
         const departementsResponse = await axios.get(ip + '/departement');
@@ -88,7 +88,7 @@ const Spécialité = () => {
 
       axios
         .patch (
-          `http://localhost:3000/specialite/${specialiteToSave.idSpecialite}`,
+          ip + `/specialite/${specialiteToSave.idSpecialite}`,
           rest
         )
         .then (response => {
@@ -107,7 +107,7 @@ const Spécialité = () => {
         });
     } else {
       axios
-        .post ('http://localhost:3000/specialite', specialiteToSave)
+        .post (ip + '/specialite', specialiteToSave)
         .then (response => {
           setSpecialites ([...specialites, response.data]);
           handleClose ();
@@ -120,7 +120,7 @@ const Spécialité = () => {
 
   const handleDelete = id => {
     axios
-      .delete (`http://localhost:3000/specialite/${id}`)
+      .delete (ip + `/specialite/${id}`)
       .then (response => {
         setSpecialites (
           specialites.filter (specialite => specialite.idSpecialite !== id)

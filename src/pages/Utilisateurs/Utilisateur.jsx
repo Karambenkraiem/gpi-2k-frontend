@@ -7,6 +7,7 @@ import { VscActivateBreakpoints } from "react-icons/vsc";
 import { LuClipboardEdit } from "react-icons/lu";
 import { RxDividerVertical } from "react-icons/rx";
 import UtilisateurModal from "../../components/UtilisateurModal";
+import { ip } from "constants/ip";
 
 
 const Utilisateur = () => {
@@ -50,7 +51,7 @@ const Utilisateur = () => {
 
   const fetchUser = () => {
     axios
-      .get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
+      .get(ip + `/utilisateur/${idUtilisateur}`)
       .then((response) => {
         setUser(response.data);
         setLoading(false);
@@ -67,7 +68,7 @@ const Utilisateur = () => {
 
   const handleDelete = () => {
     axios
-      .delete(`http://localhost:3000/utilisateur/${idUtilisateur}`)
+      .delete(ip + `/utilisateur/${idUtilisateur}`)
       .then(() => {
         navigate(`/utilisateur`);
       })
@@ -91,7 +92,7 @@ const Utilisateur = () => {
       etatUtilisateur: user.etatUtilisateur === "actif" ? "inactif" : "actif",
     };
     axios
-      .patch(`http://localhost:3000/utilisateur/${idUtilisateur}`, updatedUser)
+      .patch(ip + `/utilisateur/${idUtilisateur}`, updatedUser)
       .then(() => {
         fetchUser();
       })
@@ -113,7 +114,7 @@ const Utilisateur = () => {
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error(
-        "Il y  a des champs obligatoire veuillez les remplir SVP !!!"
+        "Veuillez remplir tous les champs obligatoires!"
       );
       return;
     }
@@ -121,7 +122,7 @@ const Utilisateur = () => {
     const { Specialite, ...rest } = userToSave;
     axios
       .patch(
-        `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
+        ip + `/utilisateur/${userToSave.idUtilisateur}`,
         rest
       )
       .then((response) => {
@@ -241,12 +242,6 @@ const Utilisateur = () => {
                     <LuClipboardEdit />
                   </Button>
                   <RxDividerVertical />
-                  {/* <Switch
-                    checked={checkedSwitch}
-                    onChange={handleChangeSwitch}
-                    onClick={toggleStatus}
-                    inputProps={{ "aria-label": "controlled" }}
-                  /> */}
                   <Button onClick={toggleStatus}>
                     <VscActivateBreakpoints />
                   </Button>

@@ -1,9 +1,8 @@
-import { Box, MenuItem, TextField,Button,
-    Modal, } from '@mui/material'
+import { Box, MenuItem, TextField, Button, Modal } from '@mui/material'
 import axios from 'axios';
+import { ip } from 'constants/ip';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react'
-
 import { FaRegSave } from 'react-icons/fa'
 
 const AffectationModal = ({
@@ -18,7 +17,7 @@ const AffectationModal = ({
 
       const fetchUtilisateurs = () => {
         axios
-          .get("http://localhost:3000/utilisateur")
+          .get(ip + "/utilisateur")
           .then((response) => {
             setUtilisateurs(response.data);
             // setLoading(false);

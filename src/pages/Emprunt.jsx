@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+import { ip } from 'constants/ip';
 
 const Emprunt = () => {
   const [emprunts, setEmprunts] = useState([]);
 
   useEffect(() => {
     // Fetch emprunts from your API
-    axios.get('http://localhost:3000/emprunt') // Adjust the URL to your API endpoint
+    axios.get(ip + '/emprunt') // Adjust the URL to your API endpoint
       .then(response => {
         setEmprunts(response.data);
       })

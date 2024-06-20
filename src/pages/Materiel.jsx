@@ -157,15 +157,41 @@ const MaterielPage = () => {
     fetchMateriels();
   }, []);
 
+  // const fetchMateriels = () => {
+  //   axios
+  //     .get(ip + "/materiel")
+  //     .then((response) => {
+  //       setMateriels(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // };
+
   const fetchMateriels = () => {
     axios
-      .get("http://localhost:3000/materiel")
+      .get(`${ip}/materiel`)
       .then((response) => {
-        setMateriels(response.data);
+        const processedData = response.data.map(materiel => {
+          // Determine the state based on etatAffectation and etatEmprunt
+          let statut = 'Disponible';
+
+          if (materiel.Affectation && materiel.Affectation.length > 0) {
+            statut = materiel.Affectation[0].etatAffectation;
+          } else if (materiel.Emprunt && materiel.Emprunt.length > 0) {
+            statut = materiel.Emprunt[0].etatEmprunt;
+          }
+
+          return {
+            ...materiel,
+            statut,
+          };
+        });
+        setMateriels(processedData);
         setLoading(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
+
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -193,7 +219,7 @@ const MaterielPage = () => {
       const { Affectation, Emprunt, idSociete, statut, ...rest } =
         materialToSave;
       axios
-        .patch(`http://localhost:3000/materiel/${formData.numeroSerie}`, rest)
+        .patch(ip + `/materiel/${formData.numeroSerie}`, rest)
         .then((response) => {
           setMateriels(
             materiels.map((materiel) =>
@@ -202,7 +228,7 @@ const MaterielPage = () => {
                 : materiel
             )
           );
-          // fetchMateriels ();
+          fetchMateriels ();
           handleCloseModal();
         })
         .catch((error) =>
@@ -210,10 +236,10 @@ const MaterielPage = () => {
         );
     } else {
       axios
-        .post("http://localhost:3000/materiel", materialToSave)
+        .post(ip + "/materiel", materialToSave)
         .then((response) => {
           setMateriels([...materiels, response.data]);
-          // fetchMateriels ();
+          fetchMateriels ();
           handleCloseModal();
         })
         .catch((error) => console.error("Erreur ajout Materiel", error));
@@ -244,7 +270,6 @@ const MaterielPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value);
     setFormData({
       ...formData,
       [name]: value,
@@ -259,14 +284,14 @@ const MaterielPage = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/materiel/${id}`)
+      .delete(ip + `/materiel/${id}`)
       .then((response) => {
         setMateriels(
           materiels.filter((materiel) => materiel.numeroSerie !== id)
         );
       })
       .catch((error) => {
-        console.error("Erreur suppression de materiel ....", error);
+        console.error("Erreur suppression de matériel ....", error);
       });
   };
   const toggleStatus = (numeroSerie) => {
@@ -286,7 +311,7 @@ const MaterielPage = () => {
     const { Affectation, Emprunt, idSociete, statut, ...rest } =
       updatedMateriel;
     axios
-      .patch(`http://localhost:3000/materiel/${numeroSerie}`, rest)
+      .patch(ip + `/materiel/${numeroSerie}`, rest)
       .then((response) => {
         setMateriels(
           materiels.map((m) =>
@@ -295,7 +320,7 @@ const MaterielPage = () => {
         );
       })
       .catch((error) => {
-        console.error("Erreur archivage etat Materiel !!! ", error);
+        console.error("Erreur archivage etat matériel !!! ", error);
       });
   };
 
@@ -312,7 +337,6 @@ const MaterielPage = () => {
 
   const handleChangeAffectation = (e) => {
     const { name, value } = e.target;
-    console.log(value);
     setAffectationData({
       ...affectationData,
       [name]: value,
@@ -326,12 +350,12 @@ const MaterielPage = () => {
 
   const handleSaveAffectation = () => {
     axios
-      .post("http://localhost:3000/affectation", affectationData)
+      .post(ip + "/affectation", affectationData)
       .then((response) => {
         fetchMateriels();
         setOpenAffectation(false);
       })
-      .catch((error) => console.error("Erreur Affectation", error));
+      .catch((error) => console.error("Erreur affectation!", error));
   };
 
   const columns = [
@@ -340,7 +364,7 @@ const MaterielPage = () => {
     { field: "marque", headerName: "Marque", width: 100 },
     { field: "modele", headerName: "Modele", width: 200 },
     { field: "prix", headerName: "Prix", type: "number", width: 100 },
-    { field: "etatMateriel", headerName: "Etat Materiel", width: 120 },
+    { field: "etatMateriel", headerName: "Etat matériel", width: 120 },
     { field: "statut", headerName: "Statut", width: 90 },
     {
       field: "actions",
@@ -350,31 +374,31 @@ const MaterielPage = () => {
       renderCell: (params) => (
         <div text-align="letf">
           <Button
-            title="Voir Détails Matériel"
+            title="Voir détails matériel"
             onClick={() => handleView(params.row.numeroSerie)}
           >
             <VisibilityOutlinedIcon />
           </Button>
           <Button
-            title="Modifier Matériel"
+            title="Modifier matériel"
             onClick={() => handleEdit(params.row)}
           >
             <EditNoteIcon />
           </Button>
           <Button
-            title="Supprimer Materiel"
+            title="Supprimer matériel"
             onClick={() => handleDelete(params.row.numeroSerie)}
           >
             <DeleteOutlineOutlinedIcon />
           </Button>
           <Button
-            title="Archiver Matériel"
+            title="Archiver matériel"
             onClick={() => toggleStatus(params.row.numeroSerie)}
           >
             <Inventory2OutlinedIcon />
           </Button>
           <Button
-            title="Affecter Matériel"
+            title="Affecter matériel"
             disabled={params.row.statut === "Affecté"}
             onClick={() => handleAffectation(params.row.numeroSerie)}
           >
@@ -391,7 +415,6 @@ const MaterielPage = () => {
     },
   ];
   const [pageSize, setPageSize] = useState(25);
-  console.log(formData.dateAcquisition);
   return (
     <div>
       <h1>Gestion de Matériel</h1>
@@ -438,7 +461,7 @@ const MaterielPage = () => {
 
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>
-            <h2>{isEditing ? "Edit Materiel" : "Add Materiel"}</h2>
+            <h2>{isEditing ? "Editer matériel" : "Ajouter matériel"}</h2>
 
             <TextField
               select
@@ -522,7 +545,7 @@ const MaterielPage = () => {
             />
             <TextField
               select
-              label="Etat Materiel"
+              label="Etat matériel"
               name="etatMateriel"
               value={formData.etatMateriel || ""}
               onChange={handleChange}

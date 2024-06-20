@@ -9,6 +9,7 @@ import UtilisateurModal from "../../components/UtilisateurModal";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { ip } from "constants/ip";
 
 const Utilisateurs = () => {
   const [errors, setErrors] = useState({});
@@ -32,7 +33,7 @@ const Utilisateurs = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/utilisateur")
+      .get(ip + "/utilisateur")
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -100,7 +101,7 @@ const Utilisateurs = () => {
       const { Specialite, ...rest } = userToSave;
       axios
         .patch(
-          `http://localhost:3000/utilisateur/${userToSave.idUtilisateur}`,
+          ip + `/utilisateur/${userToSave.idUtilisateur}`,
           rest
         )
         .then((response) => {
@@ -118,7 +119,7 @@ const Utilisateurs = () => {
         });
     } else {
       axios
-        .post("http://localhost:3000/utilisateur", userToSave)
+        .post(ip + "/utilisateur", userToSave)
         .then((response) => {
           setUsers([...users, response.data]);
           handleClose();
@@ -131,7 +132,7 @@ const Utilisateurs = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/utilisateur/${id}`)
+      .delete(ip + `/utilisateur/${id}`)
       .then((response) => {
         setUsers(users.filter((user) => user.idUtilisateur !== id));
       })
@@ -174,7 +175,7 @@ const Utilisateurs = () => {
     };
   
     axios
-      .patch(`http://localhost:3000/utilisateur/${userId}`, updatedUser)
+      .patch(ip + `/utilisateur/${userId}`, updatedUser)
       .then((response) => {
         setUsers(
           users.map((u) => (u.idUtilisateur === userId ? response.data : u))

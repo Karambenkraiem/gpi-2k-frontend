@@ -1,12 +1,15 @@
 // @ts-ignore
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
+import AffectationModal from "../components/AffectationModal";
 // @ts-ignore
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
+import { RxDividerHorizontal } from "react-icons/rx";
 import { useParams } from "react-router-dom";
+import { ip } from "constants/ip";
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -14,10 +17,79 @@ const DetailsMateriel = () => {
   const [affectations, setAffectations] = useState([]);
   const [emprunts, setEmprunts] = useState([]);
   const [societies, setSocieties] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [openAffectation, setOpenAffectation] = useState(false);
+  const [materiels, setMateriels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [affectationData, setAffectationData] = useState({
+    idUtilisateur: "",
+    numeroSerie: "",
+    dateAttribution: "",
+    dateRetour: null,
+    motifRetour: null,
+  });
+
+  const handleChangeAffectation = (e) => {
+    const { name, value } = e.target;
+    console.log(value);
+    setAffectationData({
+      ...affectationData,
+      [name]: value,
+    });
+    validateMateriel(name, value);
+  };
+
+  const fetchMateriels = () => {
+    axios
+      .get(ip + "/materiel")
+      .then((response) => {
+        setMateriels(response.data);
+        setLoading(false);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const handleAffectation = (numeroSerie) => {
+    setAffectationData({ ...affectationData, numeroSerie });
+    setOpenAffectation(true);
+  };
+
+  const handleSaveAffectation = () => {
+    axios
+      .post(ip + "/affectation", affectationData)
+      .then((response) => {
+        fetchMateriels();
+        setOpenAffectation(false);
+      })
+      .catch((error) => console.error("Erreur Affectation", error));
+  };
+
+  const validateMateriel = (name, value) => {
+    let errorMsg = "";
+
+    if (name === "numeroSerie" && !value) {
+      errorMsg = "Numéro de Série est obligatoire !!!";
+    } else if (name === "categorie" && !value) {
+      errorMsg = "Catégorie est obligatoire";
+    } else if (name === "marque" && !value) {
+      errorMsg = "Marque est obligatoire";
+    } else if (name === "modele" && !value) {
+      errorMsg = "Modèle est obligatoire";
+    } else if (name === "prix" && (!value || isNaN(value) || value <= 0)) {
+      errorMsg = "Prix doit être un nombre positif";
+    } else if (name === "garantie" && !value) {
+      errorMsg = "Garantie est obligatoire";
+    } else if (name === "etatMateriel" && !value) {
+      errorMsg = "État Matériel est obligatoire";
+    } else if (name === "dateAcquisition" && !value) {
+      errorMsg = "Date d'Acquisition est obligatoire";
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
+  };
 
   const fetchAffectations = () => {
     axios
-      .get(`http://localhost:3000/affectation/${numeroSerie}`)
+      .get(ip + `/affectation/${numeroSerie}`)
       .then((response) => {
         setAffectations(response.data);
       })
@@ -28,7 +100,7 @@ const DetailsMateriel = () => {
 
   const fetchEmprunts = () => {
     axios
-      .get(`http://localhost:3000/emprunt/${numeroSerie}`)
+      .get(ip + `/emprunt/${numeroSerie}`)
       .then((response) => {
         setEmprunts(response.data);
       })
@@ -39,7 +111,7 @@ const DetailsMateriel = () => {
 
   const fetchMateriel = () => {
     axios
-      .get(`http://localhost:3000/materiel/${numeroSerie}`)
+      .get(ip + `/materiel/${numeroSerie}`)
       .then((response) => {
         setMateriel(response.data);
       })
@@ -50,7 +122,7 @@ const DetailsMateriel = () => {
 
   const fetchSocieties = () => {
     axios
-      .get(`http://localhost:3000/societe`)
+      .get(ip + `/societe`)
       .then((response) => {
         setSocieties(response.data);
       })
@@ -483,6 +555,17 @@ const DetailsMateriel = () => {
                   }
                 </Card.Body>
               </Card>
+              <Card>
+                <Card.Body className="text-center">
+                  <Button onClick={handleAffectation}>
+                    Modifier affectation
+                  </Button>
+                  <RxDividerHorizontal />
+                  <Button>
+                    Modifier emprunt
+                  </Button>
+                </Card.Body>
+              </Card>
             </Col>
             <Col lg={8}>
               <Card className="mb-4">
@@ -529,6 +612,14 @@ const DetailsMateriel = () => {
               </Card>
             </Col>
           </Row>
+          <AffectationModal
+          affectationData={affectationData}
+          openAffectation={openAffectation}
+          handleClose={() => setOpenAffectation(false)}
+          handleChange={handleChangeAffectation}
+          handleSave={handleSaveAffectation}
+          errors={errors}
+        />
         </Container>
       </section>
     </div>

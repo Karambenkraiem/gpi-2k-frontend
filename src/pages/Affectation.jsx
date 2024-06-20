@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+import { ip } from 'constants/ip';
 
 const Affectations = () => {
   const [affectations, setAffectations] = useState([]);
 
   useEffect(() => {
     // Fetch affectations from your API
-    axios.get('http://localhost:3000/affectation') 
+    axios.get(ip + '/affectation') 
       .then(response => {
         setAffectations(response.data);
       })
       .catch(error => {
-        console.error('There was an error fetching the affectations!', error);
+        console.error('Erreur récupération de données', error);
       });
   }, []);
 
