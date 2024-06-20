@@ -23,17 +23,17 @@ import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import AffectationModal from "components/AffectationModal";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
-  const [utilisateurs, setUtilisateurs] = useState([]);
   const [open, setOpen] = useState(false);
   const [affectationData, setAffectationData] = useState({
-    idUtilisateur:"",
-    numeroSerie:"",
+    idUtilisateur: "",
+    numeroSerie: "",
     dateAttribution: "",
     dateRetour: null,
-    motifRetour:null,
+    motifRetour: null,
   });
   const [openAffectation, setOpenAffectation] = useState(false);
 
@@ -155,7 +155,6 @@ const MaterielPage = () => {
 
   useEffect(() => {
     fetchMateriels();
-    fetchUtilisateurs();
   }, []);
 
   const fetchMateriels = () => {
@@ -164,16 +163,6 @@ const MaterielPage = () => {
       .then((response) => {
         setMateriels(response.data);
         setLoading(false);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  };
-
-  const fetchUtilisateurs = () => {
-    axios
-      .get("http://localhost:3000/utilisateur")
-      .then((response) => {
-        setUtilisateurs(response.data);
-        // setLoading(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -438,91 +427,14 @@ const MaterielPage = () => {
           />
         </Box>
 
-        <Modal open={openAffectation}>
-          <Box sx={style}>
-            <TextField
-              select
-              label="Utilisateur"
-              name="idUtilisateur"
-              value={affectationData.idUtilisateur}
-              onChange={handleChangeAffectation}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.categorie}
-              // @ts-ignore
-              helperText={errors.categorie}
-            >
-              {utilisateurs.map((utilisateur) => (
-                <MenuItem
-                  key={utilisateur.idUtilisateur}
-                  value={utilisateur.idUtilisateur}
-                >
-                  {utilisateur.fullName}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              label={"Date d'affectation"}
-              placeholder="Sélectionner une date"
-              name="dateAttribution"
-              value={dayjs(affectationData?.dateAttribution).format(
-                "YYYY-MM-DD"
-              )}
-              type="date"
-              onChange={handleChangeAffectation}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.dateAttribution}
-              // @ts-ignore
-              helperText={errors.dateAttribution}
-            />
-            <TextField
-              label={"Date Retour"}
-              placeholder="Sélectionner une date"
-              name="dateRetour"
-              value={dayjs(affectationData?.dateRetour).format("YYYY-MM-DD")}
-              type="date"
-              onChange={handleChangeAffectation}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.dateRetour}
-              // @ts-ignore
-              helperText={errors.dateRetour}
-            />
-            <TextField
-              label="Motif Retour"
-              name="motifRetour"
-              value={affectationData.motifRetour || ""}
-              onChange={handleChangeAffectation}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.motifRetour}
-              // @ts-ignore
-              helperText={errors.motifRetour}
-            />
-            <Button
-              onClick={handleSaveAffectation}
-              variant="contained"
-              sx={{ mt: 2 }}
-              color="primary"
-            >
-              <FaRegSave />_ Enregistrer
-            </Button>
-            <Button
-              onClick={() => setOpenAffectation(false)}
-              variant="contained"
-              color="secondary"
-              sx={{ mt: 2 }}
-            >
-              Annuler
-            </Button>
-          </Box>
-        </Modal>
+        <AffectationModal
+          affectationData={affectationData}
+          openAffectation={openAffectation}
+          handleClose={() => setOpenAffectation(false)}
+          handleChange={handleChangeAffectation}
+          handleSave={handleSaveAffectation}
+          errors={errors}
+        />
 
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>

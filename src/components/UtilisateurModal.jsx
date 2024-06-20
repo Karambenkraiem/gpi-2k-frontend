@@ -28,7 +28,7 @@ const UtilisateurModal = ({
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    maxHeight: "90vh", // Allows the modal to scroll if content overflows
+    maxHeight: "90vh",
     overflowY: "auto",
   };
 
