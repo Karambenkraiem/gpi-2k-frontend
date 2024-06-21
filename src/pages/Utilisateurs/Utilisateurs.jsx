@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import ToggleOffOutlinedIcon from '@mui/icons-material/ToggleOffOutlined';
+import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
 import { useNavigate } from "react-router-dom";
 import UtilisateurModal from "../../components/UtilisateurModal";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ip } from "constants/ip";
 
 const Utilisateurs = () => {
@@ -100,10 +100,7 @@ const Utilisateurs = () => {
       // @ts-ignore
       const { Specialite, ...rest } = userToSave;
       axios
-        .patch(
-          ip + `/utilisateur/${userToSave.idUtilisateur}`,
-          rest
-        )
+        .patch(ip + `/utilisateur/${userToSave.idUtilisateur}`, rest)
         .then((response) => {
           setUsers(
             users.map((user) =>
@@ -153,7 +150,7 @@ const Utilisateurs = () => {
       console.error("Données Introuvable !!!");
       return;
     }
-  
+
     let newStatus;
     switch (user.etatUtilisateur) {
       case "actif":
@@ -166,14 +163,14 @@ const Utilisateurs = () => {
         newStatus = "actif";
         break;
       default:
-        newStatus = "actif"; 
+        newStatus = "actif";
     }
-  
+
     const updatedUser = {
       ...user,
       etatUtilisateur: newStatus,
     };
-  
+
     axios
       .patch(ip + `/utilisateur/${userId}`, updatedUser)
       .then((response) => {
@@ -223,16 +220,28 @@ const Utilisateurs = () => {
       width: 300,
       renderCell: (params) => (
         <div>
-          <Button title="Visualiser Utilisateur" onClick={() => handleView(params.row.idUtilisateur)}>
+          <Button
+            title="Visualiser Utilisateur"
+            onClick={() => handleView(params.row.idUtilisateur)}
+          >
             <VisibilityOutlinedIcon />
           </Button>
-          <Button title="Modifier Utilisateur" onClick={() => handleOpen(params.row)}>
+          <Button
+            title="Modifier Utilisateur"
+            onClick={() => handleOpen(params.row)}
+          >
             <EditNoteIcon />
           </Button>
-          <Button title="Activer / Desactiver Utilisateur" onClick={() => toggleStatus(params.row.idUtilisateur)}>
+          <Button
+            title="Activer / Desactiver Utilisateur"
+            onClick={() => toggleStatus(params.row.idUtilisateur)}
+          >
             <ToggleOffOutlinedIcon />
           </Button>
-          <Button title="Supprimer Utilisateur" onClick={() => handleDelete(params.row.idUtilisateur)}>
+          <Button
+            title="Supprimer Utilisateur"
+            onClick={() => handleDelete(params.row.idUtilisateur)}
+          >
             <DeleteOutlineOutlinedIcon />
           </Button>
         </div>

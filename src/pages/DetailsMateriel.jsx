@@ -1,15 +1,12 @@
-// @ts-ignore
 import { Button, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import AffectationModal from "../components/AffectationModal";
-// @ts-ignore
-// @ts-ignore
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
-import { RxDividerHorizontal } from "react-icons/rx";
 import { useParams } from "react-router-dom";
 import { ip } from "constants/ip";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -19,14 +16,20 @@ const DetailsMateriel = () => {
   const [societies, setSocieties] = useState([]);
   const [errors, setErrors] = useState({});
   const [openAffectation, setOpenAffectation] = useState(false);
+  // @ts-ignore
   const [materiels, setMateriels] = useState([]);
+  // @ts-ignore
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  // @ts-ignore
+  const handleClose = () => setOpenAffectation(false);
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
     dateAttribution: "",
-    dateRetour: null,
+    dateRetour: new Date(),
     motifRetour: null,
+    etatAffectation: null,
   });
 
   const handleChangeAffectation = (e) => {
@@ -49,19 +52,41 @@ const DetailsMateriel = () => {
       .catch((error) => console.error("Error fetching data:", error));
   };
 
+  // @ts-ignore
   const handleAffectation = (numeroSerie) => {
     setAffectationData({ ...affectationData, numeroSerie });
     setOpenAffectation(true);
   };
 
+  const handleAffectationEdit = (row) => {
+    setAffectationData(row);
+    setIsEditing(true);
+    setOpenAffectation(true);
+  };
+
   const handleSaveAffectation = () => {
-    axios
-      .post(ip + "/affectation", affectationData)
-      .then((response) => {
-        fetchMateriels();
-        setOpenAffectation(false);
-      })
-      .catch((error) => console.error("Erreur Affectation", error));
+    // @ts-ignore
+    const affectationToSave = {
+      ...affectationData,
+      idUtilisateur: parseInt(affectationData.idUtilisateur, 10),
+      numeroSerie: affectationData.numeroSerie,
+    };
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    if (hasErrors) {
+      console.error(
+        "Veuillez remplir tous les champs obligatoires!"
+      );
+      return;
+    }
+      axios
+        .patch(ip + `/affectation/${affectationToSave.idUtilisateur}/${affectationToSave.numeroSerie}`, affectationData)
+        // @ts-ignore
+        .then((response) => {
+          fetchMateriels();
+          setOpenAffectation(false);
+        })
+        .catch((error) => console.error("Erreur Affectation", error));
+    
   };
 
   const validateMateriel = (name, value) => {
@@ -148,6 +173,23 @@ const DetailsMateriel = () => {
   }));
 
   const columnsAffectations = [
+    {
+      field: "actions",
+      headerName: "Modification",
+      headerAlign: "center",
+      width: 100,
+      renderCell: (params) => (
+        <div text-align="letf">
+          <Button
+            title="Affecter matériel"
+            disabled={params.row.statut === "Affecté"}
+            onClick={() => handleAffectationEdit(params.row)}
+          >
+            <EditNoteIcon />
+          </Button>
+        </div>
+      ),
+    },
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
     { field: "dateAttribution", headerName: "Date Attribution", width: 150 },
@@ -165,6 +207,23 @@ const DetailsMateriel = () => {
   }));
 
   const columnsEmprunts = [
+    {
+      field: "actions",
+      headerName: "Modification",
+      headerAlign: "center",
+      width: 100,
+      renderCell: (params) => (
+        <div text-align="letf">
+          <Button
+            title="Affecter matériel"
+            disabled={params.row.statut === "Affecté"}
+            onClick={() => handleAffectationEdit(params.row)}
+          >
+            <EditNoteIcon />
+          </Button>
+        </div>
+      ),
+    },
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
     { field: "dateEmprunt", headerName: "Date Emprunt", width: 150 },
@@ -548,22 +607,11 @@ const DetailsMateriel = () => {
                               />
                             }
                             label="LAN"
-                          />                          
+                          />
                         </FormGroup>
                       </>
                     )
                   }
-                </Card.Body>
-              </Card>
-              <Card>
-                <Card.Body className="text-center">
-                  <Button onClick={handleAffectation}>
-                    Modifier affectation
-                  </Button>
-                  <RxDividerHorizontal />
-                  <Button>
-                    Modifier emprunt
-                  </Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -578,6 +626,7 @@ const DetailsMateriel = () => {
                       <div style={{ height: 300, width: "100%" }}>
                         <DataGrid
                           rows={rowsAffectations}
+                          // @ts-ignore
                           columns={columnsAffectations}
                           // @ts-ignore
                           pageSize={5}
@@ -599,6 +648,7 @@ const DetailsMateriel = () => {
                       <div style={{ height: 300, width: "100%" }}>
                         <DataGrid
                           rows={rowsEmprunts}
+                          // @ts-ignore
                           columns={columnsEmprunts}
                           // @ts-ignore
                           pageSize={5}
@@ -613,13 +663,14 @@ const DetailsMateriel = () => {
             </Col>
           </Row>
           <AffectationModal
-          affectationData={affectationData}
-          openAffectation={openAffectation}
-          handleClose={() => setOpenAffectation(false)}
-          handleChange={handleChangeAffectation}
-          handleSave={handleSaveAffectation}
-          errors={errors}
-        />
+            openAffectation={openAffectation}
+            affectationData={affectationData}
+            isEditing={isEditing}
+            handleClose={() => setOpenAffectation(false)}
+            handleChange={handleChangeAffectation}
+            handleSave={handleSaveAffectation}
+            errors={errors}
+          />
         </Container>
       </section>
     </div>

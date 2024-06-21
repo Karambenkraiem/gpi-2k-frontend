@@ -174,16 +174,20 @@ const MaterielPage = () => {
         const processedData = response.data.map(materiel => {
           // Determine the state based on etatAffectation and etatEmprunt
           let statut = 'Disponible';
+          let couleur = 'green';
 
           if (materiel.Affectation && materiel.Affectation.length > 0) {
             statut = materiel.Affectation[0].etatAffectation;
+            couleur = 'red'
           } else if (materiel.Emprunt && materiel.Emprunt.length > 0) {
             statut = materiel.Emprunt[0].etatEmprunt;
+            couleur = 'orange'
           }
 
           return {
             ...materiel,
             statut,
+            couleur,
           };
         });
         setMateriels(processedData);
@@ -453,6 +457,7 @@ const MaterielPage = () => {
         <AffectationModal
           affectationData={affectationData}
           openAffectation={openAffectation}
+          isEditing={isEditing}
           handleClose={() => setOpenAffectation(false)}
           handleChange={handleChangeAffectation}
           handleSave={handleSaveAffectation}
