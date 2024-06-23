@@ -24,10 +24,12 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
+import EmpruntModal from "components/EmpruntModal";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
+
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -35,8 +37,19 @@ const MaterielPage = () => {
     dateRetour: null,
     motifRetour: null,
   });
-  const [openAffectation, setOpenAffectation] = useState(false);
 
+  const [empruntData, setEmpruntData] = useState({
+    idUtilisateur: "",
+    numeroSerie: "",
+    dateEmprunt: "",
+    dateRestitution: null,
+    refProjet: null,
+    etatMatRestitution: null,
+    etatEmprunt: null,
+  });
+
+  const [openAffectation, setOpenAffectation] = useState(false);
+  const [openEmprunt, setOpenEmprunt] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [societies, setSocieties] = useState([]);
   const [errors, setErrors] = useState({});
@@ -171,17 +184,17 @@ const MaterielPage = () => {
     axios
       .get(`${ip}/materiel`)
       .then((response) => {
-        const processedData = response.data.map(materiel => {
+        const processedData = response.data.map((materiel) => {
           // Determine the state based on etatAffectation and etatEmprunt
-          let statut = 'Disponible';
-          let couleur = 'green';
+          let statut = "Disponible";
+          let couleur = "green";
 
           if (materiel.Affectation && materiel.Affectation.length > 0) {
             statut = materiel.Affectation[0].etatAffectation;
-            couleur = 'red'
+            couleur = "red";
           } else if (materiel.Emprunt && materiel.Emprunt.length > 0) {
             statut = materiel.Emprunt[0].etatEmprunt;
-            couleur = 'orange'
+            couleur = "orange";
           }
 
           return {
@@ -195,7 +208,6 @@ const MaterielPage = () => {
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
-
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -232,7 +244,7 @@ const MaterielPage = () => {
                 : materiel
             )
           );
-          fetchMateriels ();
+          fetchMateriels();
           handleCloseModal();
         })
         .catch((error) =>
@@ -243,12 +255,39 @@ const MaterielPage = () => {
         .post(ip + "/materiel", materialToSave)
         .then((response) => {
           setMateriels([...materiels, response.data]);
-          fetchMateriels ();
+          fetchMateriels();
           handleCloseModal();
         })
         .catch((error) => console.error("Erreur ajout Materiel", error));
     }
   };
+
+  const handleSaveEmprunt = () => {
+    // @ts-ignore
+    const empruntToSave = {
+      ...empruntData,
+      idUtilisateur: parseInt(empruntData.idUtilisateur, 10),
+      numeroSerie: empruntData.numeroSerie,
+    };
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    if (hasErrors) {
+      console.error("Veuillez remplir tous les champs obligatoires!");
+      return;
+    }
+    axios
+      .patch(
+        ip +
+          `/emprunt/${empruntToSave.idUtilisateur}/${empruntToSave.numeroSerie}`,
+        empruntData
+      )
+      // @ts-ignore
+      .then((response) => {
+        fetchMateriels();
+        setOpenEmprunt(false);
+      })
+      .catch((error) => console.error("Erreur emprunt", error));
+  };
+
   const validateMateriel = (name, value) => {
     let errorMsg = "";
 
@@ -333,7 +372,10 @@ const MaterielPage = () => {
     setOpenAffectation(true);
   };
 
-  const handleEmprunt = (row) => {};
+  const handleEmprunt = (numeroSerie) => {
+    setEmpruntData({ ...empruntData, numeroSerie });
+    setOpenEmprunt(true);
+  };
 
   const handleView = (numeroSerie) => {
     Navigate(`/detailMateriel/${numeroSerie}`);
@@ -343,6 +385,16 @@ const MaterielPage = () => {
     const { name, value } = e.target;
     setAffectationData({
       ...affectationData,
+      [name]: value,
+    });
+    validateMateriel(name, value);
+  };
+
+  const handleChangeEmprunt = (e) => {
+    const { name, value } = e.target;
+    console.log(value);
+    setEmpruntData({
+      ...empruntData,
       [name]: value,
     });
     validateMateriel(name, value);
@@ -403,13 +455,20 @@ const MaterielPage = () => {
           </Button>
           <Button
             title="Affecter matériel"
-            disabled={params.row.statut === "Affecté"}
+            disabled={
+              params.row.statut === "Affecté" ||
+              params.row.statut === "Emprunté"
+            }
             onClick={() => handleAffectation(params.row.numeroSerie)}
           >
             <QueuePlayNextOutlinedIcon />
           </Button>
           <Button
             title="Emprunter Matériel"
+            disabled={
+              params.row.statut === "Affecté" ||
+              params.row.statut === "Emprunté"
+            }
             onClick={() => handleEmprunt(params.row)}
           >
             <ManageHistoryOutlinedIcon />
@@ -461,6 +520,16 @@ const MaterielPage = () => {
           handleClose={() => setOpenAffectation(false)}
           handleChange={handleChangeAffectation}
           handleSave={handleSaveAffectation}
+          errors={errors}
+        />
+
+        <EmpruntModal
+          openEmprunt={openEmprunt}
+          empruntData={empruntData}
+          isEditing={isEditing}
+          handleClose={() => setOpenEmprunt(false)}
+          handleChange={handleChangeEmprunt}
+          handleSave={handleSaveEmprunt}
           errors={errors}
         />
 
@@ -1136,23 +1205,32 @@ const MaterielPage = () => {
               </>
             )}
 
-            <Button
-              onClick={handleSave}
-              variant="contained"
-              sx={{ mt: 2 }}
-              color="primary"
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              gap={2}
+              mt={2}
             >
-              {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-              {isEditing ? "_ Enregistrer" : "_ Ajouter"}
-            </Button>
-            <Button
-              onClick={handleCloseModal}
-              variant="contained"
-              color="secondary"
-              sx={{ mt: 2 }}
-            >
-              Annuler
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ flexGrow: 1 }}
+                onClick={handleSave}
+              >
+                {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+                {isEditing ? " Enregistrer" : " Ajouter"}
+              </Button>
+
+              {/* <Button
+                onClick={handleClose}
+                variant="contained"
+                color="secondary"
+                sx={{ flexGrow: 1 }}
+              >
+                Annuler
+              </Button> */}
+            </Box>
           </Box>
         </Modal>
       </Box>

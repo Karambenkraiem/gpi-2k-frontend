@@ -180,16 +180,32 @@ const UtilisateurModal = ({
           type="tel"
         />
 
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={handleSave}
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          gap={2}
+          mt={2}
         >
-          {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
-          {isEditing ? "_ Enregistrer" : "_ Ajouter"}
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ flexGrow: 1 }}
+            onClick={handleSave}
+          >
+            {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
+            {isEditing ? " Enregistrer" : " Ajouter"}
+          </Button>
+
+          <Button
+            onClick={handleClose}
+            variant="contained"
+            color="secondary"
+            sx={{ flexGrow: 1 }}
+          >
+            Annuler
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

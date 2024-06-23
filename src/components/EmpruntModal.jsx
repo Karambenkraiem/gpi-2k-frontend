@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 
-const AffectationModal = ({
-  affectationData,
-  openAffectation,
+const EmpruntModal = ({
+  empruntData,
+  openEmprunt,
   isEditing,
   handleClose,
   handleChange,
@@ -16,10 +16,21 @@ const AffectationModal = ({
   errors,
 }) => {
   const [utilisateurs, setUtilisateurs] = useState([]);
-  const EtatAffectation = {
+  const EtatEmprunt = {
     Affecté: "Affecté",
     Emprunté: "Emprunté",
     Disponible: "Disponible",
+  };
+
+  const RefProjet = {
+    TERG: "TERG",
+    TERX: "TERX",
+    TERY: "TERY",
+    TERA: "TERA",
+    TEPG: "TEPG",
+    TEPX: "TEPX",
+    TEPY: "TEPY",
+    TEPA: "TEPA",
   };
   const fetchUtilisateurs = () => {
     axios
@@ -49,14 +60,14 @@ const AffectationModal = ({
   };
 
   return (
-    <Modal open={openAffectation}>
+    <Modal open={openEmprunt}>
       <Box sx={style}>
-        <h2>{isEditing ? "Modifier affectation" : "Affecter matériel"}</h2>
+        <h2>{isEditing ? "Modifier emprunt" : "Emprunter matériel"}</h2>
         <TextField
           select
           label="Utilisateur"
           name="idUtilisateur"
-          value={affectationData.idUtilisateur}
+          value={empruntData.idUtilisateur}
           onChange={handleChange}
           fullWidth
           margin="normal"
@@ -75,50 +86,69 @@ const AffectationModal = ({
           ))}
         </TextField>
         <TextField
-          label={"Date d'affectation"}
+          label={"Date d'emprunt"}
           placeholder="Sélectionner une date"
-          name="dateAttribution"
-          value={dayjs(affectationData?.dateAttribution).format("YYYY-MM-DD")}
+          name="dateEmprunt"
+          value={dayjs(empruntData?.dateEmprunt).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
           fullWidth
           margin="normal"
           // @ts-ignore
-          error={!!errors.dateAttribution}
+          error={!!errors.dateEmprunt}
           // @ts-ignore
-          helperText={errors.dateAttribution}
+          helperText={errors.dateEmprunt}
         />
         <TextField
-          label={"Date Retour"}
+          label={"Date Restitution"}
           placeholder="Sélectionner une date"
-          name="dateRetour"
-          value={dayjs(affectationData?.dateRetour).format("YYYY-MM-DD")}
+          name="dateRestitution"
+          value={dayjs(empruntData?.dateRestitution).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
           fullWidth
           margin="normal"
           // @ts-ignore
-          error={!!errors.dateRetour}
+          error={!!errors.dateRestitution}
           // @ts-ignore
-          helperText={errors.dateRetour}
+          helperText={errors.dateRestitution}
         />
         <TextField
-          label="Motif Retour"
-          name="motifRetour"
-          value={affectationData.motifRetour || ""}
+          label="Référence projet"
+          name="refProjet"
+          value={empruntData.refProjet || ""}
           onChange={handleChange}
           fullWidth
           margin="normal"
           // @ts-ignore
-          error={!!errors.motifRetour}
+          error={!!errors.refProjet}
           // @ts-ignore
-          helperText={errors.motifRetour}
-        />
+          helperText={errors.refProjet}
+        >
+          {Object.values(RefProjet).map((etat) => (
+            <MenuItem key={etat} value={etat}>
+              {etat}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           select
-          label="Etat affectation"
-          name="etatAffectation"
-          value={affectationData.etatAffectation}
+          label="Etat matériel restitué"
+          name="etatMatRestitution"
+          value={empruntData.etatMatRestitution}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          // @ts-ignore
+          error={!!errors.categorie}
+          // @ts-ignore
+          helperText={errors.categorie}
+        ></TextField>
+        <TextField
+          select
+          label="Etat du matériel retourné"
+          name="etatEmprunt"
+          value={empruntData.etatEmprunt}
           onChange={handleChange}
           fullWidth
           margin="normal"
@@ -127,12 +157,13 @@ const AffectationModal = ({
           // @ts-ignore
           helperText={errors.categorie}
         >
-          {Object.values(EtatAffectation).map((etat) => (
+          {Object.values(EtatEmprunt).map((etat) => (
             <MenuItem key={etat} value={etat}>
               {etat}
             </MenuItem>
           ))}
         </TextField>
+
         <Box
           display="flex"
           justifyContent="center"
@@ -164,4 +195,4 @@ const AffectationModal = ({
   );
 };
 
-export default AffectationModal;
+export default EmpruntModal;

@@ -7,6 +7,7 @@ import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import EmpruntModal from "components/EmpruntModal";
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -16,6 +17,7 @@ const DetailsMateriel = () => {
   const [societies, setSocieties] = useState([]);
   const [errors, setErrors] = useState({});
   const [openAffectation, setOpenAffectation] = useState(false);
+  const [openEmprunt, setOpenEmprunt] = useState(false);
   // @ts-ignore
   const [materiels, setMateriels] = useState([]);
   // @ts-ignore
@@ -32,11 +34,31 @@ const DetailsMateriel = () => {
     etatAffectation: null,
   });
 
+  const [empruntData, setEmpruntData] = useState({
+    idUtilisateur: "",
+    numeroSerie: "",
+    dateEmprunt: "",
+    dateRestitution: new Date(),
+    refProjet: null,
+    etatMatRestitution: null,
+    etatEmprunt: null,
+  });
+
   const handleChangeAffectation = (e) => {
     const { name, value } = e.target;
     console.log(value);
     setAffectationData({
       ...affectationData,
+      [name]: value,
+    });
+    validateMateriel(name, value);
+  };
+
+  const handleChangeEmprunt = (e) => {
+    const { name, value } = e.target;
+    console.log(value);
+    setEmpruntData({
+      ...empruntData,
       [name]: value,
     });
     validateMateriel(name, value);
@@ -64,6 +86,12 @@ const DetailsMateriel = () => {
     setOpenAffectation(true);
   };
 
+  const handleEmpruntEdit = (row) => {
+    setEmpruntData(row);
+    setIsEditing(true);
+    setOpenEmprunt(true);
+  };
+
   const handleSaveAffectation = () => {
     // @ts-ignore
     const affectationToSave = {
@@ -73,20 +101,47 @@ const DetailsMateriel = () => {
     };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
-      console.error(
-        "Veuillez remplir tous les champs obligatoires!"
-      );
+      console.error("Veuillez remplir tous les champs obligatoires!");
       return;
     }
-      axios
-        .patch(ip + `/affectation/${affectationToSave.idUtilisateur}/${affectationToSave.numeroSerie}`, affectationData)
-        // @ts-ignore
-        .then((response) => {
-          fetchMateriels();
-          setOpenAffectation(false);
-        })
-        .catch((error) => console.error("Erreur Affectation", error));
-    
+    axios
+      .patch(
+        ip +
+          `/affectation/${affectationToSave.idUtilisateur}/${affectationToSave.numeroSerie}`,
+        affectationData
+      )
+      // @ts-ignore
+      .then((response) => {
+        fetchMateriels();
+        setOpenAffectation(false);
+      })
+      .catch((error) => console.error("Erreur Affectation", error));
+  };
+
+  const handleSaveEmprunt = () => {
+    // @ts-ignore
+    const empruntToSave = {
+      ...empruntData,
+      idUtilisateur: parseInt(empruntData.idUtilisateur, 10),
+      numeroSerie: empruntData.numeroSerie,
+    };
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    if (hasErrors) {
+      console.error("Veuillez remplir tous les champs obligatoires!");
+      return;
+    }
+    axios
+      .patch(
+        ip +
+          `/emprunt/${empruntToSave.idUtilisateur}/${empruntToSave.numeroSerie}`,
+        empruntData
+      )
+      // @ts-ignore
+      .then((response) => {
+        fetchMateriels();
+        setOpenEmprunt(false);
+      })
+      .catch((error) => console.error("Erreur emprunt", error));
   };
 
   const validateMateriel = (name, value) => {
@@ -216,8 +271,21 @@ const DetailsMateriel = () => {
         <div text-align="letf">
           <Button
             title="Affecter matériel"
-            disabled={params.row.statut === "Affecté"}
+            disabled={
+              params.row.statut === "Affecté" ||
+              params.row.statut === "Emprunté"
+            }
             onClick={() => handleAffectationEdit(params.row)}
+          >
+            <EditNoteIcon />
+          </Button>
+          <Button
+            title="Emprunter matériel"
+            disabled={
+              params.row.statut === "Affecté" ||
+              params.row.statut === "Emprunté"
+            }
+            onClick={() => handleEmpruntEdit(params.row)}
           >
             <EditNoteIcon />
           </Button>
@@ -669,6 +737,16 @@ const DetailsMateriel = () => {
             handleClose={() => setOpenAffectation(false)}
             handleChange={handleChangeAffectation}
             handleSave={handleSaveAffectation}
+            errors={errors}
+          />
+
+          <EmpruntModal
+            openEmprunt={openEmprunt}
+            empruntData={empruntData}
+            isEditing={isEditing}
+            handleClose={() => setOpenEmprunt(false)}
+            handleChange={handleChangeEmprunt}
+            handleSave={handleSaveEmprunt}
             errors={errors}
           />
         </Container>
