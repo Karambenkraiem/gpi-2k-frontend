@@ -32,7 +32,8 @@ export default function Router() {
             <Route path="/departement" element={<Département />} />
             <Route path="/affectation" element={<Affectation />} />
             <Route path="/emprunt" element={< Emprunt/>} />
-
+            <Route path="/stock" element={< Emprunt/>} />
+            <Route path="/logiciels" element={< Emprunt/>} />
           </Route>
           <Route path="*" element={<div>404</div>} />
         </Routes>

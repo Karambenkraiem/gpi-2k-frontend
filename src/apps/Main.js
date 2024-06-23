@@ -27,8 +27,10 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
 
-const drawerWidth = 280;
+const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -96,7 +98,15 @@ const Drawer = styled(MuiDrawer, {
 
 const initialNavItems = [
   { label: "Accueil", path: "/", icon: <HomeOutlined /> },
-  { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
+  {
+    label: "Gestion des utilisateurs",
+    icon: <RoomPreferencesIcon />,
+    items: [
+      { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
+      { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
+      { label: "Spécialités", path: "/specialite", icon: <ListAltIcon /> },
+    ]
+  },
   {
     label: "Ressources materielles",
     icon: <ManageSearchIcon />,
@@ -106,14 +116,8 @@ const initialNavItems = [
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
     ]
   },
-  {
-    label: "Management",
-    icon: <RoomPreferencesIcon />,
-    items: [
-      { label: "Spécialités", path: "/specialite", icon: <ListAltIcon /> },
-      { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
-    ]
-  }
+  {label: "Gestion du stock", path:"/stock", icon:<InventoryIcon/>},
+  {label: "Ressources logicielles", path:"/logiciels", icon:<InstallDesktopIcon/>},
 ];
 
 export default function Main() {
