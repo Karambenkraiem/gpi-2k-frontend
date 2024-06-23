@@ -36,6 +36,7 @@ const MaterielPage = () => {
     dateAttribution: "",
     dateRetour: null,
     motifRetour: null,
+    etatAffectation: "",
   });
 
   const [empruntData, setEmpruntData] = useState({
@@ -43,9 +44,9 @@ const MaterielPage = () => {
     numeroSerie: "",
     dateEmprunt: "",
     dateRestitution: null,
-    refProjet: null,
+    refProjet: "",
     etatMatRestitution: null,
-    etatEmprunt: null,
+    etatEmprunt: "",
   });
 
   const [openAffectation, setOpenAffectation] = useState(false);
@@ -262,32 +263,6 @@ const MaterielPage = () => {
     }
   };
 
-  const handleSaveEmprunt = () => {
-    // @ts-ignore
-    const empruntToSave = {
-      ...empruntData,
-      idUtilisateur: parseInt(empruntData.idUtilisateur, 10),
-      numeroSerie: empruntData.numeroSerie,
-    };
-    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
-    if (hasErrors) {
-      console.error("Veuillez remplir tous les champs obligatoires!");
-      return;
-    }
-    axios
-      .patch(
-        ip +
-          `/emprunt/${empruntToSave.idUtilisateur}/${empruntToSave.numeroSerie}`,
-        empruntData
-      )
-      // @ts-ignore
-      .then((response) => {
-        fetchMateriels();
-        setOpenEmprunt(false);
-      })
-      .catch((error) => console.error("Erreur emprunt", error));
-  };
-
   const validateMateriel = (name, value) => {
     let errorMsg = "";
 
@@ -414,6 +389,16 @@ const MaterielPage = () => {
       .catch((error) => console.error("Erreur affectation!", error));
   };
 
+  const handleSaveEmprunt = () => {
+    axios
+      .post(ip + "/emprunt", empruntData)
+      .then((response) => {
+        fetchMateriels();
+        setOpenEmprunt(false);
+      })
+      .catch((error) => console.error("Erreur emprunt!", error));
+  };
+
   const columns = [
     { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
     { field: "categorie", headerName: "Categorie", width: 140 },
@@ -469,7 +454,7 @@ const MaterielPage = () => {
               params.row.statut === "Affecté" ||
               params.row.statut === "Emprunté"
             }
-            onClick={() => handleEmprunt(params.row)}
+            onClick={() => handleEmprunt(params.row.numeroSerie)}
           >
             <ManageHistoryOutlinedIcon />
           </Button>
@@ -1221,15 +1206,6 @@ const MaterielPage = () => {
                 {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
                 {isEditing ? " Enregistrer" : " Ajouter"}
               </Button>
-
-              {/* <Button
-                onClick={handleClose}
-                variant="contained"
-                color="secondary"
-                sx={{ flexGrow: 1 }}
-              >
-                Annuler
-              </Button> */}
             </Box>
           </Box>
         </Modal>

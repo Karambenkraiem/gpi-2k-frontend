@@ -78,6 +78,7 @@ const AffectationModal = ({
           label={"Date d'affectation"}
           placeholder="Sélectionner une date"
           name="dateAttribution"
+          
           value={dayjs(affectationData?.dateAttribution).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
@@ -92,7 +93,7 @@ const AffectationModal = ({
           label={"Date Retour"}
           placeholder="Sélectionner une date"
           name="dateRetour"
-          value={dayjs(affectationData?.dateRetour).format("YYYY-MM-DD")}
+          value={dayjs(affectationData.dateRetour).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
           fullWidth

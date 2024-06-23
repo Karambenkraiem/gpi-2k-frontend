@@ -29,19 +29,19 @@ const DetailsMateriel = () => {
     idUtilisateur: "",
     numeroSerie: "",
     dateAttribution: "",
-    dateRetour: new Date(),
+    dateRetour: null,
     motifRetour: null,
-    etatAffectation: null,
+    etatAffectation: "",
   });
 
   const [empruntData, setEmpruntData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
     dateEmprunt: "",
-    dateRestitution: new Date(),
-    refProjet: null,
+    dateRestitution: null,
+    refProjet: "",
     etatMatRestitution: null,
-    etatEmprunt: null,
+    etatEmprunt: "",
   });
 
   const handleChangeAffectation = (e) => {
@@ -270,21 +270,7 @@ const DetailsMateriel = () => {
       renderCell: (params) => (
         <div text-align="letf">
           <Button
-            title="Affecter matériel"
-            disabled={
-              params.row.statut === "Affecté" ||
-              params.row.statut === "Emprunté"
-            }
-            onClick={() => handleAffectationEdit(params.row)}
-          >
-            <EditNoteIcon />
-          </Button>
-          <Button
             title="Emprunter matériel"
-            disabled={
-              params.row.statut === "Affecté" ||
-              params.row.statut === "Emprunté"
-            }
             onClick={() => handleEmpruntEdit(params.row)}
           >
             <EditNoteIcon />

@@ -23,14 +23,15 @@ const EmpruntModal = ({
   };
 
   const RefProjet = {
-    TERG: "TERG",
-    TERX: "TERX",
-    TERY: "TERY",
-    TERA: "TERA",
-    TEPG: "TEPG",
-    TEPX: "TEPX",
-    TEPY: "TEPY",
-    TEPA: "TEPA",
+    TERG: "TERG-",
+    TERX: "TERX-",
+    TERY: "TERY-",
+    TERA: "TERA-",
+    TEPG: "TEPG-",
+    TEPX: "TEPX-",
+    TEPY: "TEPY-",
+    TEPA: "TEPA-",
+    ADMINISTRATIF: "ADMINISTRATIF",
   };
   const fetchUtilisateurs = () => {
     axios
@@ -120,19 +121,29 @@ const EmpruntModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // @ts-ignore
           error={!!errors.refProjet}
-          // @ts-ignore
           helperText={errors.refProjet}
-        >
-          {Object.values(RefProjet).map((etat) => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
-            </MenuItem>
-          ))}
-        </TextField>
+          InputProps={{
+            endAdornment: (
+              <TextField
+                select
+                value=""
+                onChange={(e) =>
+                  handleChange({
+                    target: { name: "refProjet", value: e.target.value },
+                  })
+                }
+              >
+                {Object.values(RefProjet).map((etat) => (
+                  <MenuItem key={etat} value={etat}>
+                    {etat}
+                  </MenuItem>
+                ))}
+              </TextField>
+            ),
+          }}
+        />
         <TextField
-          select
           label="Etat matériel restitué"
           name="etatMatRestitution"
           value={empruntData.etatMatRestitution}
@@ -146,7 +157,7 @@ const EmpruntModal = ({
         ></TextField>
         <TextField
           select
-          label="Etat du matériel retourné"
+          label="Etat équipement"
           name="etatEmprunt"
           value={empruntData.etatEmprunt}
           onChange={handleChange}
