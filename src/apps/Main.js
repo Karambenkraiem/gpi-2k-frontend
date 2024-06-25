@@ -116,7 +116,7 @@ const initialNavItems = [
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
     ]
   },
-  {label: "Gestion du stock", path:"/stock", icon:<InventoryIcon/>},
+  {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
   {label: "Ressources logicielles", path:"/logiciels", icon:<InstallDesktopIcon/>},
 ];
 

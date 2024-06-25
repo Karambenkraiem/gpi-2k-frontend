@@ -14,6 +14,8 @@ import Département from "../pages/Département";
 import DetailsMateriel from "../pages/DetailsMateriel";
 import Affectation from "../pages/Affectation";
 import Emprunt from "../pages/Emprunt";
+import Stocks from "pages/Stocks";
+import Logiciels from "pages/Logiciels";
 
 
 export default function Router() {
@@ -32,8 +34,8 @@ export default function Router() {
             <Route path="/departement" element={<Département />} />
             <Route path="/affectation" element={<Affectation />} />
             <Route path="/emprunt" element={< Emprunt/>} />
-            <Route path="/stock" element={< Emprunt/>} />
-            <Route path="/logiciels" element={< Emprunt/>} />
+            <Route path="/stocks" element={< Stocks/>} />
+            <Route path="/logiciels" element={< Logiciels/>} />
           </Route>
           <Route path="*" element={<div>404</div>} />
         </Routes>
