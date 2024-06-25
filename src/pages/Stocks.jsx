@@ -7,6 +7,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import StockModal from '../components/StockModal';
+import { ip } from 'constants/ip';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -14,7 +15,7 @@ const Stocks = () => {
   const [editItem, setEditItem] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/stocks')
+    axios.get(ip + "/stocks")
       .then(response => setStocks(response.data))
       .catch(error => console.error('Error fetching stocks:', error));
   }, []);

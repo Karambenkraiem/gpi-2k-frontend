@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, TextField, Button, MenuItem } from '@mui/material';
 import axios from 'axios';
+import { ip } from 'constants/ip';
+import dayjs from 'dayjs';
 
 const style = {
   position: 'absolute',
@@ -15,45 +17,48 @@ const style = {
     overflowY: "auto",
 };
 
-const categories = [
-  { value: 'Toner', label: 'Toner' },
-  { value: 'DisqueStoquage', label: 'Disque de Stockage' },
-  { value: 'Clavier', label: 'Clavier' },
-  { value: 'Souris', label: 'Souris' },
-  { value: 'FlashDisque', label: 'Flash Disque' },
-  { value: 'CarteGraphique', label: 'Carte Graphique' },
-  { value: 'Ram', label: 'Ram' },
-  { value: 'DisqueDur', label: 'Disque Dur' },
-  { value: 'CartoucheEncre', label: 'Cartouche d’Encre' },
-  { value: 'Autres', label: 'Autres' },
-];
+const Categorie = {
+    Toner: "Toner",
+    DisqueStoquage: "DisqueStoquage", 
+    Clavier: "Clavier", 
+    Souris: "Souris", 
+    FlashDisque: "FlashDisque", 
+    CarteGraphique: "CarteGraphique", 
+    Ram: "Ram", 
+    DisqueDur: "DisqueDur", 
+    CartoucheEncre: "CartoucheEncre", 
+    Autres: "Autres" 
+    
+}
+  
+
 
 const ModalStock = ({ open, handleClose, editItem }) => {
   const [formData, setFormData] = useState({
-    refArt: '',
-    categorie: 'Autres',
-    marque: '',
-    modele: '',
-    prix: 0,
+    refArt: "",
+    categorie: "",
+    marque: "",
+    modele: "",
+    prix: "",
     quantiteStock: 0,
     capaciteToner: null,
-    compatibiliteToner: '',
-    dateExpirationToner: '',
-    couleurToner: '',
+    compatibiliteToner: "",
+    dateExpirationToner: "",
+    couleurToner: "",
     capaciteFlashDvdCdRamHDD: null,
-    typeDisqueStoquage: '',
-    typeConnexionClavierSouris: '',
-    dispositionToucheClavier: '',
+    typeDisqueStoquage: null,
+    typeConnexionClavierSouris: null,
+    dispositionToucheClavier: null,
     nombreBouttonSouris: null,
     memoireCarteGraphiqueRam: null,
-    IntefaceCarteGraphique: '',
+    IntefaceCarteGraphique: null,
     frequenceCarteGraphiqueRam: null,
-    typeRam: '',
-    interFaceHDD: '',
+    typeRam: "",
+    interFaceHDD: null,
     vitesseHDD: null,
-    tailleHDD: '',
-    TypeHDD: '',
-    autre: ''
+    tailleHDD: null,
+    TypeHDD: null,
+    autre: "",
   });
 
   useEffect(() => {
@@ -68,14 +73,21 @@ const ModalStock = ({ open, handleClose, editItem }) => {
   };
 
   const handleSubmit = () => {
+    const stockToSave={
+        ...formData,
+        prix:parseFloat(formData.prix),
+        quantiteStock:parseInt(formData.quantiteStock),
+        capaciteToner:parseInt(formData.capaciteToner),
+
+    }
     if (editItem) {
-      axios.put(`/api/stocks/${formData.refArt}`, formData)
+      axios.patch(`http://localhost:3000/stocks/${formData.refArt}`, formData)
         .then(() => {
           handleClose();
         })
         .catch((error) => console.error('Error updating stock:', error));
     } else {
-      axios.post('/api/stocks', formData)
+      axios.post(ip+'/stocks', stockToSave)
         .then(() => {
           handleClose();
         })
@@ -105,17 +117,17 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         <h2 id="modal-title">{editItem ? 'Éditer' : 'Ajouter'} Article</h2>
         
         <TextField
-          name="categorie"
+          select
           label="Catégorie"
+          name="categorie"
           value={formData.categorie}
           onChange={handleChange}
-          select
           fullWidth
           margin="normal"
         >
-          {categories.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {Object.values(Categorie).map((category) => (
+            <MenuItem key={category} value={category}>
+              {category}
             </MenuItem>
           ))}
         </TextField>
@@ -148,7 +160,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         <TextField
           name="prix"
           label="Prix"
-          value={formData.prix}
+          value={formData.prix || ""}
           onChange={handleChange}
           type="number"
           fullWidth
@@ -185,7 +197,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             <TextField
               name="dateExpirationToner"
               label="Date Expiration Toner"
-              value={formData.dateExpirationToner}
+               value={dayjs(formData?.dateExpirationToner).format("YYYY-MM-DD")}
               onChange={handleChange}
               type="date"
               fullWidth
@@ -193,13 +205,27 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               InputLabelProps={{ shrink: true }}
             />
             <TextField
+            select
               name="couleurToner"
               label="Couleur Toner"
-              value={formData.couleurToner}
+              value={formData.couleurToner || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
-            />
+            >
+                {[
+                    "NOIR",
+                    "COULEUR",
+                    
+                  ].map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+
+            </TextField>
+
+
           </>
         )}
         {isDisqueStoquageCategory && (
@@ -217,7 +243,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="typeDisqueStoquage"
               label="Type Disque de Stockage"
-              value={formData.typeDisqueStoquage}
+              value={formData.typeDisqueStoquage || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -240,7 +266,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="typeConnexionClavierSouris"
               label=" Connexion "
-              value={formData.typeConnexionClavierSouris}
+              value={formData.typeConnexionClavierSouris || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -259,7 +285,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="dispositionToucheClavier"
               label="Disposition Touche Clavier"
-              value={formData.dispositionToucheClavier}
+              value={formData.dispositionToucheClavier || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -280,7 +306,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="typeConnexionClavierSouris"
               label="Connexion"
-              value={formData.typeConnexionClavierSouris}
+              value={formData.typeConnexionClavierSouris || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -392,7 +418,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="interFaceHDD"
               label="Interface HDD"
-              value={formData.interFaceHDD}
+              value={formData.interFaceHDD || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"            
@@ -421,7 +447,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="tailleHDD"
               label="Taille HDD"
-              value={formData.tailleHDD}
+              value={formData.tailleHDD || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -431,7 +457,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
                     "3.5",
                     "M2",                    
                   ].map((type) => (
-                    <MenuItem key={type} value={type}>
+                    <MenuItem key={type} value={type} >
                       {type}
                     </MenuItem>
                   ))}
@@ -440,7 +466,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="TypeHDD"
               label="Type Disque Dur"
-              value={formData.TypeHDD}
+              value={formData.TypeHDD || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
@@ -459,7 +485,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             select
               name="couleurToner"
               label="Couleur Cartouche"
-              value={formData.couleurToner}
+              value={formData.couleurToner || ""}
               onChange={handleChange}
               fullWidth
               margin="normal"
