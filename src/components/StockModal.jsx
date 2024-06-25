@@ -4,6 +4,10 @@ import axios from 'axios';
 import { ip } from 'constants/ip';
 import dayjs from 'dayjs';
 
+
+
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -34,6 +38,8 @@ const Categorie = {
 
 
 const ModalStock = ({ open, handleClose, editItem }) => {
+    const [stocks, setStocks] = useState([]);
+
   const [formData, setFormData] = useState({
     refArt: "",
     categorie: "",
@@ -81,17 +87,30 @@ const ModalStock = ({ open, handleClose, editItem }) => {
 
     }
     if (editItem) {
-      axios.patch(`http://localhost:3000/stocks/${formData.refArt}`, formData)
-        .then(() => {
+        // @ts-ignore
+        const {Alimentation, ...rest}=stockToSave;
+      axios
+        .patch(`http://localhost:3000/stocks/${stockToSave.refArt}`, rest)
+        .then((response) => {
+            setStocks(
+                stocks.map((stock)=>
+                stock.refArt === stockToSave.refArt
+            ? response.data
+            :stock
+                )
+            );
           handleClose();
         })
         .catch((error) => console.error('Error updating stock:', error));
     } else {
       axios.post(ip+'/stocks', stockToSave)
-        .then(() => {
+        .then((response) => {
+            setStocks([...stocks,response.data]);
           handleClose();
         })
-        .catch((error) => console.error('Error adding stock:', error));
+        .catch((error) => {
+            console.error('Error Ajout stock:', error);
+        });
     }
   };
 

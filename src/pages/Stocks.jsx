@@ -13,12 +13,22 @@ const Stocks = () => {
   const [stocks, setStocks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [stockToSave,setStockToSave]=useState({
+    refArt:""
+  });
 
   useEffect(() => {
-    axios.get(ip + "/stocks")
-      .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));
-  }, []);
+    axios
+    .get(ip + "/stocks")
+      .then((response) => {
+        setStocks(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
+      });
+  });
 
   const columns = [
     { field: 'refArt', headerName: 'Référence', width: 150 },
@@ -102,11 +112,17 @@ const Stocks = () => {
       </Button>
       <DataGrid
         rows={stocks}
+        // @ts-ignore
         columns={columns}
+        loading={loading}
         pageSize={10}
         getRowId={(row) => row.refArt}
       />
-      <StockModal open={openModal} handleClose={handleCloseModal} editItem={editItem} />
+      <StockModal 
+      open={openModal}
+       handleClose={handleCloseModal}
+        editItem={editItem}
+        />
     </div>
   );
 };
