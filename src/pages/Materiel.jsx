@@ -354,12 +354,6 @@ const MaterielPage = () => {
   }, []);
 
   const handleSaveAffectation = () => {
-    // const affectationToSave = {
-    //   ...affectationData,
-    //   // @ts-ignore
-    //   idUtilisateur: parseInt(affectationData.idUtilisateur, 10)
-    // };
-    // const {Utilisateur, Materiel, ...rest} = affectationToSave;
     Promise.all([
         axios.post(ip + "/affectation",{
           dateAttribution: affectationData.dateAttribution,
@@ -367,16 +361,15 @@ const MaterielPage = () => {
           motifRetour:affectationData.motifRetour,
           idUtilisateur:affectationData.idUtilisateur,
           numeroSerie:affectationData.numeroSerie,
-
         }),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
           disponibilite: affectationData.disponibilite,
         }),
       ])
-      // .then((response) => {
-      //   fetchMateriels();
-      //   setOpenAffectation(false);
-      // })
+      .then((response) => {
+        fetchMateriels();
+        setOpenAffectation(false);
+      })
       .catch((error) => console.error("Erreur affectation!", error));
   };
 
