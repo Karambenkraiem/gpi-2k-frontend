@@ -23,7 +23,7 @@ const AlimentationModal = ({
 
   useEffect(() => {
     fetchSocietes();
-  });
+  },[]);
 
   // const handleSubmit = () => {
   //   axios.post(ip + "/alimentation", alimentationData).then((response) => {
@@ -81,8 +81,8 @@ const AlimentationModal = ({
         <TextField
           label={"Date d'alimentation"}
           placeholder="Sélectionner une date"
-          name="dateAcquisition"
-          value={dayjs(alimentationData?.dateAcquisition).format("YYYY-MM-DD")}
+          name="dateAlimentation"
+          value={alimentationData?.dateAlimentation}
           type="date"
           onChange={handleChange}
           fullWidth

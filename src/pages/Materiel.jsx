@@ -363,7 +363,6 @@ const MaterielPage = () => {
     };
     const {Utilisateur, Materiel, ...rest} = affectationToSave;
     Promise.all([
-
         axios.post(ip + "/affectation/", rest),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
           disponibilite: affectationData.disponibilite,

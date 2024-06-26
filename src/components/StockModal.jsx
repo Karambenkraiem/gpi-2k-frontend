@@ -49,7 +49,6 @@ const ModalStock = ({ open, handleClose, editItem }) => {
     quantiteStock: 0,
     capaciteToner: null,
     compatibiliteToner: "",
-    dateExpirationToner: "",
     couleurToner: null,
     capaciteFlashDvdCdRamHDD: 0,
     typeDisqueStoquage: null,
@@ -214,16 +213,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               fullWidth
               margin="normal"
             />
-            <TextField
-              name="dateExpirationToner"
-              label="Date Expiration Toner"
-               value={dayjs(formData?.dateExpirationToner).format("YYYY-MM-DD")}
-              onChange={handleChange}
-              type="date"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{ shrink: true }}
-            />
+            
             <TextField
             select
               name="couleurToner"
