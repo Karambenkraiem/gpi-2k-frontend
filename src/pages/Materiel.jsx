@@ -31,22 +31,20 @@ const MaterielPage = () => {
   const [open, setOpen] = useState(false);
 
   const [affectationData, setAffectationData] = useState({
-    idUtilisateur: "",
+    idUtilisateur: null,
     numeroSerie: "",
     dateAttribution: "",
     dateRetour: null,
     motifRetour: null,
-    etatAffectation: "",
   });
 
   const [empruntData, setEmpruntData] = useState({
-    idUtilisateur: "",
+    idUtilisateur: null,
     numeroSerie: "",
     dateEmprunt: "",
     dateRestitution: null,
     refProjet: "",
     etatMatRestitution: null,
-    etatEmprunt: "",
   });
 
   const [openAffectation, setOpenAffectation] = useState(false);
@@ -125,6 +123,7 @@ const MaterielPage = () => {
     garantie: "",
     etatMateriel: "",
     dateAcquisition: "",
+    disponibilite:"",
     idSociete: "",
     nombrePortSwitch: "",
     debitSwitch: "",
@@ -171,37 +170,13 @@ const MaterielPage = () => {
     fetchMateriels();
   }, []);
 
-  // const fetchMateriels = () => {
-  //   axios
-  //     .get(ip + "/materiel")
-  //     .then((response) => {
-  //       setMateriels(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // };
-
   const fetchMateriels = () => {
     axios
       .get(`${ip}/materiel`)
       .then((response) => {
         const processedData = response.data.map((materiel) => {
-          // Determine the state based on etatAffectation and etatEmprunt
-          let statut = "Disponible";
-          let couleur = "green";
-
-          if (materiel.Affectation && materiel.Affectation.length > 0) {
-            statut = materiel.Affectation[0].etatAffectation;
-            couleur = "red";
-          } else if (materiel.Emprunt && materiel.Emprunt.length > 0) {
-            statut = materiel.Emprunt[0].etatEmprunt;
-            couleur = "orange";
-          }
-
           return {
             ...materiel,
-            statut,
-            couleur,
           };
         });
         setMateriels(processedData);
@@ -233,7 +208,7 @@ const MaterielPage = () => {
 
     if (isEditing) {
       // @ts-ignore
-      const { Affectation, Emprunt, idSociete, statut, ...rest } =
+      const { Affectation, Emprunt, idSociete, disponibilite, ...rest } =
         materialToSave;
       axios
         .patch(ip + `/materiel/${formData.numeroSerie}`, rest)
@@ -312,6 +287,7 @@ const MaterielPage = () => {
         console.error("Erreur suppression de matériel ....", error);
       });
   };
+
   const toggleStatus = (numeroSerie) => {
     const materiel = materiels.find((m) => m.numeroSerie === numeroSerie);
     if (!materiel) {
@@ -326,7 +302,7 @@ const MaterielPage = () => {
         ? "rebut"
         : materiel.etatMateriel,
     };
-    const { Affectation, Emprunt, idSociete, statut, ...rest } =
+    const { Affectation, Emprunt, idSociete, disponibilite, ...rest } =
       updatedMateriel;
     axios
       .patch(ip + `/materiel/${numeroSerie}`, rest)
@@ -380,8 +356,19 @@ const MaterielPage = () => {
   }, []);
 
   const handleSaveAffectation = () => {
-    axios
-      .post(ip + "/affectation", affectationData)
+    const affectationToSave = {
+      ...affectationData,
+      // @ts-ignore
+      idUtilisateur: parseInt(affectationData.idUtilisateur, 10)
+    };
+    const {Utilisateur, Materiel, ...rest} = affectationToSave;
+    Promise.all([
+
+        axios.post(ip + "/affectation/", rest),
+        axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
+          disponibilite: affectationData.disponibilite,
+        }),
+      ])
       .then((response) => {
         fetchMateriels();
         setOpenAffectation(false);
@@ -406,7 +393,7 @@ const MaterielPage = () => {
     { field: "modele", headerName: "Modele", width: 200 },
     { field: "prix", headerName: "Prix", type: "number", width: 100 },
     { field: "etatMateriel", headerName: "Etat matériel", width: 120 },
-    { field: "statut", headerName: "Statut", width: 90 },
+    { field: "disponibilite", headerName: "Disponobilité", width: 100 },
     {
       field: "actions",
       headerName: "Actions",
@@ -441,8 +428,8 @@ const MaterielPage = () => {
           <Button
             title="Affecter matériel"
             disabled={
-              params.row.statut === "Affecté" ||
-              params.row.statut === "Emprunté"
+              params.row.disponibilite === "Affecté" ||
+              params.row.disponibilite === "Emprunté"
             }
             onClick={() => handleAffectation(params.row.numeroSerie)}
           >
@@ -451,8 +438,8 @@ const MaterielPage = () => {
           <Button
             title="Emprunter Matériel"
             disabled={
-              params.row.statut === "Affecté" ||
-              params.row.statut === "Emprunté"
+              params.row.disponibilite === "Affecté" ||
+              params.row.disponibilite === "Emprunté"
             }
             onClick={() => handleEmprunt(params.row.numeroSerie)}
           >
@@ -501,6 +488,7 @@ const MaterielPage = () => {
         <AffectationModal
           affectationData={affectationData}
           openAffectation={openAffectation}
+          formData={formData}
           isEditing={isEditing}
           handleClose={() => setOpenAffectation(false)}
           handleChange={handleChangeAffectation}
@@ -511,6 +499,7 @@ const MaterielPage = () => {
         <EmpruntModal
           openEmprunt={openEmprunt}
           empruntData={empruntData}
+          formData={formData}
           isEditing={isEditing}
           handleClose={() => setOpenEmprunt(false)}
           handleChange={handleChangeEmprunt}

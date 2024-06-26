@@ -1,13 +1,24 @@
-import { Button, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import AffectationModal from "../components/AffectationModal";
+// @ts-ignore
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EmpruntModal from "components/EmpruntModal";
+// @ts-ignore
+import { RxDividerVertical } from "react-icons/rx";
+import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
+import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -19,10 +30,13 @@ const DetailsMateriel = () => {
   const [openAffectation, setOpenAffectation] = useState(false);
   const [openEmprunt, setOpenEmprunt] = useState(false);
   // @ts-ignore
+  // @ts-ignore
   const [materiels, setMateriels] = useState([]);
+  // @ts-ignore
   // @ts-ignore
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  // @ts-ignore
   // @ts-ignore
   const handleClose = () => setOpenAffectation(false);
   const [affectationData, setAffectationData] = useState({
@@ -31,7 +45,6 @@ const DetailsMateriel = () => {
     dateAttribution: "",
     dateRetour: null,
     motifRetour: null,
-    etatAffectation: "",
   });
 
   const [empruntData, setEmpruntData] = useState({
@@ -41,8 +54,13 @@ const DetailsMateriel = () => {
     dateRestitution: null,
     refProjet: "",
     etatMatRestitution: null,
-    etatEmprunt: "",
   });
+
+  const handleBtnAffecterClick = (numeroSerie) => {
+    console.log(numeroSerie);
+    setAffectationData({ ...affectationData, numeroSerie });
+    setOpenAffectation(true);
+  };
 
   const handleChangeAffectation = (e) => {
     const { name, value } = e.target;
@@ -75,8 +93,9 @@ const DetailsMateriel = () => {
   };
 
   // @ts-ignore
-  const handleAffectation = (numeroSerie) => {
-    setAffectationData({ ...affectationData, numeroSerie });
+  const handleAffectation = (idAffectation) => {
+    // @ts-ignore
+    setAffectationData({ ...affectationData, idAffectation });
     setOpenAffectation(true);
   };
 
@@ -93,56 +112,102 @@ const DetailsMateriel = () => {
   };
 
   const handleSaveAffectation = () => {
-    // @ts-ignore
     const affectationToSave = {
       ...affectationData,
-      idUtilisateur: parseInt(affectationData.idUtilisateur, 10),
+      // @ts-ignore
+      idAffectation: parseInt(affectationData.idAffectation, 10),
       numeroSerie: affectationData.numeroSerie,
     };
+
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error("Veuillez remplir tous les champs obligatoires!");
       return;
     }
-    axios
-      .patch(
-        ip +
-          `/affectation/${affectationToSave.idUtilisateur}/${affectationToSave.numeroSerie}`,
-        affectationData
-      )
-      // @ts-ignore
-      .then((response) => {
-        fetchMateriels();
-        setOpenAffectation(false);
-      })
-      .catch((error) => console.error("Erreur Affectation", error));
+    if (isEditing) {
+      // Making PATCH requests concurrently using Promise.all
+      Promise.all([
+        axios.patch(
+          `${ip}/affectation/${affectationToSave.idAffectation}`,
+          affectationData
+        ),
+        axios.patch(`${ip}/materiel/${affectationToSave.numeroSerie}`, {
+          disponibilite: affectationData.disponibilite,
+        }),
+      ])
+        // @ts-ignore
+        .then(([response1, response2]) => {
+          fetchMateriels();
+          setOpenAffectation(false);
+        })
+        .catch((error) => {
+          console.error("Erreur Affectation", error);
+        });
+    } else {
+      Promise.all([
+        axios.post(ip + "/affectation/", affectationData),
+        axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
+          disponibilite: affectationData.disponibilite,
+        }),
+      ])
+        // @ts-ignore
+        .then((response) => {
+          fetchMateriels();
+          setOpenAffectation(false);
+        })
+        .catch((error) => console.error("Erreur emprunt!", error));
+    }
   };
 
-  const handleSaveEmprunt = () => {
-    // @ts-ignore
-    const empruntToSave = {
-      ...empruntData,
-      idUtilisateur: parseInt(empruntData.idUtilisateur, 10),
-      numeroSerie: empruntData.numeroSerie,
-    };
-    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
-    if (hasErrors) {
-      console.error("Veuillez remplir tous les champs obligatoires!");
-      return;
-    }
-    axios
-      .patch(
-        ip +
-          `/emprunt/${empruntToSave.idUtilisateur}/${empruntToSave.numeroSerie}`,
-        empruntData
-      )
-      // @ts-ignore
-      .then((response) => {
-        fetchMateriels();
-        setOpenEmprunt(false);
-      })
-      .catch((error) => console.error("Erreur emprunt", error));
-  };
+  const handleSaveEmprunt = () => {};
+  // const handleSaveEmprunt = () => {
+
+  //   const empruntToSave = {
+  //     ...empruntData,
+  //     // @ts-ignore
+  //     idAffectation: parseInt(affectationData.idAffectation, 10),
+  //     numeroSerie: affectationData.numeroSerie,
+  //   };
+
+  //   const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+  //   if (hasErrors) {
+  //     console.error("Veuillez remplir tous les champs obligatoires!");
+  //     return;
+  //   }
+  //   if (isEditing){
+  //         // Making PATCH requests concurrently using Promise.all
+  //   Promise.all([
+  //     axios.patch(
+  //       `${ip}/affectation/${affectationToSave.idAffectation}`,
+  //       affectationData
+  //     ),
+  //     axios.patch(`${ip}/materiel/${affectationToSave.numeroSerie}`, {
+  //       disponibilite: affectationData.disponibilite,
+  //     }),
+  //   ])
+  //     // @ts-ignore
+  //     .then(([response1, response2]) => {
+  //       fetchMateriels();
+  //       setOpenAffectation(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur Affectation", error);
+  //     });
+  //   } else {
+  //     Promise.all([
+  //       axios.post(ip + "/emprunt", empruntData),
+  //       axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
+  //         disponibilite: affectationData.disponibilite,
+  //       }),
+  //     ])
+  //       // @ts-ignore
+  //       .then((response) => {
+  //         fetchMateriels();
+  //         setOpenEmprunt(false);
+  //       })
+  //       .catch((error) => console.error("Erreur emprunt!", error));
+  //   }
+  // };
 
   const validateMateriel = (name, value) => {
     let errorMsg = "";
@@ -221,10 +286,11 @@ const DetailsMateriel = () => {
   const rowsAffectations = affectations.map((affectation, index) => ({
     id: index,
     ...affectation,
-    fullName: affectation.utilisateur?.fullName || "N/A",
-    numeroSerie: affectation.materiel?.numeroSerie || "N/A",
-    categorie: affectation.materiel?.categorie || "N/A",
-    marque: affectation.materiel?.marque || "N/A",
+    fullName: affectation.Utilisateur?.fullName || "N/A",
+    numeroSerie: affectation.Materiel?.numeroSerie || "N/A",
+    categorie: affectation.Materiel?.categorie || "N/A",
+    marque: affectation.Materiel?.marque || "N/A",
+    disponibilite: affectation.Materiel?.disponibilite || "N/A",
   }));
 
   const columnsAffectations = [
@@ -245,6 +311,7 @@ const DetailsMateriel = () => {
         </div>
       ),
     },
+    { field: "idAffectation", headerName: "#ID", width: 100 },
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
     { field: "dateAttribution", headerName: "Date Attribution", width: 150 },
@@ -259,6 +326,7 @@ const DetailsMateriel = () => {
     numeroSerie: emprunt.materiel?.numeroSerie || "N/A",
     categorie: emprunt.materiel?.categorie || "N/A",
     marque: emprunt.materiel?.marque || "N/A",
+    disponibilite: emprunt.Materiel?.disponibilite || "N/A",
   }));
 
   const columnsEmprunts = [
@@ -278,6 +346,7 @@ const DetailsMateriel = () => {
         </div>
       ),
     },
+    { field: "idEmprunt", headerName: "#ID", width: 100 },
     { field: "idUtilisateur", headerName: "Matricule", width: 100 },
     { field: "fullName", headerName: "Nom & Prénom", width: 200 },
     { field: "dateEmprunt", headerName: "Date Emprunt", width: 150 },
@@ -668,6 +737,35 @@ const DetailsMateriel = () => {
                   }
                 </Card.Body>
               </Card>
+              <Card>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  gap={2}
+                  mt={2}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ flexGrow: 1 }}
+                    // @ts-ignore
+                    onClick={() => {handleBtnAffecterClick(materiel?.numeroSerie)}
+                    }
+                  >
+                    <QueuePlayNextOutlinedIcon />
+                    _Affecter
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ flexGrow: 1 }}
+                  >
+                    <ManageHistoryOutlinedIcon />
+                    _Emprunter
+                  </Button>
+                </Box>
+              </Card>
             </Col>
             <Col lg={8}>
               <Card className="mb-4">
@@ -729,6 +827,7 @@ const DetailsMateriel = () => {
           <EmpruntModal
             openEmprunt={openEmprunt}
             empruntData={empruntData}
+            formData={FormData}
             isEditing={isEditing}
             handleClose={() => setOpenEmprunt(false)}
             handleChange={handleChangeEmprunt}

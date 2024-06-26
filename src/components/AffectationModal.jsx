@@ -15,12 +15,14 @@ const AffectationModal = ({
   handleSave,
   errors,
 }) => {
+
   const [utilisateurs, setUtilisateurs] = useState([]);
   const EtatAffectation = {
     Affecté: "Affecté",
     Emprunté: "Emprunté",
     Disponible: "Disponible",
   };
+  
   const fetchUtilisateurs = () => {
     axios
       .get(ip + "/utilisateur")
@@ -33,6 +35,7 @@ const AffectationModal = ({
 
   useEffect(() => {
     fetchUtilisateurs();
+    //fetchMateriel();
   });
 
   const style = {
@@ -65,12 +68,12 @@ const AffectationModal = ({
           // @ts-ignore
           helperText={errors.categorie}
         >
-          {utilisateurs.map((utilisateur) => (
+          {utilisateurs.map((elem) => (
             <MenuItem
-              key={utilisateur.idUtilisateur}
-              value={utilisateur.idUtilisateur}
+              key={elem.idUtilisateur}
+              value={elem.idUtilisateur}
             >
-              {utilisateur.fullName}
+              {elem.fullName}
             </MenuItem>
           ))}
         </TextField>
@@ -78,7 +81,6 @@ const AffectationModal = ({
           label={"Date d'affectation"}
           placeholder="Sélectionner une date"
           name="dateAttribution"
-          
           value={dayjs(affectationData?.dateAttribution).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
@@ -118,8 +120,8 @@ const AffectationModal = ({
         <TextField
           select
           label="Etat affectation"
-          name="etatAffectation"
-          value={affectationData.etatAffectation}
+          name="disponibilite"
+          value={affectationData?.disponibilite}
           onChange={handleChange}
           fullWidth
           margin="normal"

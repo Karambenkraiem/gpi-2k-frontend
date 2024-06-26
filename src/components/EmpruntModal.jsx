@@ -2,6 +2,7 @@ import { Box, MenuItem, TextField, Button, Modal } from "@mui/material";
 import axios from "axios";
 import { ip } from "constants/ip";
 import dayjs from "dayjs";
+import Emprunt from "pages/Emprunt";
 import React, { useEffect, useState } from "react";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
@@ -9,6 +10,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 const EmpruntModal = ({
   empruntData,
   openEmprunt,
+  formData,
   isEditing,
   handleClose,
   handleChange,
@@ -158,8 +160,8 @@ const EmpruntModal = ({
         <TextField
           select
           label="Etat équipement"
-          name="etatEmprunt"
-          value={empruntData.etatEmprunt}
+          name="disponibilite"
+          value={formData.disponibilite}
           onChange={handleChange}
           fullWidth
           margin="normal"
