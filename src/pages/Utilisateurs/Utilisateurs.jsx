@@ -12,9 +12,9 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ip } from "constants/ip";
 
 const Utilisateurs = () => {
+  const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState({});
   const Navigate = useNavigate();
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
