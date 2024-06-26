@@ -118,7 +118,7 @@ const fetchStocks = () =>{
   };
 
   const handleSaveAlimentation= () => {
-    axios.post(ip+"/alimentaion",alimentationData)
+    axios.post(ip+"/alimentation",alimentationData)
     .then((response)=>{
       fetchStocks();
       setOpenAlimentationModal(false);
