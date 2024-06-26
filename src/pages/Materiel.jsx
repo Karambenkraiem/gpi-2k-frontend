@@ -31,7 +31,7 @@ const MaterielPage = () => {
   const [open, setOpen] = useState(false);
 
   const [affectationData, setAffectationData] = useState({
-    idUtilisateur: null,
+    idUtilisateur:"",
     numeroSerie: "",
     dateAttribution: "",
     dateRetour: null,
@@ -39,8 +39,6 @@ const MaterielPage = () => {
   });
 
   const [empruntData, setEmpruntData] = useState({
-    idUtilisateur: null,
-    numeroSerie: "",
     dateEmprunt: "",
     dateRestitution: null,
     refProjet: "",
@@ -356,23 +354,29 @@ const MaterielPage = () => {
   }, []);
 
   const handleSaveAffectation = () => {
-    const affectationToSave = {
-      ...affectationData,
-      // @ts-ignore
-      idUtilisateur: parseInt(affectationData.idUtilisateur, 10)
-    };
-    const {Utilisateur, Materiel, ...rest} = affectationToSave;
+    // const affectationToSave = {
+    //   ...affectationData,
+    //   // @ts-ignore
+    //   idUtilisateur: parseInt(affectationData.idUtilisateur, 10)
+    // };
+    // const {Utilisateur, Materiel, ...rest} = affectationToSave;
     Promise.all([
+        axios.post(ip + "/affectation",{
+          dateAttribution: affectationData.dateAttribution,
+          dateRetour:affectationData.dateRetour,
+          motifRetour:affectationData.motifRetour,
+          idUtilisateur:affectationData.idUtilisateur,
+          numeroSerie:affectationData.numeroSerie,
 
-        axios.post(ip + "/affectation/", rest),
+        }),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
           disponibilite: affectationData.disponibilite,
         }),
       ])
-      .then((response) => {
-        fetchMateriels();
-        setOpenAffectation(false);
-      })
+      // .then((response) => {
+      //   fetchMateriels();
+      //   setOpenAffectation(false);
+      // })
       .catch((error) => console.error("Erreur affectation!", error));
   };
 
