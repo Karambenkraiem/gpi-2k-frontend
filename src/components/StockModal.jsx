@@ -50,8 +50,8 @@ const ModalStock = ({ open, handleClose, editItem }) => {
     capaciteToner: null,
     compatibiliteToner: "",
     dateExpirationToner: "",
-    couleurToner: "",
-    capaciteFlashDvdCdRamHDD: null,
+    couleurToner: null,
+    capaciteFlashDvdCdRamHDD: 0,
     typeDisqueStoquage: null,
     typeConnexionClavierSouris: null,
     dispositionToucheClavier: null,
@@ -84,6 +84,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         prix:parseFloat(formData.prix),
         quantiteStock:parseInt(formData.quantiteStock),
         capaciteToner:parseInt(formData.capaciteToner),
+        capaciteFlashDvdCdRamHDD:parseInt(formData.capaciteFlashDvdCdRamHDD),
 
     }
     if (editItem) {
@@ -232,7 +233,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               fullWidth
               margin="normal"
             >
-                {[
+                {[  null,
                     "NOIR",
                     "COULEUR",
                     

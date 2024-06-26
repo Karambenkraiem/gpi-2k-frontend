@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button, IconButton } from '@mui/material';
@@ -7,34 +8,127 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import StockModal from '../components/StockModal';
-import AlimenterModal from '../components/AlimenterModal';
 import { ip } from 'constants/ip';
 import { useNavigate } from 'react-router-dom';
+import AlimentationModal from '../components/AlimentationModal';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [openAlimenterModal, setOpenAlimenterModal] = useState(false);
+  const [openAlimentationModal, setOpenAlimentationModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedRefArt, setSelectedRefArt] = useState(null);
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
+  
+  
 
+const fetchStocks = () =>{
+  axios
+  .get(ip + "/stocks")
+  .then((response) => {
+    setStocks(response.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error("Error Fetching Data", error);
+  });
+}
+
+
+
+
+
+  useEffect(() => {
+    fetchStocks();
+      
+  },[]);
+
+
+  // @ts-ignore
   const [stockToSave, setStockToSave] = useState({
     refArt: "",
   });
+  
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setOpenModal(true);
+  };
 
-  useEffect(() => {
-    axios
-      .get(ip + "/stocks")
-      .then((response) => {
-        setStocks(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error Fetching Data", error);
+  const handleArchive = (refArt) => {
+    axios.delete(ip+"/stocks/"+refArt)
+    .then(response => setStocks(response.data))
+      .catch(error => console.error('Error fetching stocks:', error));;
+    
+    console.log('Archive:', refArt);
+  };
+
+  const [alimentationData,setAlimentationData]=useState({
+    idAlimentation:"",
+    idSociete:"",
+    refArt:"",
+    dateAlimentation:"",
+    quantiteAlimente:0,
+  })
+
+
+
+
+
+  const handleQuantityChange = (e) => {
+    const value = Number(e.target.value);
+    if (value >= 0) {
+      setAlimentationData({
+        ...alimentationData,
+        quantiteAlimente: value,
       });
-  }, );
+    }
+  };
+
+
+
+
+
+  const handleAlimentation = (refArt) => {
+    setAlimentationData({ ...alimentationData,refArt})
+    setOpenAlimentationModal(true);
+  };
+
+  const handleAdd = () => {
+    setEditItem(null);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setEditItem(null);
+    axios.get(ip + "/stocks")
+      .then(response => setStocks(response.data))
+      .catch(error => console.error('Error fetching stocks:', error));
+  };
+
+  const handleCloseAlimenterModal = () => {
+    setOpenAlimentationModal(false);
+    setSelectedRefArt(null);
+    axios.get(ip + "/stocks")
+      .then(response => setStocks(response.data))
+      .catch(error => console.error('Error fetching stocks:', error));
+  };
+
+  const handleSaveAlimentation= () => {
+    axios.post(ip+"/alimentaion",alimentationData)
+    .then((response)=>{
+      fetchStocks();
+      setOpenAlimentationModal(false);
+    })
+    .catch((error)=> console.error("Erreur alimentation!!",error));
+  }
+
+  const handleView = (id) => {
+    Navigate(`/detailsStock/${id}`);
+  };
 
   const columns = [
     { field: 'refArt', headerName: 'Référence', width: 150 },
@@ -62,7 +156,7 @@ const Stocks = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={() => handleAlimenter(params.row.refArt)}
+            onClick={() => handleAlimentation(params.row.refArt)}
           >
             Alimenter
           </Button>
@@ -71,56 +165,13 @@ const Stocks = () => {
     },
   ];
 
-  const handleView = (refArt) => {
-    navigate(`/detailsStock/${refArt}`);
-  };
-
-  const handleEdit = (item) => {
-    setEditItem(item);
-    setOpenModal(true);
-  };
-
-  const handleArchive = (refArt) => {
-    // Implement archiving logic
-    console.log('Archive:', refArt);
-  };
-
-  const handleAlimenter = (refArt) => {
-    setSelectedRefArt(refArt);
-    setOpenAlimenterModal(true);
-  };
-
-  const handleAdd = () => {
-    setEditItem(null);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setEditItem(null);
-    axios.get(ip + "/stocks")
-      .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));
-  };
-
-  const handleCloseAlimenterModal = () => {
-    setOpenAlimenterModal(false);
-    setSelectedRefArt(null);
-    axios.get(ip + "/stocks")
-      .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));
-  };
-
-  const handleSaveQuantity = (quantity) => {
-    const stockItem = stocks.find(stock => stock.refArt === selectedRefArt);
-    const updatedQuantity = stockItem.quantiteStock + quantity;
-    const url = `${ip}/stocks/${selectedRefArt}`;
-    axios.patch(url, { quantiteStock: updatedQuantity })
-      .then(response => {
-        setStocks(stocks.map(stock => stock.refArt === selectedRefArt ? { ...stock, quantiteStock: updatedQuantity } : stock));
-      })
-      .catch(error => console.error('Error updating quantity:', error));
-  };
+  const handleChangeAlimentation=(e)=>{
+    const {name,value}=e.target;
+    setAlimentationData({
+      ...alimentationData,
+      [name]:value,
+    })
+  }
 
   return (
     <div style={{ height: 600, width: '100%' }}>
@@ -135,6 +186,7 @@ const Stocks = () => {
       </Button>
       <DataGrid
         rows={stocks}
+        // @ts-ignore
         columns={columns}
         loading={loading}
         pageSize={10}
@@ -145,11 +197,15 @@ const Stocks = () => {
         handleClose={handleCloseModal}
         editItem={editItem}
       />
-      <AlimenterModal
-        open={openAlimenterModal}
-        handleClose={handleCloseAlimenterModal}
+      <AlimentationModal
+        alimentationData={alimentationData}
+        openAlimentationModal={openAlimentationModal}
+        handleClose={()=>setOpenAlimentationModal(false)}
+        handleChange={handleChangeAlimentation}
+        handleSave={handleSaveAlimentation}
         refArt={selectedRefArt}
-        onSave={handleSaveQuantity}
+        isEditing={isEditing}
+
       />
     </div>
   );
