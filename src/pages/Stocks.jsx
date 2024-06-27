@@ -1,7 +1,7 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -11,12 +11,12 @@ import StockModal from "../components/StockModal";
 import { ip } from "constants/ip";
 import { useNavigate } from "react-router-dom";
 import AlimentationModal from "../components/AlimentationModal";
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openAlimentationModal, setOpenAlimentationModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,9 +39,9 @@ const Stocks = () => {
   }, []);
 
   // @ts-ignore
-  const [stockToSave, setStockToSave] = useState({
-    refArt: "",
-  });
+  // const [stockToSave, setStockToSave] = useState({
+  //   refArt: "",
+  // });
 
   const handleEdit = (item) => {
     setEditItem(item);
@@ -64,21 +64,23 @@ const Stocks = () => {
     quantiteStock: "",
   });
 
-  const handleQuantityChange = (e) => {
-    const value = Number(e.target.value);
-    if (value >= 0) {
-      setAlimentationData({
-        ...alimentationData,
-        //quantiteAlimente: value,
-      });
-    }
-  };
+  // const handleQuantityChange = (e) => {
+  //   const value = Number(e.target.value);
+  //   if (value >= 0) {
+  //     setAlimentationData({
+  //       ...alimentationData,
+  //       //quantiteAlimente: value,
+  //     });
+  //   }
+  // };
 
   const handleAlimentation = (row) => {
     setAlimentationData(row);
     setOpenAlimentationModal(true);
   };
-
+const handleHistorique=() =>{
+  Navigate('/alimentations')
+}
   const handleAdd = () => {
     setEditItem(null);
     setOpenModal(true);
@@ -119,7 +121,7 @@ const Stocks = () => {
         quantiteStock:nouvelleQte,
       })
     ])
-      .then(([alimentationResponse, stockResponse]) => {
+      .then((response) => {
         fetchStocks();
         setOpenAlimentationModal(false);
       })
@@ -187,16 +189,28 @@ const Stocks = () => {
   };
 
   return (
-    <div style={{ height: 600, width: "100%" }}>
+    <div>
+    <Box display="flex" justifyContent="space-between" marginBottom={2}>
       <Button
         variant="contained"
         color="primary"
         startIcon={<AddIcon />}
         onClick={handleAdd}
-        style={{ marginBottom: 16 }}
+        style={{ marginRight: '16' }} // Ensure this button stays on the left
       >
         Ajouter Article
       </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<HistoryOutlinedIcon />}
+        onClick={handleHistorique}
+
+      >
+       Historique Alimentation
+      </Button>
+      </Box>
+      
       <DataGrid
         rows={stocks}
         // @ts-ignore
@@ -217,6 +231,7 @@ const Stocks = () => {
         handleChange={handleChangeAlimentation}
         handleSaveAlimentation={handleSaveAlimentation}
       />
+    
     </div>
   );
 };

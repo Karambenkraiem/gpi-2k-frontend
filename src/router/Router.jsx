@@ -17,6 +17,7 @@ import Emprunt from "../pages/Emprunt";
 import Stocks from "pages/Stocks";
 import Logiciels from "pages/Logiciels";
 import DetailsStock from "pages/DetailsStock";
+import Alimentations from "pages/Alimentations";
 
 
 export default function Router() {
@@ -39,6 +40,8 @@ export default function Router() {
             <Route path="/detailsStock/:refArt" element={<DetailsStock />} />
 
             <Route path="/logiciels" element={< Logiciels/>} />
+            <Route path="/alimentations" element={< Alimentations/>} />
+
           </Route>
           <Route path="*" element={<div>404</div>} />
         </Routes>

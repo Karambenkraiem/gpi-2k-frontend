@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Box, Paper, Button, Slider, TextField } from '@mui/material';
+import { Container, Typography, Box, Paper, Button, Slider } from '@mui/material';
 import axios from 'axios';
 import { ip } from 'constants/ip';  // Make sure to have this file and ip constant correctly set up
 
@@ -9,7 +9,6 @@ const StockDetails = () => {
   const [stock, setStock] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   const fetchStock = async () => {
     try {
       const response = await axios.get(`${ip}/stocks/${refArt}`);
