@@ -102,7 +102,17 @@ const Stocks = () => {
   };
 
   const handleSaveAlimentation = () => {
-    const nouvelleQuantite = parseInt(alimentationData.quantiteStoc) + parseInt(alimentationData.quantiteAlimente);
+    const alimentationToSave = {
+      ...alimentationData,
+      quantiteAlimente: parseInt(alimentationData.quantiteAlimente),
+    };
+    const currentStockQuantity = parseInt(Stocks?.quantiteStock ?? 0, 10);
+    const newStockQuantity = currentStockQuantity + alimentationData.quantiteAlimente;
+    const createAlimentation = axios.post(ip + "/alimentation", alimentationToSave);
+    const updateStock = axios.patch(`${ip}"/stocks/"${alimentationData.refArt}`, {
+      quantiteStock: newStockQuantity,
+    })
+
     Promise.all([
       axios.post(ip + "/alimentation", {
         idSociete: alimentationData.idSociete,
