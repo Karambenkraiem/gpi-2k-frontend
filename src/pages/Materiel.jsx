@@ -322,6 +322,7 @@ const MaterielPage = () => {
   };
 
   const handleEmprunt = (numeroSerie) => {
+    // @ts-ignore
     setEmpruntData({ ...empruntData, numeroSerie });
     setOpenEmprunt(true);
   };
@@ -363,6 +364,7 @@ const MaterielPage = () => {
           numeroSerie:affectationData.numeroSerie,
         }),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
+          // @ts-ignore
           disponibilite: affectationData.disponibilite,
         }),
       ])
@@ -485,7 +487,6 @@ const MaterielPage = () => {
         <AffectationModal
           affectationData={affectationData}
           openAffectation={openAffectation}
-          formData={formData}
           isEditing={isEditing}
           handleClose={() => setOpenAffectation(false)}
           handleChange={handleChangeAffectation}
