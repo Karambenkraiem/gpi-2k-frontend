@@ -58,10 +58,10 @@ const Stocks = () => {
 
   const [alimentationData, setAlimentationData] = useState({
     refArt: "",
-    idSociete: "null",
+    idSociete: "",
     dateAlimentation: "",
     quantiteAlimente: "",
-    quantiteStock:"",
+    quantiteStock: "",
   });
 
   const handleQuantityChange = (e) => {
@@ -69,7 +69,7 @@ const Stocks = () => {
     if (value >= 0) {
       setAlimentationData({
         ...alimentationData,
-        quantiteAlimente: value,
+        //quantiteAlimente: value,
       });
     }
   };
@@ -112,8 +112,8 @@ const Stocks = () => {
       axios.post(ip + "/alimentation", {
         idSociete: alimentationData.idSociete,
         refArt: alimentationData.refArt,
-        dateAlimentation: qteAlimente,
-        quatiteAlimente: alimentationData.quantiteAlimente
+        dateAlimentation: alimentationData.dateAlimentation,
+        quantiteAlimente: qteAlimente,
       }),
       axios.patch(ip + `/stocks/${alimentationData.refArt}`, {
         quantiteStock:nouvelleQte,

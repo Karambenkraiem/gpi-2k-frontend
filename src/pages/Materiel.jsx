@@ -372,7 +372,7 @@ const MaterielPage = () => {
         fetchMateriels();
         setOpenAffectation(false);
       })
-      .catch((error) => console.error("Erreur affectation!", error));
+      .catch((error) => {console.error("Erreur affectation!", error);});
   };
 
   const handleSaveEmprunt = () => {
