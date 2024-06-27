@@ -108,10 +108,10 @@ const Stocks = () => {
       ...alimentationData,
       quantiteAlimente: parseInt(alimentationData.quantiteAlimente),
     };
-    const currentStockQuantity = Stocks?.quantiteStock ?? 0;
-    const newStockQuantity = parseInt(currentStockQuantity + alimentationData.quantiteAlimente);
+    const currentStockQuantity = parseInt(Stocks?.quantiteStock ?? 0, 10);
+    const newStockQuantity = currentStockQuantity + alimentationData.quantiteAlimente;
     const createAlimentation = axios.post(ip + "/alimentation", alimentationToSave);
-    const updateStock = axios.patch(`http://localhost:3000/stocks/${alimentationData.refArt}`, {
+    const updateStock = axios.patch(`${ip}"/stocks/"${alimentationData.refArt}`, {
       quantiteStock: newStockQuantity,
     })
 
@@ -119,9 +119,10 @@ const Stocks = () => {
       createAlimentation, 
       updateStock
     ])
-      .then(([alimentationResponse, stockResponse]) => {
-        console.log("Alimentation saved:", alimentationResponse.data);
-        console.log("Stock updated:", stockResponse.data);
+      .then((response) => {
+        
+
+        fetchStocks();
         setOpenAlimentationModal(false);
       })
       .catch((error) => {
