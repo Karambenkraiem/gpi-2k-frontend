@@ -71,9 +71,9 @@ const AlimentationModal = ({
           // // @ts-ignore
           // helperText={errors.categorie}
         >
-          {societes.map((societe) => (
-            <MenuItem key={societe?.idSociete} value={societe?.idSociete}>
-              {societe?.raisonSociale}
+          {societes.map((elem) => (
+            <MenuItem key={elem?.idSociete} value={elem?.idSociete}>
+              {elem?.raisonSociale}
             </MenuItem>
           ))}
         </TextField>

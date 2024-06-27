@@ -20,7 +20,6 @@ const Stocks = () => {
 
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedRefArt, setSelectedRefArt] = useState(null);
   const Navigate = useNavigate();
 
   const fetchStocks = () => {
@@ -58,11 +57,11 @@ const Stocks = () => {
   };
 
   const [alimentationData, setAlimentationData] = useState({
-    // idAlimentation:"",
     refArt: "",
     idSociete: "null",
     dateAlimentation: "",
     quantiteAlimente: 0,
+    quantiteStock:"",
   });
 
   const handleQuantityChange = (e) => {
@@ -75,8 +74,8 @@ const Stocks = () => {
     }
   };
 
-  const handleAlimentation = (refArt) => {
-    setAlimentationData({ ...alimentationData, refArt });
+  const handleAlimentation = (row) => {
+    setAlimentationData(row);
     setOpenAlimentationModal(true);
   };
 
@@ -96,7 +95,6 @@ const Stocks = () => {
 
   const handleCloseAlimenterModal = () => {
     setOpenAlimentationModal(false);
-    setSelectedRefArt(null);
     axios
       .get(ip + "/stocks")
       .then((response) => setStocks(response.data))
@@ -104,24 +102,20 @@ const Stocks = () => {
   };
 
   const handleSaveAlimentation = () => {
-    const alimentationToSave = {
-      ...alimentationData,
-      quantiteAlimente: parseInt(alimentationData.quantiteAlimente),
-    };
-    const currentStockQuantity = Stocks?.quantiteStock ?? 0;
-    const newStockQuantity = parseInt(currentStockQuantity + alimentationData.quantiteAlimente);
-    const createAlimentation = axios.post(ip + "/alimentation", alimentationToSave);
-    const updateStock = axios.patch(`http://localhost:3000/stocks/${alimentationData.refArt}`, {
-      quantiteStock: newStockQuantity,
-    })
-
+    const nouvelleQuantite = parseInt(alimentationData.quantiteStoc) + parseInt(alimentationData.quantiteAlimente);
     Promise.all([
-      createAlimentation, 
-      updateStock
+      axios.post(ip + "/alimentation", {
+        idSociete: alimentationData.idSociete,
+        refArt: alimentationData.refArt,
+        dateAlimentation: alimentationData.dateAlimentation,
+        quatiteAlimente: parseInt(alimentationData.quantiteAlimente)
+      }),
+      axios.patch(ip + `/stocks/${alimentationData.refArt}`, {
+        quantiteStock:nouvelleQuantite,
+      })
     ])
       .then(([alimentationResponse, stockResponse]) => {
-        console.log("Alimentation saved:", alimentationResponse.data);
-        console.log("Stock updated:", stockResponse.data);
+        fetchStocks();
         setOpenAlimentationModal(false);
       })
       .catch((error) => {
@@ -170,7 +164,7 @@ const Stocks = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={() => handleAlimentation(params.row.refArt)}
+            onClick={() => handleAlimentation(params.row)}
           >
             Alimenter
           </Button>
@@ -217,8 +211,6 @@ const Stocks = () => {
         handleClose={() => setOpenAlimentationModal(false)}
         handleChange={handleChangeAlimentation}
         handleSaveAlimentation={handleSaveAlimentation}
-        refArt={selectedRefArt}
-        isEditing={isEditing}
       />
     </div>
   );
