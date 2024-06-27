@@ -82,7 +82,7 @@ const AlimentationModal = ({
           label={"Date d'alimentation"}
           placeholder="Sélectionner une date"
           name="dateAlimentation"
-          value={alimentationData?.dateAlimentation}
+          value={dayjs(alimentationData.dateAlimentation).format("YYYY-MM-DD")}
           type="date"
           onChange={handleChange}
           fullWidth

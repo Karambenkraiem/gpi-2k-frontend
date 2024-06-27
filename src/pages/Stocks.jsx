@@ -59,8 +59,8 @@ const Stocks = () => {
 
   const [alimentationData, setAlimentationData] = useState({
     // idAlimentation:"",
-    idSociete: null,
     refArt: "",
+    idSociete: "null",
     dateAlimentation: "",
     quantiteAlimente: 0,
   });
@@ -108,13 +108,17 @@ const Stocks = () => {
       ...alimentationData,
       quantiteAlimente: parseInt(alimentationData.quantiteAlimente),
     };
-  
+    const currentStockQuantity = Stocks?.quantiteStock ?? 0;
+    const newStockQuantity = parseInt(currentStockQuantity + alimentationData.quantiteAlimente);
     const createAlimentation = axios.post(ip + "/alimentation", alimentationToSave);
-    const updateStock = axios.patch(`${ip}/stocks/${alimentationData.refArt}`, {
-      quantiteStock: stocks.quantiteStock + alimentationToSave.quantiteAlimente,
-    });
-  
-    Promise.all([createAlimentation, updateStock])
+    const updateStock = axios.patch(`http://localhost:3000/stocks/${alimentationData.refArt}`, {
+      quantiteStock: newStockQuantity,
+    })
+
+    Promise.all([
+      createAlimentation, 
+      updateStock
+    ])
       .then(([alimentationResponse, stockResponse]) => {
         console.log("Alimentation saved:", alimentationResponse.data);
         console.log("Stock updated:", stockResponse.data);

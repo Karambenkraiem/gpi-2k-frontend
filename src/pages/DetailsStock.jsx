@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Box, Paper, Button } from '@mui/material';
+import { Container, Typography, Box, Paper, Button, Slider, TextField } from '@mui/material';
 import axios from 'axios';
 import { ip } from 'constants/ip';  // Make sure to have this file and ip constant correctly set up
 
@@ -40,22 +40,32 @@ const StockDetails = () => {
         Back
       </Button>
       <Paper elevation={3} style={{ padding: 16 }}>
-        <Typography variant="h4" gutterBottom>
-          Stock Details
+        <Typography variant="h2" gutterBottom>
+        Detail d'article
         </Typography>
         <Box mb={2}>
-          <Typography variant="h6">Référence: {stock.refArt}</Typography>
+          <Typography variant="h3">{stock.categorie}</Typography>
           <Typography variant="h6">Marque: {stock.marque}</Typography>
           <Typography variant="h6">Modèle: {stock.modele}</Typography>
-          <Typography variant="h6">Prix: {stock.prix} €</Typography>
+          <Typography variant="h6">Prix: {stock.prix} TND</Typography>
           <Typography variant="h6">Quantité en Stock: {stock.quantiteStock}</Typography>
-          <Typography variant="h6">Catégorie: {stock.categorie}</Typography>
+          <Slider
+            value={stock.quantiteStock}
+            aria-labelledby="quantity-slider"
+            min={0}
+            max={100}
+            valueLabelDisplay="auto"
+            sx={{
+              color: stock.quantiteStock <= 5 ? 'red' : 'primary.main',
+              outline: stock.quantiteStock <= 5 ? '2px solid red' : 'none',
+            }}
+          />
+          <Typography variant="h6">Fournisseur : {stock.societe?.raisonSociale}</Typography>
         </Box>
         {stock.categorie === 'Toner' && (
           <>
             <Typography variant="h6">Capacité Toner: {stock.capaciteToner}</Typography>
             <Typography variant="h6">Compatibilité Toner: {stock.compatibiliteToner}</Typography>
-            <Typography variant="h6">Date Expiration Toner: {new Date(stock.dateExpirationToner).toLocaleDateString()}</Typography>
             <Typography variant="h6">Couleur Toner: {stock.couleurToner}</Typography>
           </>
         )}
@@ -91,6 +101,7 @@ const StockDetails = () => {
         {stock.autre && (
           <Typography variant="h6">Autre: {stock.autre}</Typography>
         )}
+        
       </Paper>
     </Container>
   );
