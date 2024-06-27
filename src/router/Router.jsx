@@ -18,6 +18,7 @@ import Stocks from "pages/Stocks";
 import Logiciels from "pages/Logiciels";
 import DetailsStock from "pages/DetailsStock";
 import Alimentations from "pages/Alimentations";
+import Consommations from "pages/Consommations";
 
 
 export default function Router() {
@@ -41,6 +42,8 @@ export default function Router() {
 
             <Route path="/logiciels" element={< Logiciels/>} />
             <Route path="/alimentations" element={< Alimentations/>} />
+            <Route path="/consommations" element={< Consommations/>} />
+
 
           </Route>
           <Route path="*" element={<div>404</div>} />

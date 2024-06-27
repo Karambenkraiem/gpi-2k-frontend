@@ -11,12 +11,15 @@ import StockModal from "../components/StockModal";
 import { ip } from "constants/ip";
 import { useNavigate } from "react-router-dom";
 import AlimentationModal from "../components/AlimentationModal";
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import ConsommationModal from "components/ConsommationModal";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openAlimentationModal, setOpenAlimentationModal] = useState(false);
+  const [openConsommationModal, setOpenConsommationModal] = useState(false);
 
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,14 +51,6 @@ const Stocks = () => {
     setOpenModal(true);
   };
 
-  const handleArchive = (refArt) => {
-    axios
-      .delete(ip + "/stocks/" + refArt)
-      .then((response) => setStocks(response.data))
-      .catch((error) => console.error("Error fetching stocks:", error));
-    console.log("Archive:", refArt);
-  };
-
   const [alimentationData, setAlimentationData] = useState({
     refArt: "",
     idSociete: "",
@@ -63,24 +58,32 @@ const Stocks = () => {
     quantiteAlimente: "",
     quantiteStock: "",
   });
-
-  // const handleQuantityChange = (e) => {
-  //   const value = Number(e.target.value);
-  //   if (value >= 0) {
-  //     setAlimentationData({
-  //       ...alimentationData,
-  //       //quantiteAlimente: value,
-  //     });
-  //   }
-  // };
+  const [consommationData, setConsommationData] = useState({
+    idUtilisateur: "",
+    numeroSerie: "",
+    refArt: "",
+    quantiteConsomme: "",
+    dateConsomation: "",
+    quantiteStock: "",
+  });
 
   const handleAlimentation = (row) => {
     setAlimentationData(row);
     setOpenAlimentationModal(true);
   };
-const handleHistorique=() =>{
-  Navigate('/alimentations')
-}
+  const handleConsommation = (row) => {
+    setConsommationData(row);
+    setOpenConsommationModal(true);
+  };
+
+  const handleHistoriqueAlimentation = () => {
+    Navigate("/alimentations");
+  };
+
+  const handleHistoriqueConsommation = () => {
+    Navigate("/consommations");
+  };
+
   const handleAdd = () => {
     setEditItem(null);
     setOpenModal(true);
@@ -103,12 +106,35 @@ const handleHistorique=() =>{
       .catch((error) => console.error("Error fetching stocks:", error));
   };
 
+  const handleSaveConsommation = () => {
+    const qteActuelle = parseInt(consommationData.quantiteStock, 10);
+    const qteConsomme = parseInt(consommationData.quantiteConsomme, 10);
+    const nouvelleQte = qteActuelle - qteConsomme;
+    Promise.all([
+      axios.post(ip + "/consommation", {
+        idUtilisateur: consommationData.idUtilisateur,
+        numeroSerie: consommationData.numeroSerie,
+        refArt: consommationData.refArt,
+        dateConsomation: consommationData.dateConsomation,
+        quantiteConsomme: qteConsomme,
+      }),
+      axios.patch(ip + `/stocks/${consommationData.refArt}`, {
+        quantiteStock: nouvelleQte,
+      }),
+    ])
+      .then((response) => {
+        fetchStocks();
+        setOpenConsommationModal(false);
+      })
+      .catch((error) => {
+        console.error("Erreur alimentation ou mise à jour du stock:", error);
+      });
+  };
+
   const handleSaveAlimentation = () => {
     const qteActuelle = parseInt(alimentationData.quantiteStock, 10);
-    const qteAlimente= parseInt(alimentationData.quantiteAlimente, 10);
-    
+    const qteAlimente = parseInt(alimentationData.quantiteAlimente, 10);
     const nouvelleQte = qteActuelle + qteAlimente;
-
 
     Promise.all([
       axios.post(ip + "/alimentation", {
@@ -118,8 +144,8 @@ const handleHistorique=() =>{
         quantiteAlimente: qteAlimente,
       }),
       axios.patch(ip + `/stocks/${alimentationData.refArt}`, {
-        quantiteStock:nouvelleQte,
-      })
+        quantiteStock: nouvelleQte,
+      }),
     ])
       .then((response) => {
         fetchStocks();
@@ -129,11 +155,9 @@ const handleHistorique=() =>{
         console.error("Erreur alimentation ou mise à jour du stock:", error);
       });
   };
-
   const handleView = (id) => {
     Navigate(`/detailsStock/${id}`);
   };
-
   const columns = [
     { field: "refArt", headerName: "Référence", width: 150 },
     { field: "marque", headerName: "Marque", width: 150 },
@@ -149,7 +173,7 @@ const handleHistorique=() =>{
     {
       field: "actions",
       headerName: "Actions",
-      width: 300,
+      width: 450,
       renderCell: (params) => (
         <>
           <IconButton
@@ -161,12 +185,7 @@ const handleHistorique=() =>{
           <IconButton color="primary" onClick={() => handleEdit(params.row)}>
             <EditIcon />
           </IconButton>
-          <IconButton
-            color="secondary"
-            onClick={() => handleArchive(params.row.refArt)}
-          >
-            <ArchiveIcon />
-          </IconButton>
+
           <Button
             variant="contained"
             color="primary"
@@ -174,6 +193,14 @@ const handleHistorique=() =>{
             onClick={() => handleAlimentation(params.row)}
           >
             Alimenter
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleConsommation(params.row)}
+            startIcon={<RemoveIcon />}
+          >
+            Consommer
           </Button>
         </>
       ),
@@ -187,30 +214,44 @@ const handleHistorique=() =>{
       [name]: value,
     });
   };
+  const handleChangeConsommation = (e) => {
+    const { name, value } = e.target;
+    setConsommationData({
+      ...consommationData,
+      [name]: value,
+    });
+  };
 
   return (
     <div>
-    <Box display="flex" justifyContent="space-between" marginBottom={2}>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleAdd}
-        style={{ marginRight: '16' }} // Ensure this button stays on the left
-      >
-        Ajouter Article
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<HistoryOutlinedIcon />}
-        onClick={handleHistorique}
-
-      >
-       Historique Alimentation
-      </Button>
+      <Box display="flex" justifyContent="space-between" marginBottom={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAdd}
+          style={{ marginRight: "16" }} // Ensure this button stays on the left
+        >
+          Ajouter Article
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<HistoryOutlinedIcon />}
+          onClick={handleHistoriqueAlimentation}
+        >
+          Historique Alimentation
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<HistoryOutlinedIcon />}
+          onClick={handleHistoriqueConsommation}
+        >
+          Historique Consommation
+        </Button>
       </Box>
-      
+
       <DataGrid
         rows={stocks}
         // @ts-ignore
@@ -231,7 +272,13 @@ const handleHistorique=() =>{
         handleChange={handleChangeAlimentation}
         handleSaveAlimentation={handleSaveAlimentation}
       />
-    
+      <ConsommationModal
+        consommationData={consommationData}
+        openConsommationModal={openConsommationModal}
+        handleClose={() => setOpenConsommationModal(false)}
+        handleChange={handleChangeConsommation}
+        handleSaveConsommation={handleSaveConsommation}
+      />
     </div>
   );
 };
