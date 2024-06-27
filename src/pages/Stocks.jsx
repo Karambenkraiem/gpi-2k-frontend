@@ -1,16 +1,16 @@
 // @ts-ignore
-import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button, IconButton } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios';
-import StockModal from '../components/StockModal';
-import { ip } from 'constants/ip';
-import { useNavigate } from 'react-router-dom';
-import AlimentationModal from '../components/AlimentationModal';
+import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button, IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
+import StockModal from "../components/StockModal";
+import { ip } from "constants/ip";
+import { useNavigate } from "react-router-dom";
+import AlimentationModal from "../components/AlimentationModal";
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -22,60 +22,48 @@ const Stocks = () => {
   const [loading, setLoading] = useState(true);
   const [selectedRefArt, setSelectedRefArt] = useState(null);
   const Navigate = useNavigate();
-  
-  
 
-const fetchStocks = () =>{
-  axios
-  .get(ip + "/stocks")
-  .then((response) => {
-    setStocks(response.data);
-    setLoading(false);
-  })
-  .catch((error) => {
-    console.error("Error Fetching Data", error);
-  });
-}
-
-
-
-
+  const fetchStocks = () => {
+    axios
+      .get(ip + "/stocks")
+      .then((response) => {
+        setStocks(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
+      });
+  };
 
   useEffect(() => {
     fetchStocks();
-      
-  },[]);
-
+  }, []);
 
   // @ts-ignore
   const [stockToSave, setStockToSave] = useState({
     refArt: "",
   });
-  
+
   const handleEdit = (item) => {
     setEditItem(item);
     setOpenModal(true);
   };
 
   const handleArchive = (refArt) => {
-    axios.delete(ip+"/stocks/"+refArt)
-    .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));;
-    
-    console.log('Archive:', refArt);
+    axios
+      .delete(ip + "/stocks/" + refArt)
+      .then((response) => setStocks(response.data))
+      .catch((error) => console.error("Error fetching stocks:", error));
+    console.log("Archive:", refArt);
   };
 
-  const [alimentationData,setAlimentationData]=useState({
-    idAlimentation:"",
-    idSociete:"",
-    refArt:"",
-    dateAlimentation:"",
-    quantiteAlimente:0,
-  })
-
-
-
-
+  const [alimentationData, setAlimentationData] = useState({
+    // idAlimentation:"",
+    refArt: "",
+    idSociete: "null",
+    dateAlimentation: "",
+    quantiteAlimente: 0,
+  });
 
   const handleQuantityChange = (e) => {
     const value = Number(e.target.value);
@@ -87,12 +75,8 @@ const fetchStocks = () =>{
     }
   };
 
-
-
-
-
   const handleAlimentation = (refArt) => {
-    setAlimentationData({ ...alimentationData,refArt})
+    setAlimentationData({ ...alimentationData, refArt });
     setOpenAlimentationModal(true);
   };
 
@@ -104,52 +88,82 @@ const fetchStocks = () =>{
   const handleCloseModal = () => {
     setOpenModal(false);
     setEditItem(null);
-    axios.get(ip + "/stocks")
-      .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));
+    axios
+      .get(ip + "/stocks")
+      .then((response) => setStocks(response.data))
+      .catch((error) => console.error("Error fetching stocks:", error));
   };
 
   const handleCloseAlimenterModal = () => {
     setOpenAlimentationModal(false);
     setSelectedRefArt(null);
-    axios.get(ip + "/stocks")
-      .then(response => setStocks(response.data))
-      .catch(error => console.error('Error fetching stocks:', error));
+    axios
+      .get(ip + "/stocks")
+      .then((response) => setStocks(response.data))
+      .catch((error) => console.error("Error fetching stocks:", error));
   };
 
-  const handleSaveAlimentation= () => {
-    axios.post(ip+"/alimentation",alimentationData)
-    .then((response)=>{
-      fetchStocks();
-      setOpenAlimentationModal(false);
+  const handleSaveAlimentation = () => {
+    const alimentationToSave = {
+      ...alimentationData,
+      quantiteAlimente: parseInt(alimentationData.quantiteAlimente),
+    };
+    const currentStockQuantity = Stocks?.quantiteStock ?? 0;
+    const newStockQuantity = parseInt(currentStockQuantity + alimentationData.quantiteAlimente);
+    const createAlimentation = axios.post(ip + "/alimentation", alimentationToSave);
+    const updateStock = axios.patch(`http://localhost:3000/stocks/${alimentationData.refArt}`, {
+      quantiteStock: newStockQuantity,
     })
-    .catch((error)=> console.error("Erreur alimentation!!",error));
-  }
+
+    Promise.all([
+      createAlimentation, 
+      updateStock
+    ])
+      .then(([alimentationResponse, stockResponse]) => {
+        console.log("Alimentation saved:", alimentationResponse.data);
+        console.log("Stock updated:", stockResponse.data);
+        setOpenAlimentationModal(false);
+      })
+      .catch((error) => {
+        console.error("Erreur alimentation ou mise à jour du stock:", error);
+      });
+  };
 
   const handleView = (id) => {
     Navigate(`/detailsStock/${id}`);
   };
 
   const columns = [
-    { field: 'refArt', headerName: 'Référence', width: 150 },
-    { field: 'marque', headerName: 'Marque', width: 150 },
-    { field: 'modele', headerName: 'Modèle', width: 150 },
-    { field: 'prix', headerName: 'Prix', width: 100, type: 'number' },
-    { field: 'quantiteStock', headerName: 'Quantité en Stock', width: 150, type: 'number' },
-    { field: 'categorie', headerName: 'Catégorie', width: 150 },
+    { field: "refArt", headerName: "Référence", width: 150 },
+    { field: "marque", headerName: "Marque", width: 150 },
+    { field: "modele", headerName: "Modèle", width: 150 },
+    { field: "prix", headerName: "Prix", width: 100, type: "number" },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "quantiteStock",
+      headerName: "Quantité en Stock",
+      width: 150,
+      type: "number",
+    },
+    { field: "categorie", headerName: "Catégorie", width: 150 },
+    {
+      field: "actions",
+      headerName: "Actions",
       width: 300,
       renderCell: (params) => (
         <>
-          <IconButton color="primary" onClick={() => handleView(params.row.refArt)}>
+          <IconButton
+            color="primary"
+            onClick={() => handleView(params.row.refArt)}
+          >
             <VisibilityIcon />
           </IconButton>
           <IconButton color="primary" onClick={() => handleEdit(params.row)}>
             <EditIcon />
           </IconButton>
-          <IconButton color="secondary" onClick={() => handleArchive(params.row.refArt)}>
+          <IconButton
+            color="secondary"
+            onClick={() => handleArchive(params.row.refArt)}
+          >
             <ArchiveIcon />
           </IconButton>
           <Button
@@ -165,16 +179,16 @@ const fetchStocks = () =>{
     },
   ];
 
-  const handleChangeAlimentation=(e)=>{
-    const {name,value}=e.target;
+  const handleChangeAlimentation = (e) => {
+    const { name, value } = e.target;
     setAlimentationData({
       ...alimentationData,
-      [name]:value,
-    })
-  }
+      [name]: value,
+    });
+  };
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{ height: 600, width: "100%" }}>
       <Button
         variant="contained"
         color="primary"
@@ -200,12 +214,11 @@ const fetchStocks = () =>{
       <AlimentationModal
         alimentationData={alimentationData}
         openAlimentationModal={openAlimentationModal}
-        handleClose={()=>setOpenAlimentationModal(false)}
+        handleClose={() => setOpenAlimentationModal(false)}
         handleChange={handleChangeAlimentation}
-        handleSave={handleSaveAlimentation}
+        handleSaveAlimentation={handleSaveAlimentation}
         refArt={selectedRefArt}
         isEditing={isEditing}
-
       />
     </div>
   );
