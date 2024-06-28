@@ -267,6 +267,7 @@ const MaterielPage = () => {
     });
     validateMateriel(name, value);
   };
+  
   const handleEdit = (rowData) => {
     setFormData(rowData);
     setIsEditing(true);
@@ -454,7 +455,9 @@ const MaterielPage = () => {
       <h1>Gestion de Matériel</h1>
       <Box sx={{ height: 800, width: "100%" }}>
         <Box sx={{ mb: 2 }}>
-          <Button onClick={handleOpenModal} variant="contained" color="primary">
+          <Button onClick={handleOpenModal}
+          variant="contained"
+          color="primary">
             + Ajouter Materiel
           </Button>
         </Box>

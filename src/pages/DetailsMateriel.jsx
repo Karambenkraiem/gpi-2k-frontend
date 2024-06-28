@@ -15,8 +15,6 @@ import { useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EmpruntModal from "components/EmpruntModal";
-// @ts-ignore
-import { RxDividerVertical } from "react-icons/rx";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 
@@ -30,15 +28,13 @@ const DetailsMateriel = () => {
   const [openAffectation, setOpenAffectation] = useState(false);
   const [openEmprunt, setOpenEmprunt] = useState(false);
   // @ts-ignore
-  // @ts-ignore
   const [materiels, setMateriels] = useState([]);
-  // @ts-ignore
   // @ts-ignore
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   // @ts-ignore
-  // @ts-ignore
   const handleClose = () => setOpenAffectation(false);
+
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -125,13 +121,13 @@ const DetailsMateriel = () => {
       return;
     }
     if (isEditing) {
-      // Making PATCH requests concurrently using Promise.all
       Promise.all([
         axios.patch(
           `${ip}/affectation/${affectationToSave.idAffectation}`,
           affectationData
         ),
         axios.patch(`${ip}/materiel/${affectationToSave.numeroSerie}`, {
+          // @ts-ignore
           disponibilite: affectationData.disponibilite,
         }),
       ])
@@ -147,6 +143,7 @@ const DetailsMateriel = () => {
       Promise.all([
         axios.post(ip + "/affectation/", affectationData),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
+          // @ts-ignore
           disponibilite: affectationData.disponibilite,
         }),
       ])
@@ -159,55 +156,58 @@ const DetailsMateriel = () => {
     }
   };
 
-  const handleSaveEmprunt = () => {};
-  // const handleSaveEmprunt = () => {
+ 
+  const handleSaveEmprunt = () => {
 
-  //   const empruntToSave = {
-  //     ...empruntData,
-  //     // @ts-ignore
-  //     idAffectation: parseInt(affectationData.idAffectation, 10),
-  //     numeroSerie: affectationData.numeroSerie,
-  //   };
+    // @ts-ignore
+    const empruntToSave = {
+      ...empruntData,
+      // @ts-ignore
+      idEmprunt: parseInt(empruntData.idEmprunt, 10),
+      numeroSerie: empruntData.numeroSerie,
+    };
 
-  //   const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
-  //   if (hasErrors) {
-  //     console.error("Veuillez remplir tous les champs obligatoires!");
-  //     return;
-  //   }
-  //   if (isEditing){
-  //         // Making PATCH requests concurrently using Promise.all
-  //   Promise.all([
-  //     axios.patch(
-  //       `${ip}/affectation/${affectationToSave.idAffectation}`,
-  //       affectationData
-  //     ),
-  //     axios.patch(`${ip}/materiel/${affectationToSave.numeroSerie}`, {
-  //       disponibilite: affectationData.disponibilite,
-  //     }),
-  //   ])
-  //     // @ts-ignore
-  //     .then(([response1, response2]) => {
-  //       fetchMateriels();
-  //       setOpenAffectation(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erreur Affectation", error);
-  //     });
-  //   } else {
-  //     Promise.all([
-  //       axios.post(ip + "/emprunt", empruntData),
-  //       axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
-  //         disponibilite: affectationData.disponibilite,
-  //       }),
-  //     ])
-  //       // @ts-ignore
-  //       .then((response) => {
-  //         fetchMateriels();
-  //         setOpenEmprunt(false);
-  //       })
-  //       .catch((error) => console.error("Erreur emprunt!", error));
-  //   }
-  // };
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    if (hasErrors) {
+      console.error("Veuillez remplir tous les champs obligatoires!");
+      return;
+    }
+    if (isEditing){
+    Promise.all([
+      axios.patch(
+        // @ts-ignore
+        `${ip}/affectation/${empruntData.idEmprunt}`,
+        empruntData
+      ),
+      axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
+        // @ts-ignore
+        disponibilite: empruntData.disponibilite,
+      }),
+    ])
+      // @ts-ignore
+      .then(([response1, response2]) => {
+        fetchMateriels();
+        setOpenEmprunt(false);
+      })
+      .catch((error) => {
+        console.error("Erreur Emprunt", error);
+      });
+    } else {
+      Promise.all([
+        axios.post(ip + "/emprunt", empruntData),
+        axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
+          // @ts-ignore
+          disponibilite: empruntData.disponibilite,
+        }),
+      ])
+        // @ts-ignore
+        .then((response) => {
+          fetchMateriels();
+          setOpenEmprunt(false);
+        })
+        .catch((error) => console.error("Erreur emprunt!", error));
+    }
+  };
 
   const validateMateriel = (name, value) => {
     let errorMsg = "";
@@ -239,7 +239,7 @@ const DetailsMateriel = () => {
         setAffectations(response.data);
       })
       .catch((error) => {
-        console.error("Erreur récupération des affectations!", error);
+        console.error("Erreur récupération de la liste des installations!", error);
       });
   };
 

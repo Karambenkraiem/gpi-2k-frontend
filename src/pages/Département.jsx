@@ -22,17 +22,19 @@ const Département = () => {
     idDepartement: "",
     nom: "",
   });
-
+const fectchDepartements = ()=> {
+  axios
+  .get(ip + "/departement")
+  .then((response) => {
+    setDepartements(response.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error("Error Fetching Data", error);
+  });
+}
   useEffect(() => {
-    axios
-      .get(ip + "/departement")
-      .then((response) => {
-        setDepartements(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error Fetching Data", error);
-      });
+    fectchDepartements();
   }, []);
 
   const validate = (name, value) => {
@@ -60,10 +62,10 @@ const Département = () => {
   };
 
   const handleSave = () => {
-    const departementToSave = {
-      ...currentDepartement,
-      idDepartement: currentDepartement.idDepartement,
-    };
+    // const departementToSave = {
+    //   ...currentDepartement,
+    //   idDepartement: currentDepartement.idDepartement,
+    // };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error("Veuillez remplir tous les champs obligatoires!");
@@ -72,15 +74,12 @@ const Département = () => {
 
     if (isEditing) {
       axios
-        .patch(ip + `/departement/${departementToSave.idDepartement}`)
+        .patch(ip + `/departement/${currentDepartement.idDepartement}`, {
+          nom: currentDepartement.nom
+        })
         .then((response) => {
-          setDepartements(
-            departements.map((departement) =>
-              departement.idDepartement === departementToSave.idDepartement
-                ? response.data
-                : departement
-            )
-          );
+          setDepartements(response.data);
+          fectchDepartements();
           handleClose();
         })
         .catch((error) => {
@@ -88,7 +87,7 @@ const Département = () => {
         });
     } else {
       axios
-        .post(ip + "/departement", departementToSave)
+        .post(ip + "/departement", currentDepartement)
         .then((response) => {
           setDepartements([...departements, response.data]);
           handleClose();
