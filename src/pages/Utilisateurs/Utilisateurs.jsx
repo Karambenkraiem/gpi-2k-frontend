@@ -97,6 +97,7 @@ const Utilisateurs = () => {
     }
 
     if (isEditing) {
+      // @ts-ignore
       const { Specialite, ...rest } = userToSave;
       axios
         .patch(ip + `/utilisateur/${userToSave.idUtilisateur}`, rest)

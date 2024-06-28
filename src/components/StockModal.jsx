@@ -23,7 +23,7 @@ const style = {
 
 const Categorie = {
     Toner: "Toner",
-    DisqueStoquage: "DisqueStoquage", 
+    DisqueStoquage: "DisqueStockage", 
     Clavier: "Clavier", 
     Souris: "Souris", 
     FlashDisque: "FlashDisque", 
@@ -90,7 +90,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         // @ts-ignore
         const {Alimentation, ...rest}=stockToSave;
       axios
-        .patch(`http://localhost:3000/stocks/${stockToSave.refArt}`, rest)
+        .patch(`${ip}/stocks/${stockToSave.refArt}`, rest)
         .then((response) => {
             setStocks(
                 stocks.map((stock)=>
