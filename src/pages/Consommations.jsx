@@ -40,6 +40,7 @@ const Consommations = () => {
       <DataGrid
         rows={consommations}
         columns={columns}
+        // @ts-ignore
         pageSize={5}
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.idConsommation}

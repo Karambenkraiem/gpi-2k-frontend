@@ -29,6 +29,7 @@ import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
+import BusinessIcon from '@mui/icons-material/Business';
 
 const drawerWidth = 300;
 
@@ -118,6 +119,7 @@ const initialNavItems = [
   },
   {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
   {label: "Ressources logicielles", path:"/logiciels", icon:<InstallDesktopIcon/>},
+  {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
 ];
 
 export default function Main() {

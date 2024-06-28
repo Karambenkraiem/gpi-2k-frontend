@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 const Alimentations = () => {
@@ -39,6 +39,7 @@ const Alimentations = () => {
       <DataGrid
         rows={alimentations}
         columns={columns}
+        // @ts-ignore
         pageSize={5}
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.idAlimentation}
