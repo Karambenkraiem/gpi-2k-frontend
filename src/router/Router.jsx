@@ -41,10 +41,13 @@ export default function Router() {
             <Route path="/emprunt" element={< Emprunt/>} />
             <Route path="/stocks" element={< Stocks/>} />
             <Route path="/detailsStock/:refArt" element={<DetailsStock />} />
-            <Route path="/logiciels" element={< Logiciels/>} />
+            <Route path="/logiciels" element={< Logiciels/>} />            
             <Route path="/alimentations" element={< Alimentations/>} />
             <Route path="/consommations" element={< Consommations/>} />
             <Route path="/societes" element={< Societe/>} />
+            <Route path="/detailsLogiciel/:idLogiciel" element={< DetailsLogiciel/>} />
+
+
 
 
           </Route>
