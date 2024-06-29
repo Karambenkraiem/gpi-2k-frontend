@@ -11,7 +11,6 @@ import SocieteModal from "components/SocieteModal";
 const DetailsSociete = () => {
   const { idSociete } = useParams();
   const [societe, setSociete] = useState({});
-  const [utilisateurs, setUtilisateurs] = useState([]);
   const [materiels, setMateriels] = useState([]);
   const [alimentations, setAlimentations] = useState([]);
   const [logiciels, setLogiciels] = useState([]);
@@ -59,34 +58,29 @@ const DetailsSociete = () => {
       });
   };
 
-  // const fetchLogiciels = () => {
-  //   axios
-  //     .get(ip + `/logiciel`)
-  //     .then((response) => {
-  //       const formattedData = response.data.map((logiciel, index) => ({
-  //         id: logiciel.idLogiciel || index + 1, // Ensure each item has a unique id
-  //         ...logiciel,
-  //       }));
-  //       setLogiciels(formattedData);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erreur récupération logiciels!!!", error);
-  //     });
-  // };
+  const fetchLogiciels = () => {
+    axios
+      .get(ip + `/logiciel`)
+      .then((response) => {
+        const formattedData = response.data.map((logiciel, index) => ({
+          id: logiciel.idLogiciel || index + 1, // Ensure each item has a unique id
+          ...logiciel,
+        }));
+        setLogiciels(formattedData);
+      })
+      .catch((error) => {
+        console.error("Erreur récupération logiciels!!!", error);
+      });
+  };
 
   useEffect(() => {
     fetchSociete();
     fetchMateriels();
     fetchAlimentations();
-    // fetchLogiciels();
-  }, []);
+    fetchLogiciels();
+  }, [idSociete]);
 
-  // const columnsUtilisateurs = [
-  //   { field: "idUtilisateur", headerName: "#ID", width: 100 },
-  //   { field: "fullName", headerName: "Nom & Prénom", width: 200 },
-  //   { field: "email", headerName: "Email", width: 200 },
-  //   { field: "telephone", headerName: "Téléphone", width: 150 },
-  // ];
+  
 
   const columnsMateriels = [
     { field: "numeroSerie", headerName: "Numéro de Série", width: 150 },
@@ -111,20 +105,11 @@ const DetailsSociete = () => {
 
   const [editItem, setEditItem] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
   const handleModalClose = () => {
     setModalOpen(false);
   };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    editItem((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    
-  };
-
+  
   const handleEditSociete = () => {
     setEditItem(societe);
     setModalOpen(true);
@@ -281,9 +266,7 @@ const DetailsSociete = () => {
         <SocieteModal
           open={modalOpen}
           handleClose={handleModalClose}
-          isEditing={true}
-          editItem={editItem}
-          handleChange={handleChange}         
+          editItem={editItem}         
         />
       </section>
     </div>

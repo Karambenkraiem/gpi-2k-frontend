@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Box, TextField, Button, MenuItem } from "@mui/material";
 import axios from "axios";
 import { ip } from "constants/ip";
+import { useParams } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",
@@ -26,9 +27,25 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
     typeSociete: "",
   });
 
+
+
+  const fetchSociete = () => {
+    axios
+      .get(ip + `/societe/${idSociete}`)
+      .then((response) => {
+        setSociete(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur récupération société !!!", error);
+      });
+  };
+
+
   useEffect(() => {
     if (editItem) {
       setSocieteData(editItem);
+      fetchSociete();
     } else {
       setSocieteData({
         raisonSociale: "",
@@ -39,6 +56,8 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
         secteurActivite: "",
         typeSociete: "",
       });
+      fetchSociete();
+
     }
   }, [editItem]);
 
@@ -49,29 +68,70 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
       [name]: value,
     }));
   };
-const [societes,setSocietes] = useState([]);
+  const { idSociete } = useParams();
+  const [societe, setSociete] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const handleSaveSociete = () => {const request = editItem
-    ? axios.patch(`http://localhost:3000/societe/${societeData.idSociete}`, societeData)
-    : axios.post(`${ip}/societe`, societeData);
+  
+  const [societes, setSocietes] = useState([]);
 
-  request
-    .then(() => {      
-      handleClose();
-    })
-    .catch((error) => {
-      console.error("Error saving Societé:", error);
-    });
-      
+  const handleSaveSociete = () => {
+    const societeToSave = { ...societeData };
 
-    request
-      .then(() => {
-        handleClose();
-      })
-      .catch((error) => {
-        console.error("Error saving Societé:", error);
-      });
+    if (editItem) {
+      const { Alimentation, Materiel, Logiciel, ...rest } = societeToSave;
+      axios
+        .patch(`${ip}/societe/${societeToSave.idSociete}`, rest)
+        .then((response) => {
+          setSocietes(
+            societes.map((societe) =>
+              societe.idSociete === societeToSave.idSociete
+                ? response.data
+                : societe
+            )
+          );
+          handleClose();
+          fetchSociete();
+        })
+        .catch((error) => console.error('Error updating stock:', error));
+    }else{
+        axios.post(ip+'/societe', societeToSave)
+        .then((response) => {
+            setSocietes([...societes,response.data]);
+          handleClose();
+          fetchSociete();
+        })
+        .catch((error) => {
+            console.error('Error Ajout societes:', error);
+        });
+    }
   };
+
+  //////////////////////////////////////////////////////////////////////
+  //   const handleSaveSociete = () => {
+  //     const request = editItem
+  //       ? axios.patch(`http://localhost:3000/societe/${societeData.idSociete}`, {
+  //         raisonSociale:societeData.raisonSociale,
+  //         adresse: societeData.adresse,
+  //         responsable: societeData.responsable,
+  //         email: societeData.email,
+  //         numtel: societeData.numtel,
+  //         secteurActivite: societeData.secteurActivite,
+  //         typeSociete: societeData.typeSociete,
+  //       })
+  //       : axios.post(`${ip}/societe`, societeData);
+
+  //     request
+  //       .then(() => {
+  //         handleClose();
+  //         fetchSociete();
+
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error saving Societé:", error);
+  //       });
+  //   };
+  ///////////////////////////////////////////////////////////////////////
 
   return (
     <Modal open={open} onClose={handleClose}>
