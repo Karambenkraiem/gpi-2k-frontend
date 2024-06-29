@@ -155,7 +155,7 @@ const Logiciels = () => {
       headerAlign: "center",
       width: 400,
       renderCell: (params) => (
-        <div text-align="letf">
+        <div text-align="left">
           <Button title="Voir détails logiciel"
           onClick={() => handleView(params.row.idLogiciel)}
           >

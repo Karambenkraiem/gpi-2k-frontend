@@ -21,6 +21,7 @@ import Alimentations from "pages/Alimentations";
 import Consommations from "pages/Consommations";
 import Societe from "pages/Societe";
 import DetailsLogiciel from "pages/DetailsLogiciel";
+import DetailsSociete from "pages/DetailsSociete";
 
 
 export default function Router() {
@@ -46,6 +47,7 @@ export default function Router() {
             <Route path="/consommations" element={< Consommations/>} />
             <Route path="/societes" element={< Societe/>} />
             <Route path="/detailsLogiciel/:idLogiciel" element={< DetailsLogiciel/>} />
+            <Route path="/detailsSociete/:idSociete" element={< DetailsSociete/>} />
 
 
 

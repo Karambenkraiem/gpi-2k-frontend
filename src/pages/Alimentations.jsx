@@ -36,7 +36,7 @@ const Alimentations = () => {
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
       >
-        <ReplyAllIcon/>  Back
+        <ReplyAllIcon/>  RETOUR
       </Button>
       <DataGrid
         rows={alimentations}

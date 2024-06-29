@@ -36,14 +36,14 @@ const StockDetails = () => {
   return (
     <Container>
       <Button onClick={() => navigate(-1)} variant="contained" style={{ marginBottom: 16 }}>
-        Back
+        RETOUR
       </Button>
-      <Paper elevation={3} style={{ padding: 16 }}>
-        <Typography variant="h2" gutterBottom>
-        Detail d'article
+      <Paper elevation={3}   style={{ padding: 16  }}>
+        <Typography variant="h4" gutterBottom>
+        Details d'article
         </Typography>
         <Box mb={2}>
-          <Typography variant="h3">{stock.categorie}</Typography>
+          <Typography variant="h5">{stock.categorie}</Typography>
           <Typography variant="h6">Marque: {stock.marque}</Typography>
           <Typography variant="h6">Modèle: {stock.modele}</Typography>
           <Typography variant="h6">Prix: {stock.prix} TND</Typography>

@@ -8,6 +8,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SocieteModal from '../components/SocieteModal';
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import { useNavigate } from 'react-router-dom';
 
 const Societes = () => {
   const [societes, setSocietes] = useState([]);
@@ -43,10 +46,12 @@ const Societes = () => {
     setEditItem(societe);
     setOpenModal(true);
   };
+  const Navigate = useNavigate();
 
-  const handleViewSociete = (societe) => {
-    // Implement view logic here, for now just console.log
-    console.log('View Societe:', societe);
+  const handleViewSociete = (idSociete) => {
+    Navigate(`/detailsSociete/${idSociete}`);
+
+    console.log('View Societe:', idSociete);
   };
 
   const handleDeleteSociete = (idSociete) => {
@@ -64,7 +69,7 @@ const Societes = () => {
     { field: 'raisonSociale', headerName: 'Raison Sociale', width: 200 },
     { field: 'adresse', headerName: 'Adresse', width: 200 },
     { field: 'responsable', headerName: 'Responsable', width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
+    // { field: 'email', headerName: 'Email', width: 200 },
     { field: 'numtel', headerName: 'Numéro Téléphone', width: 150 },
     { field: 'secteurActivite', headerName: 'Secteur Activité', width: 150 },
     { field: 'typeSociete', headerName: 'Type Société', width: 150 },
@@ -74,15 +79,15 @@ const Societes = () => {
       width: 150,
       renderCell: (params) => (
         <Box>
-          <IconButton onClick={() => handleViewSociete(params.row)}>
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton onClick={() => handleEditSociete(params.row)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDeleteSociete(params.row.idSociete)}>
+          <Button onClick={() => handleViewSociete(params.row.idSociete)}>
+            <VisibilityOutlinedIcon />
+          </Button>
+          <Button onClick={() => handleEditSociete(params.row)}>
+            <EditNoteIcon />
+          </Button>
+          <Button onClick={() => handleDeleteSociete(params.row.idSociete)}>
             <DeleteIcon />
-          </IconButton>
+          </Button>
         </Box>
       ),
     },

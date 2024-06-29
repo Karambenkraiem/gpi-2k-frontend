@@ -14,6 +14,8 @@ import AlimentationModal from "../components/AlimentationModal";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import ConsommationModal from "components/ConsommationModal";
 import RemoveIcon from "@mui/icons-material/Remove";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -180,14 +182,14 @@ const Stocks = () => {
             color="primary"
             onClick={() => handleView(params.row.refArt)}
           >
-            <VisibilityIcon />
+            <VisibilityOutlinedIcon />
           </IconButton>
           <IconButton color="primary" onClick={() => handleEdit(params.row)}>
-            <EditIcon />
+            <EditNoteIcon />
           </IconButton>
 
           <Button
-            variant="contained"
+            // variant="contained"
             color="primary"
             startIcon={<AddIcon />}
             onClick={() => handleAlimentation(params.row)}
@@ -195,7 +197,7 @@ const Stocks = () => {
             Alimenter
           </Button>
           <Button
-            variant="contained"
+            // variant="contained"
             color="secondary"
             onClick={() => handleConsommation(params.row)}
             startIcon={<RemoveIcon />}
@@ -236,7 +238,7 @@ const Stocks = () => {
   </Button>
   <Box display="flex" gap={2}>
     <Button
-      variant="contained"
+      // variant="contained"
       color="primary"
       startIcon={<HistoryOutlinedIcon />}
       onClick={handleHistoriqueAlimentation}
@@ -244,7 +246,7 @@ const Stocks = () => {
       Historique Alimentation
     </Button>
     <Button
-      variant="contained"
+      // variant="contained"
       color="primary"
       startIcon={<HistoryOutlinedIcon />}
       onClick={handleHistoriqueConsommation}
