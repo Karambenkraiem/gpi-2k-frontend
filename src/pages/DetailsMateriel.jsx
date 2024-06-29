@@ -11,12 +11,14 @@ import AffectationModal from "../components/AffectationModal";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EmpruntModal from "components/EmpruntModal";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -27,6 +29,7 @@ const DetailsMateriel = () => {
   const [errors, setErrors] = useState({});
   const [openAffectation, setOpenAffectation] = useState(false);
   const [openEmprunt, setOpenEmprunt] = useState(false);
+  const navigate = useNavigate();
   // @ts-ignore
   const [materiels, setMateriels] = useState([]);
   // @ts-ignore
@@ -378,6 +381,18 @@ const DetailsMateriel = () => {
       <h1>Details matériel</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
+        <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            style={{
+              marginBottom: 16,
+              backgroundColor: "blue",
+              color: "white",
+            }}
+            className="d-flex align-items-left"
+          >
+            <ReplyAllIcon /> Retour
+          </Button>
           <Row>
             <Col>
               <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">

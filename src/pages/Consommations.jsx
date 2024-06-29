@@ -3,12 +3,14 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+import { ip } from 'constants/ip';
 
 const Consommations = () => {
   const [consommations, setConsommations] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/consommation')
+    axios.get(ip+'/consommation')
       .then(response => {
         setConsommations(response.data);
       })
@@ -35,7 +37,7 @@ const Consommations = () => {
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
       >
-        Back
+        <ReplyAllIcon/> Back
       </Button>
       <DataGrid
         rows={consommations}

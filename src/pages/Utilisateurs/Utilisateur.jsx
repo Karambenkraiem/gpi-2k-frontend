@@ -8,7 +8,7 @@ import { LuClipboardEdit } from "react-icons/lu";
 import { RxDividerVertical } from "react-icons/rx";
 import UtilisateurModal from "../../components/UtilisateurModal";
 import { ip } from "constants/ip";
-
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 
 const Utilisateur = () => {
   const { idUtilisateur } = useParams();
@@ -39,7 +39,7 @@ const Utilisateur = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentUser((prev) => ({
@@ -113,18 +113,13 @@ const Utilisateur = () => {
     };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
-      console.error(
-        "Veuillez remplir tous les champs obligatoires!"
-      );
+      console.error("Veuillez remplir tous les champs obligatoires!");
       return;
     }
     // @ts-ignore
     const { Specialite, ...rest } = userToSave;
     axios
-      .patch(
-        ip + `/utilisateur/${userToSave.idUtilisateur}`,
-        rest
-      )
+      .patch(ip + `/utilisateur/${userToSave.idUtilisateur}`, rest)
       .then((response) => {
         setUsers(
           users.map((user) =>
@@ -153,19 +148,14 @@ const Utilisateur = () => {
 
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-          <Row>
-            <Col>
-              <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
-                <Breadcrumb.Item href="/">Accueil</Breadcrumb.Item>
-                <Breadcrumb.Item href="/utilisateurs">
-                  Utilisateurs
-                </Breadcrumb.Item>
-                <Breadcrumb.Item active aria-current="page">
-                  Profile Utilisateur
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </Col>
-          </Row>
+          <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary" // Use primary color
+            style={{ marginBottom: 16, backgroundColor:'#3B71CA', color: 'white' }}
+          >
+            <ReplyAllIcon /> Back
+          </Button>
           <Row>
             <Col lg={6}>
               <Card className="mb-6">
@@ -284,8 +274,10 @@ const Utilisateur = () => {
                     </Col>
                     <Col sm={9}>
                       <p className="text-muted mb-0">
-                        {// @ts-ignore
-                        user.lastLogin || "N/A"}
+                        {
+                          // @ts-ignore
+                          user.lastLogin || "N/A"
+                        }
                       </p>
                     </Col>
                   </Row>

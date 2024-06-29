@@ -41,7 +41,9 @@ const Emprunt = () => {
   
 
   return (
+    
     <div style={{ height: 600, width: '100%' }}>
+      
       <DataGrid
         rows={rows}
         columns={columns}
