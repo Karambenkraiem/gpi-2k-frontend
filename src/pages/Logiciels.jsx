@@ -18,7 +18,7 @@ const Logiciels = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [errors, setErrors] = useState({});
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [logicielData, setLogicielData] = useState({
     idLogiciel: "",
     libelle: "",
@@ -115,7 +115,7 @@ const Logiciels = () => {
   };
 
   const handleView = (id) => {
-    Navigate(`/detailsLogiciel/${id}`);
+    navigate(`/detailsLogiciel/${id}`);
   };
 
   const handleEdit = (rowData) => {

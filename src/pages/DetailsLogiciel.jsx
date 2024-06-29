@@ -3,13 +3,15 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
 import { ip } from "constants/ip";
 import InstallDesktopIcon from "@mui/icons-material/InstallDesktop";
-import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 import RestorePageIcon from "@mui/icons-material/RestorePage";
+import LicenceModal from "components/LicenceModal";
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+import InstallLicenceModal from "components/InstallLicenceModal";
 
 const DetailsLogiciel = () => {
   const { idLogiciel } = useParams();
@@ -19,15 +21,27 @@ const DetailsLogiciel = () => {
   const [licences, setLicences] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openInstallModal, setOpenInstallModal] = useState(false);
+  const navigate = useNavigate();
   const [licenceData, setLicenceData] = useState({
     idLicence: "",
     numeroLicence: "",
     dateActivation: "",
     dateExpiration: "",
     prixLicence: null,
-    idLogiciel: "",
-    statut: "",
+    idLogiciel: idLogiciel,
+    statutLicence: "",
   });
+
+  const [installationData, setInstallationData] = useState({
+    idLicence: "",
+    numeroLicence: "",
+    numeroSerie: "",
+    dateInstallation: "",
+    dateDesinstallation: "",
+    statutLicence: "",
+  });
+
   const fetchSocieties = () => {
     axios
       .get(ip + `/societe`)
@@ -74,7 +88,7 @@ const DetailsLogiciel = () => {
       });
   };
 
-  const handleOpenModal = (licence = null) => {
+  const handleOpen = (licence = null) => {
     if (licence) {
       setLicenceData(licence);
       setIsEditing(true);
@@ -85,12 +99,125 @@ const DetailsLogiciel = () => {
         dateActivation: "",
         dateExpiration: "",
         prixLicence: null,
-        idLogiciel: "",
-        statut: "",
+        idLogiciel: idLogiciel,
+        statutLicence: "",
       });
+      console.log(idLogiciel);
       setIsEditing(false);
     }
     setOpenModal(true);
+  };
+
+  const handleInstallOpen = (licence = null, numLicence = "") => {
+    if (licence) {
+      setInstallationData(licence);
+      setIsEditing(true);
+    } else {
+      setInstallationData({
+        idLicence: "",
+        numeroLicence: numLicence,
+        numeroSerie: "",
+        dateInstallation: "",
+        dateDesinstallation: "",
+        statutLicence: "",
+      });
+      console.log(idLogiciel);
+      setIsEditing(false);
+    }
+    setOpenInstallModal(true);
+  };
+
+  const handleSave = () => {
+    if (isEditing) {
+      axios
+        .patch(`${ip}/licence/${parseInt(licenceData.idLicence, 10)}`, {
+          numeroLicence: licenceData.numeroLicence,
+          dateActivation: licenceData.dateActivation,
+          dateExpiration: licenceData.dateExpiration,
+          prixLicence: parseFloat(licenceData.prixLicence),
+          statutLicence: licenceData.statutLicence,
+          idLogiciel: parseInt(licenceData.idLogiciel),
+        })
+        .then((response) => {
+          setLicences([...licences, response.data]);
+          fetchLicences();
+          handleClose();
+        })
+        .catch((error) =>
+          console.error("Probleme modification de la licence", error)
+        );
+    } else {
+      axios
+        .post(`${ip}/licence`, {
+          numeroLicence: licenceData.numeroLicence,
+          dateActivation: licenceData.dateActivation,
+          dateExpiration: licenceData.dateExpiration,
+          prixLicence: parseFloat(licenceData.prixLicence),
+          statutLicence: licenceData.statutLicence,
+          idLogiciel: parseInt(licenceData.idLogiciel),
+        })
+        .then((response) => {
+          setLicences([...licences, response.data]);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Erreur ajout de la licence!");
+        });
+    }
+  };
+
+  const handleSaveInstallation = () => {
+    if (isEditing) {
+      axios
+        .patch(`${ip}/licence/${parseInt(licenceData.idLicence, 10)}`, {
+          numeroLicence: licenceData.numeroLicence,
+          dateActivation: licenceData.dateActivation,
+          dateExpiration: licenceData.dateExpiration,
+          prixLicence: parseFloat(licenceData.prixLicence),
+          statutLicence: licenceData.statutLicence,
+          idLogiciel: parseInt(licenceData.idLogiciel),
+        })
+        .then((response) => {
+          setLicences([...licences, response.data]);
+          fetchLicences();
+          handleClose();
+        })
+        .catch((error) =>
+          console.error("Probleme modification de la licence", error)
+        );
+    } else {
+      Promise.all([
+        axios.post(`${ip}/installation`, {
+          numeroLicence: installationData.idLicence,
+          dateActivation: installationData.dateInstallation,
+        }),
+        axios.patch(`${ip}/licence/${parseInt(licenceData.idLicence, 10)}`, {
+          statutLicence: licenceData.statutLicence,
+        }),
+      ])
+        .then((response1, response2) => {
+          fetchLicences();
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Erreur ajout de la licence!");
+        });
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLicenceData({ ...licenceData, [name]: value });
+  };
+
+  const handleChangeInstall = (e) => {
+    const { name, value } = e.target;
+    setInstallationData({ ...installationData, [name]: value });
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+    setOpenInstallModal(false);
   };
 
   const nomSociete = societies.find(
@@ -115,7 +242,10 @@ const DetailsLogiciel = () => {
       width: 200,
       renderCell: (params) => (
         <div text-align="letf">
-          <Button title="Modifier licence" onClick={null}>
+          <Button
+            title="Modifier licence"
+            onClick={() => handleOpen(params.row)}
+          >
             <EditNoteIcon />
           </Button>
           <Button
@@ -124,7 +254,7 @@ const DetailsLogiciel = () => {
               params.row.disponibilite === "Affecté" ||
               params.row.disponibilite === "Emprunté"
             }
-            onClick={null}
+            onClick={() => handleInstallOpen(null, params.row.numeroLicence)}
           >
             <InstallDesktopIcon />
           </Button>
@@ -134,7 +264,7 @@ const DetailsLogiciel = () => {
               params.row.disponibilite === "Affecté" ||
               params.row.disponibilite === "Emprunté"
             }
-            onClick={null}
+            onClick={() => handleInstallOpen(params.row)}
           >
             <RestorePageIcon />
           </Button>
@@ -143,10 +273,11 @@ const DetailsLogiciel = () => {
     },
 
     { field: "idLicence", headerName: "#ID", width: 50 },
-    { field: "numeroLicence", headerName: "N° Licence", width: 200 },
-    { field: "statut", headerName: "Statut", width: 100 },
+    { field: "numeroLicence", headerName: "N° Licence", width: 300 },
+    { field: "statutLicence", headerName: "Statut", width: 100 },
     { field: "dateActivation", headerName: "Date Activation", width: 150 },
     { field: "dateExpiration", headerName: "Date expiration", width: 150 },
+    { field: "prixLicence", headerName: "Prix en DT", width: 150 },
   ];
 
   return (
@@ -154,17 +285,15 @@ const DetailsLogiciel = () => {
       <h1>Details logiciels</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-          <Row>
-            <Col>
-              <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
-                <Breadcrumb.Item href="/">Accueil</Breadcrumb.Item>
-                <Breadcrumb.Item href="/logiciels">Logiciels</Breadcrumb.Item>
-                <Breadcrumb.Item active aria-current="page">
-                  Détails logiciel
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </Col>
-          </Row>
+          <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary" // Use primary color
+            style={{ marginBottom: 16 }}
+          >
+            <ReplyAllIcon /> Back
+          </Button>
+
           <Row>
             <Col lg={4}>
               <Card className="mb-1">
@@ -215,11 +344,27 @@ const DetailsLogiciel = () => {
                       variant="contained"
                       color="primary"
                       // @ts-ignore
-                      onClick={handleOpenModal}
+                      onClick={() => handleOpen(null)}
                     >
                       <InstallDesktopIcon />_ Ajouter Licence
                     </Button>
                   </Box>
+                  <LicenceModal
+                    openModal={openModal}
+                    handleClose={handleClose}
+                    isEditing={isEditing}
+                    licenceData={licenceData}
+                    handleChange={handleChange}
+                    handleSave={handleSave}
+                  />
+                  <InstallLicenceModal
+                    openInstallModal={openInstallModal}
+                    handleClose={handleClose}
+                    isEditing={isEditing}
+                    installationData={licenceData}
+                    handleChange={handleChangeInstall}
+                    handleSave={handleSave}
+                  />
                 </Card.Body>
               </Card>
             </Col>

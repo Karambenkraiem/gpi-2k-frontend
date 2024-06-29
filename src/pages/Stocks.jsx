@@ -226,33 +226,36 @@ const Stocks = () => {
 
   return (
     <div>
-      <Box display="flex" justifyContent="space-between" marginBottom={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
-          style={{ marginRight: "16" }} // Ensure this button stays on the left
-        >
-          Ajouter Article
-        </Button>
-        <Button
-          // variant="contained"
-          color="primary"
-          startIcon={<HistoryOutlinedIcon />}
-          onClick={handleHistoriqueAlimentation}
-        >
-          Historique Alimentation
-        </Button>
-        <Button
-          // variant="contained"
-          color="primary"
-          startIcon={<HistoryOutlinedIcon />}
-          onClick={handleHistoriqueConsommation}
-        >
-          Historique Consommation
-        </Button>
-      </Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
+  <Button
+    variant="contained"
+    color="primary"
+    startIcon={<AddIcon />}
+    onClick={handleAdd}
+    style={{ marginRight: 16 }}
+  >
+    Ajouter Article
+  </Button>
+  <Box display="flex" gap={2}>
+    <Button
+      // variant="contained"
+      color="primary"
+      startIcon={<HistoryOutlinedIcon />}
+      onClick={handleHistoriqueAlimentation}
+    >
+      Historique Alimentation
+    </Button>
+    <Button
+      // variant="contained"
+      color="primary"
+      startIcon={<HistoryOutlinedIcon />}
+      onClick={handleHistoriqueConsommation}
+    >
+      Historique Consommation
+    </Button>
+  </Box>
+</Box>
+
 
       <DataGrid
         rows={stocks}
