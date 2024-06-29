@@ -35,7 +35,7 @@ const Consommations = () => {
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
       >
-        Back
+        RETOUR
       </Button>
       <DataGrid
         rows={consommations}

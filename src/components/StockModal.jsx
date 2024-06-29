@@ -23,7 +23,7 @@ const style = {
 
 const Categorie = {
     Toner: "Toner",
-    DisqueStoquage: "DisqueStockage", 
+    DisqueStoquage: "DisqueStoquage", 
     Clavier: "Clavier", 
     Souris: "Souris", 
     FlashDisque: "FlashDisque", 
