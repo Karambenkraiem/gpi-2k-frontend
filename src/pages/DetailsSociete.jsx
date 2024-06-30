@@ -2,11 +2,13 @@ import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { DataGrid } from "@mui/x-data-grid";
 import SocieteModal from "components/SocieteModal";
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+
 
 const DetailsSociete = () => {
   const { idSociete } = useParams();
@@ -60,8 +62,8 @@ const DetailsSociete = () => {
 
   const fetchLogiciels = () => {
     axios
-      .get(ip + `/logiciel`)
-      .then((response) => {
+    .get(ip + `/societe/${idSociete}/logiciel`)
+    .then((response) => {
         const formattedData = response.data.map((logiciel, index) => ({
           id: logiciel.idLogiciel || index + 1, // Ensure each item has a unique id
           ...logiciel,
@@ -80,7 +82,8 @@ const DetailsSociete = () => {
     fetchLogiciels();
   }, [idSociete]);
 
-  
+  const navigate = useNavigate();
+
 
   const columnsMateriels = [
     { field: "numeroSerie", headerName: "Numéro de Série", width: 150 },
@@ -108,8 +111,16 @@ const DetailsSociete = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
+    fetchSociete();
+
   };
-  
+  const handleRowClick = (params, type) => {
+    const item = params.row;
+    // You can navigate to a detail view or show a modal with item details
+    console.log("Selected item:", item);
+    // For now, just logging the item. You can add navigation or modal code here.
+    navigate(`/detail/${type}/${item.id}`);
+  };
   const handleEditSociete = () => {
     setEditItem(societe);
     setModalOpen(true);
@@ -119,18 +130,15 @@ const DetailsSociete = () => {
       <h1>Détails Société</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-          <Row>
-            <Col>
-              <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
-                <Breadcrumb.Item href="/">Accueil</Breadcrumb.Item>
-                <Breadcrumb.Item href="/societe">Sociétés</Breadcrumb.Item>
-                <Breadcrumb.Item active aria-current="page">
-                  Détails Société
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </Col>
-          </Row>
-          <Row>
+        <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary" // Use primary color
+            style={{ marginBottom: 16 }}
+          >
+            <ReplyAllIcon /> Back
+          </Button>
+          <Row >
             <Col lg={4}>
               <Card className="mb-6">
                 <Card.Body className="text-left">
@@ -214,6 +222,8 @@ const DetailsSociete = () => {
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
+
+                          
                         />
                       </div>
                     </Col>
@@ -224,7 +234,7 @@ const DetailsSociete = () => {
                 <Card.Body>
                   <Row>
                     <Col sm={6}>
-                      <p className="mb-0">Alimentations Associées</p>
+                      <p className="mb-0">Accessoires et consommables Associées</p>
                     </Col>
                     <Col sm={12}>
                       <div style={{ height: 300, width: "100%" }}>
@@ -254,6 +264,7 @@ const DetailsSociete = () => {
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
+
                         />
                       </div>
                     </Col>
