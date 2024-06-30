@@ -119,6 +119,7 @@ const Societes = () => {
         open={openModal}
         handleClose={handleCloseModal}
         editItem={editItem}
+
       />
     </div>
   );
