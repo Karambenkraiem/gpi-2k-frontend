@@ -2,9 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, IconButton } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import StockModal from "../components/StockModal";
@@ -226,36 +223,40 @@ const Stocks = () => {
 
   return (
     <div>
-      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
-  <Button
-    variant="contained"
-    color="primary"
-    startIcon={<AddIcon />}
-    onClick={handleAdd}
-    style={{ marginRight: 16 }}
-  >
-    Ajouter Article
-  </Button>
-  <Box display="flex" gap={2}>
-    <Button
-      // variant="contained"
-      color="primary"
-      startIcon={<HistoryOutlinedIcon />}
-      onClick={handleHistoriqueAlimentation}
-    >
-      Historique Alimentation
-    </Button>
-    <Button
-      // variant="contained"
-      color="primary"
-      startIcon={<HistoryOutlinedIcon />}
-      onClick={handleHistoriqueConsommation}
-    >
-      Historique Consommation
-    </Button>
-  </Box>
-</Box>
-
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        marginBottom={2}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAdd}
+          style={{ marginRight: 16 }}
+        >
+          Ajouter Article
+        </Button>
+        <Box display="flex" gap={2}>
+          <Button
+            // variant="contained"
+            color="primary"
+            startIcon={<HistoryOutlinedIcon />}
+            onClick={handleHistoriqueAlimentation}
+          >
+            Historique Alimentation
+          </Button>
+          <Button
+            // variant="contained"
+            color="primary"
+            startIcon={<HistoryOutlinedIcon />}
+            onClick={handleHistoriqueConsommation}
+          >
+            Historique Consommation
+          </Button>
+        </Box>
+      </Box>
 
       <DataGrid
         rows={stocks}

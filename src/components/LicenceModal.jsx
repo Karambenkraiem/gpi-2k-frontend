@@ -39,6 +39,7 @@ const LicenceModal = ({
   const StatutLicence = {
     Assignée: "Assignée",
     Disponible: "Disponible",
+    Expirée: "Expirée"
   };
 
   const fetchSocietes = () => {

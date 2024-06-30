@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { ip } from "constants/ip";
 import InstallDesktopIcon from "@mui/icons-material/InstallDesktop";
-import RestorePageIcon from "@mui/icons-material/RestorePage";
 import LicenceModal from "components/LicenceModal";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import InstallLicenceModal from "components/InstallLicenceModal";
@@ -34,8 +33,8 @@ const DetailsLogiciel = () => {
   });
 
   const [installationData, setInstallationData] = useState({
-    idLicence: "",
     numeroLicence: "",
+    idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
@@ -108,14 +107,20 @@ const DetailsLogiciel = () => {
     setOpenModal(true);
   };
 
-  const handleInstallOpen = (licence = null, numLicence = "") => {
-    if (licence) {
-      setInstallationData(licence);
+  // const handleEdit = (rowData) => {
+  //   setFormData(rowData);
+  //   setIsEditing(true);
+  //   setOpen(true);
+  // };
+
+  const handleInstallOpen = (rowData = null, idLic, NumLic) => {
+    if (rowData) {
+      setInstallationData(rowData);
       setIsEditing(true);
     } else {
       setInstallationData({
-        idLicence: "",
-        numeroLicence: numLicence,
+        numeroLicence: NumLic,
+        idLicence: idLic,
         numeroSerie: "",
         dateInstallation: "",
         dateDesinstallation: "",
@@ -168,17 +173,20 @@ const DetailsLogiciel = () => {
 
   const handleSaveInstallation = () => {
     if (isEditing) {
-      axios
-        .patch(`${ip}/licence/${parseInt(licenceData.idLicence, 10)}`, {
-          numeroLicence: licenceData.numeroLicence,
-          dateActivation: licenceData.dateActivation,
-          dateExpiration: licenceData.dateExpiration,
-          prixLicence: parseFloat(licenceData.prixLicence),
-          statutLicence: licenceData.statutLicence,
-          idLogiciel: parseInt(licenceData.idLogiciel),
-        })
-        .then((response) => {
-          setLicences([...licences, response.data]);
+      Promise.all([
+        axios.patch(
+          `${ip}/installation${parseInt(installationData.idLicence)}`,
+          {
+            numeroSerie: installationData.numeroSerie,
+            dateInstallation: installationData.dateInstallation,
+            dateExpiration: installationData.dateDesinstallation,
+          }
+        ),
+        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+          statutLicence: installationData.statutLicence,
+        }),
+      ])
+        .then((response1, response2) => {
           fetchLicences();
           handleClose();
         })
@@ -188,11 +196,13 @@ const DetailsLogiciel = () => {
     } else {
       Promise.all([
         axios.post(`${ip}/installation`, {
-          numeroLicence: installationData.idLicence,
-          dateActivation: installationData.dateInstallation,
+          idLicence: installationData.idLicence,
+          numeroSerie: installationData.numeroSerie,
+          dateInstallation: installationData.dateInstallation,
+          dateDesinstallation:null,
         }),
-        axios.patch(`${ip}/licence/${parseInt(licenceData.idLicence, 10)}`, {
-          statutLicence: licenceData.statutLicence,
+        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+          statutLicence: installationData.statutLicence,
         }),
       ])
         .then((response1, response2) => {
@@ -239,7 +249,7 @@ const DetailsLogiciel = () => {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-      width: 200,
+      width: 150,
       renderCell: (params) => (
         <div text-align="letf">
           <Button
@@ -250,24 +260,21 @@ const DetailsLogiciel = () => {
           </Button>
           <Button
             title="Assigner une licence"
-            disabled={
-              params.row.disponibilite === "Affecté" ||
-              params.row.disponibilite === "Emprunté"
+            onClick={() =>
+              handleInstallOpen(
+                null,
+                params.row.idLicence,
+                params.row.numeroLicence
+              )
             }
-            onClick={() => handleInstallOpen(null, params.row.numeroLicence)}
+            disabled={
+              params.row.statutLicence === "Assignée" ||
+              params.row.statutLicence === "Expirée"
+            }
           >
             <InstallDesktopIcon />
           </Button>
-          <Button
-            title="Retirer une licence"
-            disabled={
-              params.row.disponibilite === "Affecté" ||
-              params.row.disponibilite === "Emprunté"
-            }
-            onClick={() => handleInstallOpen(params.row)}
-          >
-            <RestorePageIcon />
-          </Button>
+
         </div>
       ),
     },
@@ -281,6 +288,7 @@ const DetailsLogiciel = () => {
   ];
 
   return (
+
     <div>
       <h1>Details logiciels</h1>
       <section style={{ backgroundColor: "#eee" }}>
@@ -361,9 +369,9 @@ const DetailsLogiciel = () => {
                     openInstallModal={openInstallModal}
                     handleClose={handleClose}
                     isEditing={isEditing}
-                    installationData={licenceData}
+                    installationData={installationData}
                     handleChange={handleChangeInstall}
-                    handleSave={handleSave}
+                    handleSave={handleSaveInstallation}
                   />
                 </Card.Body>
               </Card>
