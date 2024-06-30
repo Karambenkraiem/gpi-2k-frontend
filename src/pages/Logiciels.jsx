@@ -10,6 +10,8 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import LogicielModal from "components/LogicielModal";
 import { useNavigate } from "react-router-dom";
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import AddIcon from "@mui/icons-material/Add";
 
 const Logiciels = () => {
   const [logiciels, setLogiciels] = useState([]);
@@ -156,8 +158,9 @@ const Logiciels = () => {
       width: 400,
       renderCell: (params) => (
         <div text-align="left">
-          <Button title="Voir détails logiciel"
-          onClick={() => handleView(params.row.idLogiciel)}
+          <Button
+            title="Voir détails logiciel"
+            onClick={() => handleView(params.row.idLogiciel)}
           >
             <VisibilityOutlinedIcon />
           </Button>
@@ -193,18 +196,39 @@ const Logiciels = () => {
     },
   ];
 
+  const handleHistoriqueInstallations = () => {
+    navigate(`/installations`);
+  };
+
   return (
     <div>
       <h1>Gestion des logiciels</h1>
       <Box sx={{ height: 560, width: "100%" }}>
-        <Box sx={{ mb: 2 }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          marginBottom={2}
+        >
           <Button
             variant="contained"
             color="primary"
+            startIcon={<AddIcon />}
             onClick={() => handleOpen(null)}
+            style={{ marginRight: 16 }}
           >
-            + Ajouter logiciel
+            + Ajouter Logiciel
           </Button>
+          <Box display="flex" gap={2}>
+            <Button
+              // variant="contained"
+              color="primary"
+              startIcon={<HistoryOutlinedIcon />}
+              onClick={handleHistoriqueInstallations}
+            >
+              Historique des installations
+            </Button>
+          </Box>
         </Box>
 
         <LogicielModal

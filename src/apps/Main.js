@@ -28,7 +28,7 @@ import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
+import AppsIcon from '@mui/icons-material/Apps';
 import BusinessIcon from '@mui/icons-material/Business';
 
 const drawerWidth = 300;
@@ -118,7 +118,7 @@ const initialNavItems = [
     ]
   },
   {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
-  {label: "Ressources logicielles", path:"/logiciels", icon:<InstallDesktopIcon/>},
+  {label: "Ressources logicielles", path:"/logiciels", icon:<AppsIcon/>},
   {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
 ];
 

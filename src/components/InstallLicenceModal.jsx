@@ -10,7 +10,6 @@ import {
 import axios from "axios";
 import { ip } from "constants/ip";
 import dayjs from "dayjs";
-import Emprunt from "pages/Emprunt";
 import React, { useEffect, useState } from "react";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
@@ -24,6 +23,15 @@ const InstallLicenceModal = ({
   handleSave,
 }) => {
   const [materiels, setMateriels] = useState([]);
+  const [licence, setLicence] = useState({
+    idLicence: "",
+    numeroLicence: "",
+    dateActivation: "",
+    dateExpiration: "",
+    prixLicence: null,
+    idLogiciel: "",
+    statutLicence: "",
+  });
   const StatutLicence = {
     Assignée: "Assignée",
     Disponible: "Disponible",
@@ -31,11 +39,22 @@ const InstallLicenceModal = ({
 
   const fetchMateriels = () => {
     axios
-      .get(ip + "/materiel")
+      .get(ip + "/materiel/pc")
       .then((response) => {
         setMateriels(response.data);
       })
       .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const fetchLicence = () => {
+    axios
+      .get(ip + `/licence/${installationData.idLicence}`)
+      .then((response) => {
+        setLicence(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur récupération de la liste des licences!", error);
+      });
   };
 
   useEffect(() => {
@@ -68,6 +87,7 @@ const InstallLicenceModal = ({
           fullWidth
           margin="normal"
           type="text"
+          disabled
         />
 
         <InputLabel htmlFor="materiels">Matéreil</InputLabel>
@@ -92,44 +112,45 @@ const InstallLicenceModal = ({
           label={"Date d'installation"}
           placeholder="Sélectionner une date"
           name="dateInstallation"
-          value={dayjs(installationData?.dateInstallation).format("YYYY-MM-DD")}
+          value={dayjs(installationData?.dateInstallation).format("YYYY-MM-DD") || null}
           type="date"
           onChange={handleChange}
           fullWidth
           margin="normal"
         />
-        {
-          // @ts-ignore
-          isEditing && (
-            <TextField
-              label={"Date désinstallation"}
-              placeholder="Sélectionner une date"
-              name="dateDesinstallation"
-              value={dayjs(installationData?.dateDesinstallation).format(
-                "YYYY-MM-DD"
-              )}
-              type="date"
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-          )
-        }
-        <TextField
-          select
-          label="Statut de la licence"
+
+        {isEditing && (
+          <TextField
+            label={"Date désinstallation"}
+            placeholder="Sélectionner une date"
+            name="dateDesinstallation"
+            value={dayjs(installationData?.dateDesinstallation).format(
+              "YYYY-MM-DD"
+            )  || null}
+            type="date"
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+        )}
+
+        <InputLabel htmlFor="statutLicence">Statut</InputLabel>
+        <Select
+          label="Statut"
           name="statutLicence"
+          required
           value={installationData.statutLicence}
           onChange={handleChange}
           fullWidth
-          margin="normal"
+          style={{ marginTop: "1rem" }}
+          disabled={installationData.statutLicence == "Assignée"}
         >
-          {Object.values(StatutLicence).map((etat) => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
+          {Object.values(StatutLicence).map((elem) => (
+            <MenuItem key={elem} value={elem}>
+              {elem}
             </MenuItem>
           ))}
-        </TextField>
+        </Select>
 
         <Box
           display="flex"

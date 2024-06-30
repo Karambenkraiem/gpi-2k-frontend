@@ -22,6 +22,7 @@ import Consommations from "pages/Consommations";
 import Societe from "pages/Societe";
 import DetailsLogiciel from "pages/DetailsLogiciel";
 import DetailsSociete from "pages/DetailsSociete";
+import Installations from "pages/Installations";
 
 
 export default function Router() {
@@ -48,7 +49,7 @@ export default function Router() {
             <Route path="/societes" element={< Societe/>} />
             <Route path="/detailsLogiciel/:idLogiciel" element={< DetailsLogiciel/>} />
             <Route path="/detailsSociete/:idSociete" element={< DetailsSociete/>} />
-
+            <Route path="/installations" element={< Installations/>} />
 
 
 
