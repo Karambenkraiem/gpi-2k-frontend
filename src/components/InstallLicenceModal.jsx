@@ -59,7 +59,7 @@ const InstallLicenceModal = ({
 
   useEffect(() => {
     fetchMateriels();
-  });
+  }, []);
 
   const style = {
     position: "absolute",
@@ -143,7 +143,7 @@ const InstallLicenceModal = ({
           onChange={handleChange}
           fullWidth
           style={{ marginTop: "1rem" }}
-          disabled={installationData.statutLicence == "Assignée"}
+          //disabled={installationData.statutLicence == "Assignée"}
         >
           {Object.values(StatutLicence).map((elem) => (
             <MenuItem key={elem} value={elem}>

@@ -20,9 +20,9 @@ const DetailsLogiciel = () => {
   const [licences, setLicences] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [openInstallModal, setOpenInstallModal] = useState(false);
-  const navigate = useNavigate();
+  const [openInstallModal, setOpenInstallModal] = useState(false);  const navigate = useNavigate();
   const [licenceData, setLicenceData] = useState({
+    idInstallation:"",
     idLicence: "",
     numeroLicence: "",
     dateActivation: "",
@@ -74,7 +74,7 @@ const DetailsLogiciel = () => {
     fetchLicences();
     fetchLogiciel();
     fetchSocieties();
-  });
+  }, []);
 
   const fetchLicences = () => {
     axios
@@ -93,6 +93,7 @@ const DetailsLogiciel = () => {
       setIsEditing(true);
     } else {
       setLicenceData({
+        idInstallation:"",
         idLicence: "",
         numeroLicence: "",
         dateActivation: "",
@@ -174,20 +175,14 @@ const DetailsLogiciel = () => {
   const handleSaveInstallation = () => {
     if (isEditing) {
       Promise.all([
-        axios.patch(
-          `${ip}/installation${parseInt(installationData.idLicence)}`,
-          {
-            numeroSerie: installationData.numeroSerie,
-            dateInstallation: installationData.dateInstallation,
-            dateExpiration: installationData.dateDesinstallation,
-          }
-        ),
+        axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
+          dateDesinstallation: installationData.dateDesinstallation,
+        }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
           statutLicence: installationData.statutLicence,
         }),
       ])
         .then((response1, response2) => {
-          fetchLicences();
           handleClose();
         })
         .catch((error) =>
@@ -199,14 +194,13 @@ const DetailsLogiciel = () => {
           idLicence: installationData.idLicence,
           numeroSerie: installationData.numeroSerie,
           dateInstallation: installationData.dateInstallation,
-          dateDesinstallation:null,
+          dateDesinstallation: null,
         }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
           statutLicence: installationData.statutLicence,
         }),
       ])
         .then((response1, response2) => {
-          fetchLicences();
           handleClose();
         })
         .catch((error) => {

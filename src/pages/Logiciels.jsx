@@ -1,10 +1,7 @@
 import { Button, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
-import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 import { ip } from "constants/ip";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
@@ -170,27 +167,7 @@ const Logiciels = () => {
           >
             <EditNoteIcon />
           </Button>
-          <Button title="Archiver logiciel">
-            <Inventory2OutlinedIcon />
-          </Button>
-          <Button
-            title="Installer logiciel"
-            disabled={
-              params.row.disponibilite === "Installer" ||
-              params.row.disponibilite === "Désinstaller"
-            }
-          >
-            <QueuePlayNextOutlinedIcon />
-          </Button>
-          <Button
-            title="Désinstaller Matériel"
-            disabled={
-              params.row.disponibilite === "Installer" ||
-              params.row.disponibilite === "Désinstaller"
-            }
-          >
-            <ManageHistoryOutlinedIcon />
-          </Button>
+          
         </div>
       ),
     },
