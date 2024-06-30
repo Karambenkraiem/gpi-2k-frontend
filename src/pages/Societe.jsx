@@ -67,7 +67,7 @@ const Societes = () => {
   const columns = [
     { field: 'idSociete', headerName: 'ID', width: 90 },
     { field: 'raisonSociale', headerName: 'Raison Sociale', width: 200 },
-    { field: 'adresse', headerName: 'Adresse', width: 200 },
+    // { field: 'adresse', headerName: 'Adresse', width: 200 },
     { field: 'responsable', headerName: 'Responsable', width: 150 },
     // { field: 'email', headerName: 'Email', width: 200 },
     { field: 'numtel', headerName: 'Numéro Téléphone', width: 150 },

@@ -34,6 +34,11 @@ const Categorie = {
     Autres: "Autres" 
     
 }
+const TailleHDD =  {
+  SMALL_2_5 : "2.5",
+  LARGE_3_5 : "3.5",
+  M2 : "M2"
+}
   
 
 
@@ -54,17 +59,18 @@ const ModalStock = ({ open, handleClose, editItem }) => {
     typeDisqueStoquage: null,
     typeConnexionClavierSouris: null,
     dispositionToucheClavier: null,
-    nombreBouttonSouris: null,
+    nombreBouttonSouris: '',
     memoireCarteGraphiqueRam: null,
     IntefaceCarteGraphique: null,
     frequenceCarteGraphiqueRam: null,
     typeRam: "",
     interFaceHDD: null,
-    vitesseHDD: null,
-    tailleHDD: null,
+    vitesseHDD:'',
+    tailleHDD: '',
     TypeHDD: null,
     autre: "",
   });
+  
 
   useEffect(() => {
     if (editItem) {
@@ -84,6 +90,9 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         quantiteStock:parseInt(formData.quantiteStock),
         capaciteToner:parseInt(formData.capaciteToner),
         capaciteFlashDvdCdRamHDD:parseInt(formData.capaciteFlashDvdCdRamHDD),
+        vitesseHDD:parseInt(formData.vitesseHDD),
+        tailleHDD:parseInt(formData.tailleHDD),
+        nombreBouttonSouris:parseInt(formData.nombreBouttonSouris),
 
     }
     if (editItem) {
@@ -462,14 +471,10 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               fullWidth
               margin="normal"
             >
-                {[
-                    "2.5",
-                    "3.5",
-                    "M2",                    
-                  ].map((type) => (
-                    <MenuItem key={type} value={type} >
-                      {type}
-                    </MenuItem>
+                {Object.values(TailleHDD).map((type, index) => (
+        <MenuItem key={index} value={type}>
+          {type}
+        </MenuItem>
                   ))}
             </TextField>
             <TextField
