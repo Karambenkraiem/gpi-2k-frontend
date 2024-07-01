@@ -170,16 +170,18 @@ function Installations() {
   };
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 1000, width: "100%" }}>
       <Container className="py-4">
-        <Button
-          onClick={() => navigate(-1)}
-          variant="contained"
-          color="primary" // Use primary color
-          style={{ marginBottom: 16 }}
-        >
-          <ReplyAllIcon /> Back
-        </Button>
+      <Button
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
+      >
+        RETOUR
+      </Button>
       </Container>
 
       <InstallLicenceModal

@@ -108,12 +108,7 @@ const DetailsLogiciel = () => {
     setOpenModal(true);
   };
 
-  // const handleEdit = (rowData) => {
-  //   setFormData(rowData);
-  //   setIsEditing(true);
-  //   setOpen(true);
-  // };
-
+  
   const handleInstallOpen = (rowData = null, idLic, NumLic) => {
     if (rowData) {
       setInstallationData(rowData);
@@ -292,8 +287,10 @@ const DetailsLogiciel = () => {
         variant="contained"
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
       >
-        <ReplyAllIcon/>  RETOUR
+        RETOUR
       </Button>
 
           <Row>
@@ -347,8 +344,9 @@ const DetailsLogiciel = () => {
                       color="primary"
                       // @ts-ignore
                       onClick={() => handleOpen(null)}
+                      startIcon={<InstallDesktopIcon />}
                     >
-                      <InstallDesktopIcon />_ Ajouter Licence
+                      Ajouter Licence
                     </Button>
                   </Box>
                   <LicenceModal

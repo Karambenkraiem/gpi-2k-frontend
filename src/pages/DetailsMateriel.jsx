@@ -386,8 +386,10 @@ const DetailsMateriel = () => {
         variant="contained"
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
       >
-        <ReplyAllIcon/>  RETOUR
+        RETOUR
       </Button>
           <Row>
             <Col>
@@ -759,21 +761,23 @@ const DetailsMateriel = () => {
                   <Button
                     variant="contained"
                     color="primary"
+                    startIcon={<QueuePlayNextOutlinedIcon />}
+
                     sx={{ flexGrow: 1 }}
                     // @ts-ignore
                     onClick={() => {handleBtnAffecterClick(materiel?.numeroSerie)}
                     }
                   >
-                    <QueuePlayNextOutlinedIcon />
-                    _Affecter
+                    Affecter
                   </Button>
                   <Button
                     variant="contained"
+                    startIcon={<ManageHistoryOutlinedIcon />}
+
                     color="secondary"
                     sx={{ flexGrow: 1 }}
                   >
-                    <ManageHistoryOutlinedIcon />
-                    _Emprunter
+                    Emprunter
                   </Button>
                 </Box>
               </Card>

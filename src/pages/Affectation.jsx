@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { ip } from 'constants/ip';
+import { Box } from '@mui/material';
 
 const Affectations = () => {
   const [affectations, setAffectations] = useState([]);
@@ -42,6 +43,7 @@ const Affectations = () => {
 
     <div style={{ height: 600, width: '100%' }}>
             <h1>Historique des affectations</h1>
+            <Box sx={{ height: 1000, width: "100%" }}>
 
       <DataGrid
         rows={rows}
@@ -51,6 +53,7 @@ const Affectations = () => {
         rowsPerPageOptions={[10]}
         disableSelectionOnClick
       />
+      </Box>
     </div>
   );
 };

@@ -305,6 +305,7 @@ const Utilisateurs = () => {
           handleSave={handleSave}
           errors={errors}
         />
+      <Box sx={{ height: 1000, width: "100%" }}>
 
         <DataGrid
           rows={users}
@@ -326,6 +327,7 @@ const Utilisateurs = () => {
           disableRowSelectionOnClick
           getRowId={(row) => row.idUtilisateur}
         />
+        </Box>
       </Box>
     </div>
   );

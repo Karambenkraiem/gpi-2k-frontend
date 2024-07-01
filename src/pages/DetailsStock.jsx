@@ -41,8 +41,10 @@ const StockDetails = () => {
         variant="contained"
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
       >
-        <ReplyAllIcon/>  RETOUR
+        RETOUR
       </Button>
       <Paper elevation={3}   style={{ padding: 16  }}>
         <Typography variant="h4" gutterBottom>

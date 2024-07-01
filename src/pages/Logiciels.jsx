@@ -180,7 +180,7 @@ const Logiciels = () => {
   return (
     <div>
       <h1>Gestion des logiciels</h1>
-      <Box sx={{ height: 560, width: "100%" }}>
+      <Box sx={{ height: 800, width: "100%" }}>
         <Box
           display="flex"
           justifyContent="space-between"

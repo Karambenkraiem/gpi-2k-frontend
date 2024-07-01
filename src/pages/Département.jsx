@@ -10,9 +10,8 @@ import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import { Add } from "@mui/icons-material";
-
 
 const Département = () => {
   const [errors, setErrors] = useState({});
@@ -27,17 +26,17 @@ const Département = () => {
     nom: "",
   });
 
-const fetchDepartement = ()=> {
-  axios
-  .get(ip + "/departement")
-  .then((response) => {
-    setDepartements(response.data);
-    setLoading(false);
-  })
-  .catch((error) => {
-    console.error("Error Fetching Data", error);
-  });
-}
+  const fetchDepartement = () => {
+    axios
+      .get(ip + "/departement")
+      .then((response) => {
+        setDepartements(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
+      });
+  };
   useEffect(() => {
     fetchDepartement();
   }, []);
@@ -66,7 +65,7 @@ const fetchDepartement = ()=> {
   };
 
   const handleSave = () => {
-       const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error("Veuillez remplir tous les champs obligatoires!");
       return;
@@ -75,7 +74,7 @@ const fetchDepartement = ()=> {
     if (isEditing) {
       axios
         .patch(ip + `/departement/${currentDepartement.idDepartement}`, {
-          nom: currentDepartement.nom
+          nom: currentDepartement.nom,
         })
         .then((response) => {
           setDepartements(response.data);
@@ -126,19 +125,27 @@ const fetchDepartement = ()=> {
     {
       field: "nom",
       headerName: "Designation",
-      width: 300,
+      width: 700,
     },
     {
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
+      headerAlign: "right",
+      align: "right",
       width: 150,
       renderCell: (params) => (
         <div>
-          <Button title="Modifier département" onClick={() => handleOpen(params.row)}>
+          <Button
+            title="Modifier département"
+            onClick={() => handleOpen(params.row)}
+          >
             <EditNoteIcon />
           </Button>
-          <Button title="Supprimer departement" onClick={() => handleDelete(params.row.idDepartement)}>
+          <Button
+            title="Supprimer departement"
+            sx={{  color: "red"}}
+            onClick={() => handleDelete(params.row.idDepartement)}
+          >
             <DeleteForeverOutlinedIcon />
           </Button>
         </div>
@@ -168,7 +175,6 @@ const fetchDepartement = ()=> {
             variant="contained"
             color="primary"
             startIcon={<Add />}
-
             onClick={() => handleOpen()}
           >
             Ajouter département
@@ -219,23 +225,26 @@ const fetchDepartement = ()=> {
             </Button>
           </Box>
         </Modal>
-        <DataGrid
-          rows={departements}
-          // @ts-ignore
-          columns={columns}
-          loading={loading}
-          getRowId={(row) => row.idDepartement}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
+
+        <Box sx={{ height: 1000, width: "100%" }}>
+          <DataGrid
+            rows={departements}
+            // @ts-ignore
+            columns={columns}
+            loading={loading}
+            getRowId={(row) => row.idDepartement}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
               },
-            },
-          }}
-          pageSizeOptions={[5]}
-          // checkboxSelection
-          disableRowSelectionOnClick
-        />
+            }}
+            pageSizeOptions={[5]}
+            // checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </Box>
       </Box>
     </div>
   );

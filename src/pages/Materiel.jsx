@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   Checkbox,
   Select,
+  colors,
 } from "@mui/material";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
@@ -414,25 +415,29 @@ const MaterielPage = () => {
           >
             <EditNoteIcon />
           </Button>
-          <Button
+          {/* <Button
             title="Supprimer matériel"
             onClick={() => handleDelete(params.row.numeroSerie)}
           >
             <DeleteOutlineOutlinedIcon />
-          </Button>
+          </Button> */}
           <Button
-            title="Archiver matériel"
+            title="Mettre en rebut Materiel"
             onClick={() => toggleStatus(params.row.numeroSerie)}
           >
-            <Inventory2OutlinedIcon />
+            <Inventory2OutlinedIcon sx={{color:"red"}}
+            />
           </Button>
           <Button
             title="Affecter matériel"
+            
             disabled={
               params.row.disponibilite === "Affecté" ||
               params.row.disponibilite === "Emprunté"
             }
             onClick={() => handleAffectation(params.row.numeroSerie)}
+            sx={{  color: "green"}}
+
           >
             <QueuePlayNextOutlinedIcon />
           </Button>
@@ -464,8 +469,8 @@ const MaterielPage = () => {
             Ajouter Materiel
           </Button>
         </Box>
-        <Box>
-          <DataGrid
+        <Box sx={{ height: 1000, width: "100%" }}>
+        <DataGrid
             sx={{
               display: "flex",
               justifyContent: "center",

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import { ip } from 'constants/ip';
 
@@ -31,14 +31,18 @@ const Consommations = () => {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-        <Button
+       <Button
         onClick={() => navigate(-1)}
         variant="contained"
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
       >
-        <ReplyAllIcon/> RETOUR
+        RETOUR
       </Button>
+      <Box sx={{ height: 1000, width: "100%" }}>
+
       <DataGrid
         rows={consommations}
         columns={columns}
@@ -47,6 +51,7 @@ const Consommations = () => {
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.idConsommation}
       />
+      </Box>
     </div>
   );
 };
