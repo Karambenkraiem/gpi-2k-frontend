@@ -223,6 +223,8 @@ const Stocks = () => {
 
   return (
     <div>
+            <h1>Gestion de stock</h1>
+
       <Box
         display="flex"
         justifyContent="space-between"

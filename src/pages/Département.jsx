@@ -11,6 +11,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { Add } from "@mui/icons-material";
 
 
 const Département = () => {
@@ -166,9 +167,11 @@ const fetchDepartement = ()=> {
           <Button
             variant="contained"
             color="primary"
+            startIcon={<Add />}
+
             onClick={() => handleOpen()}
           >
-            + Ajouter département
+            Ajouter département
           </Button>
         </Box>
         <Modal open={open} onClose={handleClose}>

@@ -382,17 +382,13 @@ const DetailsMateriel = () => {
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
         <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            color="primary" // Use primary color
-            style={{
-              marginBottom: 16,
-              backgroundColor: "#3B71CA",
-              color: "white",
-            }}
-          >
-            <ReplyAllIcon /> Back
-          </Button>
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+      >
+        <ReplyAllIcon/>  RETOUR
+      </Button>
           <Row>
             <Col>
               <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">

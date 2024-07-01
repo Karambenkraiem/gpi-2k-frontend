@@ -41,7 +41,7 @@ const Affectations = () => {
   return (
 
     <div style={{ height: 600, width: '100%' }}>
-            <h1>Historique des Affectations</h1>
+            <h1>Historique des affectations</h1>
 
       <DataGrid
         rows={rows}

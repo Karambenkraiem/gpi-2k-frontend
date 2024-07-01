@@ -287,14 +287,14 @@ const DetailsLogiciel = () => {
       <h1>Details logiciels</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-          <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            color="primary" // Use primary color
-            style={{ marginBottom: 16 }}
-          >
-            <ReplyAllIcon /> Back
-          </Button>
+        <Button
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+      >
+        <ReplyAllIcon/>  RETOUR
+      </Button>
 
           <Row>
             <Col lg={4}>

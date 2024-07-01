@@ -10,6 +10,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ip } from "constants/ip";
 import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
 import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
+import { Add } from "@mui/icons-material";
 
 
 const Utilisateurs = () => {
@@ -289,8 +290,10 @@ const Utilisateurs = () => {
             variant="contained"
             color="primary"
             onClick={() => handleOpen(null)}
+            startIcon={<Add />}
+
           >
-            + Ajouter Utilisateur
+            Ajouter Utilisateur
           </Button>
         </Box>
         <UtilisateurModal

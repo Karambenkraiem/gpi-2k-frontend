@@ -202,6 +202,8 @@ const ModalStock = ({ open, handleClose, editItem }) => {
           type="number"
           fullWidth
           margin="normal"
+          disabled={!!editItem}
+
         />
         {isTonerCategory && (
           <>
@@ -235,6 +237,9 @@ const ModalStock = ({ open, handleClose, editItem }) => {
                 {[  null,
                     "NOIR",
                     "COULEUR",
+                    "MAGENTA",
+                    "JAUNE",
+                    "BLEU"
                     
                   ].map((type) => (
                     <MenuItem key={type} value={type}>

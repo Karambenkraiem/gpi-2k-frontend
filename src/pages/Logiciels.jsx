@@ -194,7 +194,7 @@ const Logiciels = () => {
             onClick={() => handleOpen(null)}
             style={{ marginRight: 16 }}
           >
-            + Ajouter Logiciel
+            Ajouter Logiciel
           </Button>
           <Box display="flex" gap={2}>
             <Button

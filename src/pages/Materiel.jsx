@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
+import { Add, AddIcCallOutlined } from "@mui/icons-material";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -121,7 +122,7 @@ const MaterielPage = () => {
     garantie: "",
     etatMateriel: "",
     dateAcquisition: "",
-    disponibilite:"",
+    disponibilite:"Disponible",
     idSociete: "",
     nombrePortSwitch: "",
     debitSwitch: "",
@@ -457,8 +458,10 @@ const MaterielPage = () => {
         <Box sx={{ mb: 2 }}>
           <Button onClick={handleOpenModal}
           variant="contained"
+          startIcon={<Add />}
+
           color="primary">
-            + Ajouter Materiel
+            Ajouter Materiel
           </Button>
         </Box>
         <Box>
