@@ -3,13 +3,15 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import { LuClipboardEdit } from "react-icons/lu";
-import { RiDeleteBin6Line } from "react-icons/ri";
+
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+
 
 const Département = () => {
   const [errors, setErrors] = useState({});
@@ -18,11 +20,13 @@ const Département = () => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const handleClose = () => setOpen(false);
+
   const [currentDepartement, setCurrentDepartement] = useState({
     idDepartement: "",
     nom: "",
   });
-const fectchDepartements = ()=> {
+
+const fetchDepartement = ()=> {
   axios
   .get(ip + "/departement")
   .then((response) => {
@@ -34,9 +38,8 @@ const fectchDepartements = ()=> {
   });
 }
   useEffect(() => {
-    fectchDepartements();
+    fetchDepartement();
   }, []);
-
   const validate = (name, value) => {
     let errorMsg = "";
     if (name === "idDepartement" && !value) {
@@ -62,11 +65,7 @@ const fectchDepartements = ()=> {
   };
 
   const handleSave = () => {
-    // const departementToSave = {
-    //   ...currentDepartement,
-    //   idDepartement: currentDepartement.idDepartement,
-    // };
-    const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
+       const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error("Veuillez remplir tous les champs obligatoires!");
       return;
@@ -79,7 +78,7 @@ const fectchDepartements = ()=> {
         })
         .then((response) => {
           setDepartements(response.data);
-          fectchDepartements();
+          fetchDepartement();
           handleClose();
         })
         .catch((error) => {
@@ -135,11 +134,11 @@ const fectchDepartements = ()=> {
       width: 150,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleOpen(params.row)}>
-            <LuClipboardEdit />
+          <Button title="Modifier département" onClick={() => handleOpen(params.row)}>
+            <EditNoteIcon />
           </Button>
-          <Button onClick={() => handleDelete(params.row.idDepartement)}>
-            <RiDeleteBin6Line />
+          <Button title="Supprimer departement" onClick={() => handleDelete(params.row.idDepartement)}>
+            <DeleteForeverOutlinedIcon />
           </Button>
         </div>
       ),
@@ -231,7 +230,7 @@ const fectchDepartements = ()=> {
             },
           }}
           pageSizeOptions={[5]}
-          checkboxSelection
+          // checkboxSelection
           disableRowSelectionOnClick
         />
       </Box>

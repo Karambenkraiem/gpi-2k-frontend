@@ -384,14 +384,14 @@ const DetailsMateriel = () => {
         <Button
             onClick={() => navigate(-1)}
             variant="contained"
+            color="primary" // Use primary color
             style={{
               marginBottom: 16,
-              backgroundColor: "blue",
+              backgroundColor: "#3B71CA",
               color: "white",
             }}
-            className="d-flex align-items-left"
           >
-            <ReplyAllIcon /> Retour
+            <ReplyAllIcon /> Back
           </Button>
           <Row>
             <Col>

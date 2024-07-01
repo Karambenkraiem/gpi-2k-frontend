@@ -3,13 +3,14 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
 import { useNavigate } from "react-router-dom";
 import UtilisateurModal from "../../components/UtilisateurModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ip } from "constants/ip";
+import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
+import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
+
 
 const Utilisateurs = () => {
   const [users, setUsers] = useState([]);
@@ -127,22 +128,60 @@ const Utilisateurs = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(ip + `/utilisateur/${id}`)
-      .then((response) => {
-        setUsers(users.filter((user) => user.idUtilisateur !== id));
-      })
-      .catch((error) => {
-        console.error("Erreur Suppression de utilisateur....", error);
-      });
-  };
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(ip + `/utilisateur/${id}`)
+  //     .then((response) => {
+  //       setUsers(users.filter((user) => user.idUtilisateur !== id));
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur Suppression de utilisateur....", error);
+  //     });
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentUser({ ...currentUser, [name]: value });
     validate(name, value);
   };
+
+
+  const handleBlockUser = (userId) => {
+    const user = users.find((u) => u.idUtilisateur === userId);
+    if (!user) {
+      console.error("Données Introuvable !!!");
+      return;
+    }
+  
+    let newStatus;
+    switch (user.etatUtilisateur) {
+      case "actif":
+        newStatus = "suspendu";
+        break;
+      case "inactif":
+        newStatus = "suspendu";
+        break;
+      case "suspendu":
+        newStatus = "actif";
+        break;
+      default:
+        newStatus = "actif";
+    }  
+    const updatedUser = {
+      ...user,
+      etatUtilisateur: newStatus,
+    };
+    axios
+      .patch(ip + `/utilisateur/${userId}`, updatedUser)
+      .then((response) => {
+        setUsers(
+          users.map((u) => (u.idUtilisateur === userId ? response.data : u))
+        );
+      })
+      .catch((error) => {
+        console.error("Erreur Mise à jour état utilisateur !!! ", error);
+      });
+  };  
 
   const toggleStatus = (userId) => {
     const user = users.find((u) => u.idUtilisateur === userId);
@@ -157,20 +196,15 @@ const Utilisateurs = () => {
         newStatus = "inactif";
         break;
       case "inactif":
-        newStatus = "suspendu";
-        break;
-      case "suspendu":
         newStatus = "actif";
-        break;
+        break;     
       default:
         newStatus = "actif";
     }
-
     const updatedUser = {
       ...user,
       etatUtilisateur: newStatus,
     };
-
     axios
       .patch(ip + `/utilisateur/${userId}`, updatedUser)
       .then((response) => {
@@ -236,13 +270,10 @@ const Utilisateurs = () => {
             title="Activer / Desactiver Utilisateur"
             onClick={() => toggleStatus(params.row.idUtilisateur)}
           >
-            <ToggleOffOutlinedIcon />
+            <LockPersonOutlinedIcon />
           </Button>
-          <Button
-            title="Supprimer Utilisateur"
-            onClick={() => handleDelete(params.row.idUtilisateur)}
-          >
-            <DeleteOutlineOutlinedIcon />
+          <Button onClick={()=>handleBlockUser(params.row.idUtilisateur)} title="Suspendre le compte">
+            <NoAccountsOutlinedIcon sx={{ color: "red" }} />
           </Button>
         </div>
       ),

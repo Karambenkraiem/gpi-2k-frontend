@@ -3,13 +3,14 @@ import Box from '@mui/material/Box';
 import {DataGrid} from '@mui/x-data-grid';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import {LuClipboardEdit} from 'react-icons/lu';
-import {RiDeleteBin6Line} from 'react-icons/ri';
+
 import Modal from '@mui/material/Modal';
 import {InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import {FaRegSave} from 'react-icons/fa';
 import {IoPersonAddOutline} from 'react-icons/io5';
 import {ip} from 'constants/ip';
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 const Spécialité = () => {
   const [errors, setErrors] = useState ({});
@@ -160,11 +161,12 @@ const Spécialité = () => {
       width: 150,
       renderCell: params => (
         <div>
-          <Button onClick={() => handleOpen (params.row)}>
-            <LuClipboardEdit />
+          <Button title='Modifier spécialité'
+           onClick={() => handleOpen (params.row)}>
+            <EditNoteIcon />
           </Button>
           <Button onClick={() => handleDelete (params.row.idSpecialite)}>
-            <RiDeleteBin6Line />
+            <DeleteForeverOutlinedIcon />
           </Button>
         </div>
       ),
@@ -303,7 +305,6 @@ const Spécialité = () => {
             },
           }}
           pageSizeOptions={[5]}
-          checkboxSelection
           disableRowSelectionOnClick
         />
       </Box>
