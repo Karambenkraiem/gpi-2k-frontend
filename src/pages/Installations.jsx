@@ -16,12 +16,13 @@ function Installations() {
   const [openModal, setOpenModal] = useState(false);
   const [materialDetails, setMaterialDetails] = useState("");
   const [installationData, setInstallationData] = useState({
-    idInstallation: "",
+    idInstallation:"",
     numeroLicence: "",
     idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
+    etatOperation:"",
     statutLicence: "",
   });
 
@@ -43,11 +44,13 @@ function Installations() {
       const detailsText = `Marque: ${materielDetails.marque}, Modèle: ${materielDetails.modele}, Processeur: ${materielDetails.processeur}, RAM: ${materielDetails.ram}, Disque: ${materielDetails.disque}`;
       setMaterialDetails(detailsText);
     } catch (error) {
-      console.error("Erreur lors de la récupération des détails du matériel", error);
+      console.error(
+        "Erreur lors de la récupération des détails du matériel",
+        error
+      );
       setMaterialDetails("Détails non disponibles");
     }
   };
-  
 
   useEffect(() => {
     fetchInstallations();
@@ -56,19 +59,16 @@ function Installations() {
   const handleSaveInstallation = () => {
     if (isEditing) {
       Promise.all([
-        axios.patch(
-          `${ip}/installation/${parseInt(installationData.idLicence)}`,
-          {
-            dateDesinstallation: installationData.dateDesinstallation,
-          }
-        ),
-        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence,
+        axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
+          dateDesinstallation: installationData.dateDesinstallation,
+          etatOperation:"Désinstallée"
         }),
+        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+          statutLicence: installationData.statutLicence
+          }),
       ])
         .then((response1, response2) => {
           handleClose();
-          fetchInstallations();
         })
         .catch((error) =>
           console.error("Probleme modification de la licence", error)
@@ -80,6 +80,7 @@ function Installations() {
           numeroSerie: installationData.numeroSerie,
           dateInstallation: installationData.dateInstallation,
           dateDesinstallation: null,
+          etatOperation:"En cours d'utilisation"
         }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
           statutLicence: installationData.statutLicence,
@@ -87,7 +88,6 @@ function Installations() {
       ])
         .then((response1, response2) => {
           handleClose();
-          fetchInstallations();
         })
         .catch((error) => {
           console.error("Erreur ajout de la licence!");
@@ -142,7 +142,11 @@ function Installations() {
       headerName: "Date de désinstallation",
       width: 150,
     },
-    { field: "statutLicence", headerName: "Statut", width: 150 },
+    {
+      field: "etatOperation",
+      headerName: "Statut",
+      width: 150,
+    },
     {
       field: "actions",
       headerName: "Actions",

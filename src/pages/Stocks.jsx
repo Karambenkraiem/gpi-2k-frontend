@@ -222,7 +222,7 @@ const Stocks = () => {
   };
 
   return (
-    <div>
+    <div style={{ height: 600, width: '100%' }}>
       <Box
         display="flex"
         justifyContent="space-between"

@@ -33,11 +33,13 @@ const DetailsLogiciel = () => {
   });
 
   const [installationData, setInstallationData] = useState({
+    idInstallation:"",
     numeroLicence: "",
     idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
+    etatOperation:"",
     statutLicence: "",
   });
 
@@ -120,11 +122,13 @@ const DetailsLogiciel = () => {
       setIsEditing(true);
     } else {
       setInstallationData({
+        idInstallation:"",
         numeroLicence: NumLic,
         idLicence: idLic,
         numeroSerie: "",
         dateInstallation: "",
         dateDesinstallation: "",
+        etatOperation:"",
         statutLicence: "",
       });
       console.log(idLogiciel);
@@ -177,10 +181,11 @@ const DetailsLogiciel = () => {
       Promise.all([
         axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
           dateDesinstallation: installationData.dateDesinstallation,
+          etatOperation:"Désinstallée"
         }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence,
-        }),
+          statutLicence: installationData.statutLicence
+          }),
       ])
         .then((response1, response2) => {
           handleClose();
@@ -195,6 +200,7 @@ const DetailsLogiciel = () => {
           numeroSerie: installationData.numeroSerie,
           dateInstallation: installationData.dateInstallation,
           dateDesinstallation: null,
+          etatOperation:"En cours d'utilisation"
         }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
           statutLicence: installationData.statutLicence,
