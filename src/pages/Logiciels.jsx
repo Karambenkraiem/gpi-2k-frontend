@@ -180,7 +180,7 @@ const Logiciels = () => {
   return (
     <div>
       <h1>Gestion des logiciels</h1>
-      <Box sx={{ height: 560, width: "100%" }}>
+      <Box sx={{ height: 800, width: "100%" }}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -194,7 +194,7 @@ const Logiciels = () => {
             onClick={() => handleOpen(null)}
             style={{ marginRight: 16 }}
           >
-            + Ajouter Logiciel
+            Ajouter Logiciel
           </Button>
           <Box display="flex" gap={2}>
             <Button

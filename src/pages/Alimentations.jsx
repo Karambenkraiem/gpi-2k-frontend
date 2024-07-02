@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { ip } from 'constants/ip';
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 
@@ -35,9 +35,13 @@ const Alimentations = () => {
         variant="contained"
         color="primary" // Use primary color
         style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
       >
-        <ReplyAllIcon/>  RETOUR
+        RETOUR
       </Button>
+      <Box sx={{ height: 1000, width: "100%" }}>
+
       <DataGrid
         rows={alimentations}
         columns={columns}
@@ -46,6 +50,7 @@ const Alimentations = () => {
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.idAlimentation}
       />
+      </Box>
     </div>
   );
 };

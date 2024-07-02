@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   Checkbox,
   Select,
+  colors,
 } from "@mui/material";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
@@ -25,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
+import { Add, AddIcCallOutlined } from "@mui/icons-material";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
@@ -121,7 +123,7 @@ const MaterielPage = () => {
     garantie: "",
     etatMateriel: "",
     dateAcquisition: "",
-    disponibilite:"",
+    disponibilite:"Disponible",
     idSociete: "",
     nombrePortSwitch: "",
     debitSwitch: "",
@@ -413,25 +415,29 @@ const MaterielPage = () => {
           >
             <EditNoteIcon />
           </Button>
-          <Button
+          {/* <Button
             title="Supprimer matériel"
             onClick={() => handleDelete(params.row.numeroSerie)}
           >
             <DeleteOutlineOutlinedIcon />
-          </Button>
+          </Button> */}
           <Button
-            title="Archiver matériel"
+            title="Mettre en rebut Materiel"
             onClick={() => toggleStatus(params.row.numeroSerie)}
           >
-            <Inventory2OutlinedIcon />
+            <Inventory2OutlinedIcon sx={{color:"red"}}
+            />
           </Button>
           <Button
             title="Affecter matériel"
+            
             disabled={
               params.row.disponibilite === "Affecté" ||
               params.row.disponibilite === "Emprunté"
             }
             onClick={() => handleAffectation(params.row.numeroSerie)}
+            sx={{  color: "green"}}
+
           >
             <QueuePlayNextOutlinedIcon />
           </Button>
@@ -457,12 +463,14 @@ const MaterielPage = () => {
         <Box sx={{ mb: 2 }}>
           <Button onClick={handleOpenModal}
           variant="contained"
+          startIcon={<Add />}
+
           color="primary">
-            + Ajouter Materiel
+            Ajouter Materiel
           </Button>
         </Box>
-        <Box>
-          <DataGrid
+        <Box sx={{ height: 1000, width: "100%" }}>
+        <DataGrid
             sx={{
               display: "flex",
               justifyContent: "center",

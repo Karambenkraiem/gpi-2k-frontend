@@ -382,17 +382,15 @@ const DetailsMateriel = () => {
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
         <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            style={{
-              marginBottom: 16,
-              backgroundColor: "blue",
-              color: "white",
-            }}
-            className="d-flex align-items-left"
-          >
-            <ReplyAllIcon /> Retour
-          </Button>
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
+      >
+        RETOUR
+      </Button>
           <Row>
             <Col>
               <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
@@ -763,21 +761,23 @@ const DetailsMateriel = () => {
                   <Button
                     variant="contained"
                     color="primary"
+                    startIcon={<QueuePlayNextOutlinedIcon />}
+
                     sx={{ flexGrow: 1 }}
                     // @ts-ignore
                     onClick={() => {handleBtnAffecterClick(materiel?.numeroSerie)}
                     }
                   >
-                    <QueuePlayNextOutlinedIcon />
-                    _Affecter
+                    Affecter
                   </Button>
                   <Button
                     variant="contained"
+                    startIcon={<ManageHistoryOutlinedIcon />}
+
                     color="secondary"
                     sx={{ flexGrow: 1 }}
                   >
-                    <ManageHistoryOutlinedIcon />
-                    _Emprunter
+                    Emprunter
                   </Button>
                 </Box>
               </Card>

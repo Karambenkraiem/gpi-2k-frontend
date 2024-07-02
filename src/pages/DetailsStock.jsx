@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Paper, Button, Slider } from '@mui/material';
 import axios from 'axios';
 import { ip } from 'constants/ip';  // Make sure to have this file and ip constant correctly set up
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 
 const StockDetails = () => {
   const { refArt } = useParams();
@@ -35,7 +36,14 @@ const StockDetails = () => {
 
   return (
     <Container>
-      <Button onClick={() => navigate(-1)} variant="contained" style={{ marginBottom: 16 }}>
+      <Button
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
+      >
         RETOUR
       </Button>
       <Paper elevation={3}   style={{ padding: 16  }}>

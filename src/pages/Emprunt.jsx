@@ -42,8 +42,9 @@ const Emprunt = () => {
 
   return (
     
-    <div style={{ height: 600, width: '100%' }}>
-      
+    <div style={{ height: 1000, width: '100%' }}>
+            <h1>Historique des emprunts</h1>
+
       <DataGrid
         rows={rows}
         columns={columns}

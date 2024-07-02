@@ -1,14 +1,15 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Breadcrumb, Button, Card, Col, Container, Row } from "react-bootstrap";
+import {  Button, Card, Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
-import { VscActivateBreakpoints } from "react-icons/vsc";
-import { LuClipboardEdit } from "react-icons/lu";
 import { RxDividerVertical } from "react-icons/rx";
 import UtilisateurModal from "../../components/UtilisateurModal";
 import { ip } from "constants/ip";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
+import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 const Utilisateur = () => {
   const { idUtilisateur } = useParams();
@@ -66,14 +67,38 @@ const Utilisateur = () => {
     fetchUser();
   });
 
-  const handleDelete = () => {
+  const handleBlockUser = () => {
+    if (!user) {
+      console.error("Données Introuvable !!!");
+      return;
+    }
+
+    let newStatus;
+    switch (user.etatUtilisateur) {
+      case "actif":
+      case "inactif":
+        newStatus = "suspendu";
+        break;
+      case "suspendu":
+        newStatus = user.etatUtilisateur === "actif" ? "actif" : "inactif";
+        break;
+      default:
+        newStatus = "actif";
+    }
+
+    const updatedUser = {
+      ...user,
+      // @ts-ignore
+      etatUtilisateur: newStatus,
+    };
+
     axios
-      .delete(ip + `/utilisateur/${idUtilisateur}`)
+      .patch(ip + `/utilisateur/${idUtilisateur}`, updatedUser)
       .then(() => {
-        navigate(`/utilisateur`);
+        fetchUser();
       })
       .catch((error) => {
-        console.error("Erreur suppression Utilisateur", error);
+        console.error("Erreur Mise à jours etat utilisateur !!!", error);
       });
   };
   const handleEdit = () => {
@@ -152,7 +177,11 @@ const Utilisateur = () => {
             onClick={() => navigate(-1)}
             variant="contained"
             color="primary" // Use primary color
-            style={{ marginBottom: 16, backgroundColor:'#3B71CA', color: 'white' }}
+            style={{
+              marginBottom: 16,
+              backgroundColor: "#3B71CA",
+              color: "white",
+            }}
           >
             <ReplyAllIcon /> Back
           </Button>
@@ -228,26 +257,23 @@ const Utilisateur = () => {
               </Card>
               <Card>
                 <Card.Body className="text-center">
-                  <Button onClick={handleEdit}>
-                    <LuClipboardEdit />
+                  <Button title="Modifier Utilisateur" onClick={handleEdit}>
+                    <EditNoteIcon />
                   </Button>
                   <RxDividerVertical />
-                  <Button onClick={toggleStatus}>
-                    <VscActivateBreakpoints />
+                  <Button
+                    title="Activer / Desactiver le compte"
+                    onClick={toggleStatus}
+                  >
+                    <LockPersonOutlinedIcon />
                   </Button>
                   <RxDividerVertical />
-                  <Button onClick={handleDelete} className="btn btn-danger">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-trash3"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                    </svg>
+
+                  <Button onClick={handleBlockUser} title="Suspendre le compte">
+                    <NoAccountsOutlinedIcon sx={{ color: "red" }} />
                   </Button>
+
+
                 </Card.Body>
               </Card>
             </Col>

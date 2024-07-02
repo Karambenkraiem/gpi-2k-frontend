@@ -110,12 +110,7 @@ const DetailsLogiciel = () => {
     setOpenModal(true);
   };
 
-  // const handleEdit = (rowData) => {
-  //   setFormData(rowData);
-  //   setIsEditing(true);
-  //   setOpen(true);
-  // };
-
+  
   const handleInstallOpen = (rowData = null, idLic, NumLic) => {
     if (rowData) {
       setInstallationData(rowData);
@@ -293,14 +288,16 @@ const DetailsLogiciel = () => {
       <h1>Details logiciels</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-          <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            color="primary" // Use primary color
-            style={{ marginBottom: 16 }}
-          >
-            <ReplyAllIcon /> Back
-          </Button>
+        <Button
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
+      >
+        RETOUR
+      </Button>
 
           <Row>
             <Col lg={4}>
@@ -353,8 +350,9 @@ const DetailsLogiciel = () => {
                       color="primary"
                       // @ts-ignore
                       onClick={() => handleOpen(null)}
+                      startIcon={<InstallDesktopIcon />}
                     >
-                      <InstallDesktopIcon />_ Ajouter Licence
+                      Ajouter Licence
                     </Button>
                   </Box>
                   <LicenceModal

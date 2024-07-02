@@ -131,13 +131,15 @@ const DetailsSociete = () => {
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
         <Button
-            onClick={() => navigate(-1)}
-            variant="contained"
-            color="primary" // Use primary color
-            style={{ marginBottom: 16 }}
-          >
-            <ReplyAllIcon /> Back
-          </Button>
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+
+      >
+        RETOUR
+      </Button>
           <Row >
             <Col lg={4}>
               <Card className="mb-6">

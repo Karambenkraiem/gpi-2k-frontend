@@ -3,13 +3,15 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import { LuClipboardEdit } from "react-icons/lu";
-import { RiDeleteBin6Line } from "react-icons/ri";
+
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import { Add } from "@mui/icons-material";
 
 const Département = () => {
   const [errors, setErrors] = useState({});
@@ -18,25 +20,26 @@ const Département = () => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const handleClose = () => setOpen(false);
+
   const [currentDepartement, setCurrentDepartement] = useState({
     idDepartement: "",
     nom: "",
   });
-const fectchDepartements = ()=> {
-  axios
-  .get(ip + "/departement")
-  .then((response) => {
-    setDepartements(response.data);
-    setLoading(false);
-  })
-  .catch((error) => {
-    console.error("Error Fetching Data", error);
-  });
-}
-  useEffect(() => {
-    fectchDepartements();
-  }, []);
 
+  const fetchDepartement = () => {
+    axios
+      .get(ip + "/departement")
+      .then((response) => {
+        setDepartements(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
+      });
+  };
+  useEffect(() => {
+    fetchDepartement();
+  }, []);
   const validate = (name, value) => {
     let errorMsg = "";
     if (name === "idDepartement" && !value) {
@@ -62,10 +65,6 @@ const fectchDepartements = ()=> {
   };
 
   const handleSave = () => {
-    // const departementToSave = {
-    //   ...currentDepartement,
-    //   idDepartement: currentDepartement.idDepartement,
-    // };
     const hasErrors = Object.values(errors).some((errorMsg) => errorMsg);
     if (hasErrors) {
       console.error("Veuillez remplir tous les champs obligatoires!");
@@ -75,11 +74,11 @@ const fectchDepartements = ()=> {
     if (isEditing) {
       axios
         .patch(ip + `/departement/${currentDepartement.idDepartement}`, {
-          nom: currentDepartement.nom
+          nom: currentDepartement.nom,
         })
         .then((response) => {
           setDepartements(response.data);
-          fectchDepartements();
+          fetchDepartement();
           handleClose();
         })
         .catch((error) => {
@@ -126,20 +125,28 @@ const fectchDepartements = ()=> {
     {
       field: "nom",
       headerName: "Designation",
-      width: 300,
+      width: 700,
     },
     {
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
+      headerAlign: "right",
+      align: "right",
       width: 150,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleOpen(params.row)}>
-            <LuClipboardEdit />
+          <Button
+            title="Modifier département"
+            onClick={() => handleOpen(params.row)}
+          >
+            <EditNoteIcon />
           </Button>
-          <Button onClick={() => handleDelete(params.row.idDepartement)}>
-            <RiDeleteBin6Line />
+          <Button
+            title="Supprimer departement"
+            sx={{  color: "red"}}
+            onClick={() => handleDelete(params.row.idDepartement)}
+          >
+            <DeleteForeverOutlinedIcon />
           </Button>
         </div>
       ),
@@ -167,9 +174,10 @@ const fectchDepartements = ()=> {
           <Button
             variant="contained"
             color="primary"
+            startIcon={<Add />}
             onClick={() => handleOpen()}
           >
-            + Ajouter département
+            Ajouter département
           </Button>
         </Box>
         <Modal open={open} onClose={handleClose}>
@@ -217,23 +225,26 @@ const fectchDepartements = ()=> {
             </Button>
           </Box>
         </Modal>
-        <DataGrid
-          rows={departements}
-          // @ts-ignore
-          columns={columns}
-          loading={loading}
-          getRowId={(row) => row.idDepartement}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
+
+        <Box sx={{ height: 1000, width: "100%" }}>
+          <DataGrid
+            rows={departements}
+            // @ts-ignore
+            columns={columns}
+            loading={loading}
+            getRowId={(row) => row.idDepartement}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
               },
-            },
-          }}
-          pageSizeOptions={[5]}
-          checkboxSelection
-          disableRowSelectionOnClick
-        />
+            }}
+            pageSizeOptions={[5]}
+            // checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </Box>
       </Box>
     </div>
   );

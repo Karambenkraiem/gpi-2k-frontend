@@ -238,6 +238,7 @@ const Stocks = () => {
         >
           Ajouter Article
         </Button>
+
         <Box display="flex" gap={2}>
           <Button
             // variant="contained"
@@ -257,15 +258,16 @@ const Stocks = () => {
           </Button>
         </Box>
       </Box>
-
-      <DataGrid
-        rows={stocks}
-        // @ts-ignore
-        columns={columns}
-        loading={loading}
-        pageSize={10}
-        getRowId={(row) => row.refArt}
-      />
+      <Box sx={{ height: 1000, width: "100%" }}>
+        <DataGrid
+          rows={stocks}
+          // @ts-ignore
+          columns={columns}
+          loading={loading}
+          pageSize={10}
+          getRowId={(row) => row.refArt}
+        />
+      </Box>
       <StockModal
         open={openModal}
         handleClose={handleCloseModal}
