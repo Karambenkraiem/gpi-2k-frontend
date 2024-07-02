@@ -99,7 +99,7 @@ const LicenceModal = ({
           margin="normal"
         />
 
-        <InputLabel htmlFor="statutLicence">Statut</InputLabel>
+        <InputLabel htmlFor="statutLicence" hidden={isEditing}>Statut</InputLabel>
 
         <Select
           label="Statut"
@@ -109,6 +109,7 @@ const LicenceModal = ({
           onChange={handleChange}
           fullWidth
           style={{ marginTop: "1rem" }}
+          hidden={isEditing}
         >
           {Object.values(StatutLicence).map((elem) => (
             <MenuItem key={elem} value={elem}>

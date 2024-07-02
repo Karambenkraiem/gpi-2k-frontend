@@ -174,13 +174,12 @@ const DetailsSociete = () => {
                   justifyContent="center"
                   alignItems="center"
                   gap={2}
-                  mt={2}
+                  m={2}
                 >
                   <Button
                     variant="contained"
                     color="primary"
                     sx={{ flexGrow: 1 }}
-                    // Add functionality to handle edit button click
                     onClick={handleEditSociete}
                   >
                     <EditNoteIcon />

@@ -163,7 +163,7 @@ const Utilisateurs = () => {
         newStatus = "suspendu";
         break;
       case "suspendu":
-        newStatus = "actif";
+       
         break;
       default:
         newStatus = "actif";
@@ -264,12 +264,15 @@ const Utilisateurs = () => {
           <Button
             title="Modifier Utilisateur"
             onClick={() => handleOpen(params.row)}
+            disabled={ params.row.etatUtilisateur === "suspendu"}
+
           >
             <EditNoteIcon />
           </Button>
           <Button
             title="Activer / Desactiver Utilisateur"
             onClick={() => toggleStatus(params.row.idUtilisateur)}
+            disabled={ params.row.etatUtilisateur === "suspendu"}
           >
             <LockPersonOutlinedIcon />
           </Button>

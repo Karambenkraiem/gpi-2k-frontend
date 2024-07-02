@@ -80,7 +80,6 @@ const Utilisateur = () => {
         newStatus = "suspendu";
         break;
       case "suspendu":
-        newStatus = user.etatUtilisateur === "actif" ? "actif" : "inactif";
         break;
       default:
         newStatus = "actif";
@@ -262,6 +261,7 @@ const Utilisateur = () => {
                   </Button>
                   <RxDividerVertical />
                   <Button
+                  disabled={user.etatUtilisateur === "suspendu"}
                     title="Activer / Desactiver le compte"
                     onClick={toggleStatus}
                   >

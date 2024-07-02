@@ -3,15 +3,13 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import { Add } from "@mui/icons-material";
+import { Add, BlockOutlined } from "@mui/icons-material";
 
 const Département = () => {
   const [errors, setErrors] = useState({});
@@ -97,18 +95,55 @@ const Département = () => {
     }
   };
 
-  const handleDelete = (id) => {
+
+  const handleBlockDep = (idDep) => {
+    const departement = departements.find((d) => d.idDepartement === idDep);
+    if (!departement) {
+      console.error("Données Introuvable !!!");
+      return;
+    }
+  
+    let newStatus;
+    switch (departement.statutDepartement) {
+      case "Actif":
+        newStatus = "Suspendu";
+        break;      
+      
+    }  
+    const updatedDepartement = {
+      ...departement,
+      statutDepartement: newStatus,
+    };
     axios
-      .delete(ip + `/departement/${id}`)
+      .patch(ip + `/departement/${idDep}`, updatedDepartement)
       .then((response) => {
         setDepartements(
-          departements.filter((specialite) => specialite.idDepartement !== id)
+          departements.map((d) => (d.idDepartement === idDep ? response.data : d))
         );
       })
       .catch((error) => {
-        console.error("Erreur Suppression du département!", error);
+        console.error("Erreur Mise à jour statut Departement !!! ", error);
       });
   };
+
+
+
+
+
+
+
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(ip + `/departement/${id}`)
+  //     .then((response) => {
+  //       setDepartements(
+  //         departements.filter((specialite) => specialite.idDepartement !== id)
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur Suppression du département!", error);
+  //     });
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -125,7 +160,12 @@ const Département = () => {
     {
       field: "nom",
       headerName: "Designation",
-      width: 700,
+      width: 500,
+    },
+    {
+      field: "statutDepartement",
+      headerName: "Statut",
+      width: 150,
     },
     {
       field: "actions",
@@ -138,16 +178,18 @@ const Département = () => {
           <Button
             title="Modifier département"
             onClick={() => handleOpen(params.row)}
+            disabled={params.row.statutDepartement==="Suspendu"}
+
           >
             <EditNoteIcon />
           </Button>
           <Button
-            title="Supprimer departement"
+            title="Suspendre département"
             sx={{  color: "red"}}
-            onClick={() => handleDelete(params.row.idDepartement)}
+            onClick={() => handleBlockDep(params.row.idDepartement)}
           >
-            <DeleteForeverOutlinedIcon />
-          </Button>
+            <BlockOutlined sx={{ color: "red" }} />
+            </Button>
         </div>
       ),
     },

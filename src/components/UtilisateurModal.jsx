@@ -66,6 +66,8 @@ const UtilisateurModal = ({
           margin="normal"
           error={!!errors.idUtilisateur}
           helperText={errors.idUtilisateur}
+          disabled={isEditing}
+
         />
 
         <TextField
@@ -153,6 +155,8 @@ const UtilisateurModal = ({
           fullWidth
           error={!!errors.etatUtilisateur}
           style={{ marginTop: "1rem" }}
+          disabled={currentUser.etatUtilisateur === "suspendu"}
+
         >
           {Object.values(EtatUtilisateur).map((etat) => (
             <MenuItem key={etat} value={etat}>

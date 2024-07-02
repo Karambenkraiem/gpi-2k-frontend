@@ -3,15 +3,13 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
-
 import Modal from "@mui/material/Modal";
 import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import { Add } from "@mui/icons-material";
+import { Add, BlockOutlined } from "@mui/icons-material";
 
 const Spécialité = () => {
   const [errors, setErrors] = useState({});
@@ -66,6 +64,7 @@ const Spécialité = () => {
         idSpecialite: "",
         nom: "",
         idDepartement: "",
+       
       });
       setIsEditing(false);
     }
@@ -115,18 +114,55 @@ const Spécialité = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleBlockSpec = (idSpec) => {
+    const specialite = specialites.find((s) => s.idSpecialite === idSpec);
+    if (!specialite) {
+      console.error("Données Introuvables !!!");
+      return;
+    }
+  
+    let newStatut;
+    switch (specialite.statutSpecialite) {
+      case "Actif":
+        newStatut = "Suspendu";
+        break;
+      default:
+        newStatut = "Suspendu";
+    }
+  
+    const updatedSpecialite = {
+      ...specialite,
+      statutSpecialite: newStatut,
+    };
+  
+    const { Departement, ...rest } = updatedSpecialite;
+    console.log(newStatut);
+  
     axios
-      .delete(ip + `/specialite/${id}`)
+      .patch(`${ip}/specialite/${idSpec}`, rest)
       .then((response) => {
         setSpecialites(
-          specialites.filter((specialite) => specialite.idSpecialite !== id)
+          specialites.map((s) => (s.idSpecialite === idSpec ? response.data : s))
         );
       })
       .catch((error) => {
-        console.error("Erreur Suppression de la spécialité....", error);
+        console.error("Erreur Mise à jour statut spécialité !!! ", error);
       });
   };
+  
+
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(ip + `/specialite/${id}`)
+  //     .then((response) => {
+  //       setSpecialites(
+  //         specialites.filter((specialite) => specialite.idSpecialite !== id)
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erreur Suppression de la spécialité....", error);
+  //     });
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -151,6 +187,11 @@ const Spécialité = () => {
       width: 350,
     },
     {
+      field: "statutSpecialite",
+      headerName: "Statut",
+      width: 150,
+    },
+    {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
@@ -161,15 +202,17 @@ const Spécialité = () => {
           <Button
             title="Modifier spécialité"
             onClick={() => handleOpen(params.row)}
+            disabled={params.row.statutSpecialite === "Suspendu"}
           >
             <EditNoteIcon />
           </Button>
           <Button
-            onClick={() => handleDelete(params.row.idSpecialite)}
-            sx={{ color: "red" }}
+            title="Suspendre Spécialité"
+            sx={{  color: "red"}}
+            onClick={() => handleBlockSpec(params.row.idSpecialite)}
           >
-            <DeleteForeverOutlinedIcon />
-          </Button>
+            <BlockOutlined sx={{ color: "red" }} />
+            </Button>
         </div>
       ),
     },
