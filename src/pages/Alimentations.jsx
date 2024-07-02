@@ -20,7 +20,7 @@ const Alimentations = () => {
   }, []);
 
   const columns = [
-    { field: 'idAlimentation', headerName: 'ID', width: 90 },
+    { field: 'idAlimentation', headerName: 'Identifiant', width: 90 },
     { field: 'idSociete', headerName: 'ID Societe', width: 150 },
     { field: 'refArt', headerName: 'Reference Article', width: 150 },
     { field: 'dateAlimentation', headerName: 'Date Alimentation', width: 200 },

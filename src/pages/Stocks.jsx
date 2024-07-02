@@ -159,6 +159,7 @@ const Stocks = () => {
   };
   const columns = [
     { field: "refArt", headerName: "Référence", width: 150 },
+    { field: "categorie", headerName: "Catégorie", width: 150 },
     { field: "marque", headerName: "Marque", width: 150 },
     { field: "modele", headerName: "Modèle", width: 150 },
     { field: "prix", headerName: "Prix", width: 100, type: "number" },
@@ -168,35 +169,44 @@ const Stocks = () => {
       width: 150,
       type: "number",
     },
-    { field: "categorie", headerName: "Catégorie", width: 150 },
     {
       field: "actions",
       headerName: "Actions",
+      headerAlign:"center",
+      align:"right",
       width: 450,
       renderCell: (params) => (
         <>
           <IconButton
             color="primary"
+            title="Voir détails article"
             onClick={() => handleView(params.row.refArt)}
+            
           >
             <VisibilityOutlinedIcon />
           </IconButton>
-          <IconButton color="primary" onClick={() => handleEdit(params.row)}>
+          <IconButton color="primary" 
+          title="Modifier l'article"
+          onClick={() => handleEdit(params.row)}>
             <EditNoteIcon />
           </IconButton>
 
           <Button
             // variant="contained"
             color="primary"
+            title="Alimenter le stock"
             startIcon={<AddIcon />}
             onClick={() => handleAlimentation(params.row)}
+            sx={{color:"green"}}
           >
             Alimenter
           </Button>
           <Button
-            // variant="contained"
+            // variant="contained"            
             color="secondary"
             onClick={() => handleConsommation(params.row)}
+            sx={{color:"red"}}
+            title="consommer les accessoires et consommables"
             startIcon={<RemoveIcon />}
           >
             Consommer
@@ -223,6 +233,7 @@ const Stocks = () => {
 
   return (
     <div style={{ height: 600, width: '100%' }}>
+      <h1>Gestion de stock des consommables et accessoires</h1>
       <Box
         display="flex"
         justifyContent="space-between"

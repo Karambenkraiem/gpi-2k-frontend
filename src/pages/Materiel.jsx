@@ -389,10 +389,10 @@ const MaterielPage = () => {
   };
 
   const columns = [
-    { field: "numeroSerie", headerName: "Numero Serie", width: 150 },
-    { field: "categorie", headerName: "Categorie", width: 140 },
+    { field: "numeroSerie", headerName: "Numero Série", width: 150 },
+    { field: "categorie", headerName: "Catégorie", width: 140 },
     { field: "marque", headerName: "Marque", width: 100 },
-    { field: "modele", headerName: "Modele", width: 200 },
+    { field: "modele", headerName: "Modèle", width: 200 },
     { field: "prix", headerName: "Prix", type: "number", width: 100 },
     { field: "etatMateriel", headerName: "Etat matériel", width: 120 },
     { field: "disponibilite", headerName: "Disponobilité", width: 100 },

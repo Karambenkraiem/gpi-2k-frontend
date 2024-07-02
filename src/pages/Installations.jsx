@@ -115,7 +115,7 @@ function Installations() {
   }));
 
   const columns = [
-    { field: "idInstallation", headerName: "ID", width: 50 },
+    { field: "idInstallation", headerName: "Identifiant", width: 50 },
     { field: "idLicence", headerName: "ID licence", width: 90 },
     { field: "numeroLicence", headerName: "N° licence", width: 150 },
     //{ field: "numeroSerie", headerName: "Numero Série Materiel", width: 150 },

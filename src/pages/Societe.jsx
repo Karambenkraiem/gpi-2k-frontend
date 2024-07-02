@@ -65,7 +65,7 @@ const Societes = () => {
   };
 
   const columns = [
-    { field: 'idSociete', headerName: 'ID', width: 90 },
+    { field: 'idSociete', headerName: 'Identifiant', width: 90 },
     { field: 'raisonSociale', headerName: 'Raison Sociale', width: 200 },
     // { field: 'adresse', headerName: 'Adresse', width: 200 },
     { field: 'responsable', headerName: 'Responsable', width: 150 },
@@ -95,6 +95,7 @@ const Societes = () => {
 
   return (
     <div>
+      <h1>Gestion des societés</h1>
       <Box >
         <Button
           variant="contained"

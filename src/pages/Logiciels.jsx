@@ -152,6 +152,7 @@ const Logiciels = () => {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
+      align:'center',
       width: 400,
       renderCell: (params) => (
         <div text-align="left">

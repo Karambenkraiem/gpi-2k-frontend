@@ -20,7 +20,7 @@ const Consommations = () => {
   }, []);
 
   const columns = [
-    { field: 'idConsommation', headerName: 'ID', width: 90 },
+    { field: 'idConsommation', headerName: 'Identifiant', width: 90 },
     { field: 'refArt', headerName: 'Reference Article', width: 150 },
     { field: 'idUtilisateur', headerName: 'ID Utilisateur', width: 150 },
     { field: 'numeroSerie', headerName: 'Numero Série Materiel', width: 150 },

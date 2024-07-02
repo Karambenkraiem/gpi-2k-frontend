@@ -137,7 +137,7 @@ const Spécialité = () => {
   const columns = [
     {
       field: "idSpecialite",
-      headerName: "#ID",
+      headerName: "Identifiant",
       width: 90,
     },
     {

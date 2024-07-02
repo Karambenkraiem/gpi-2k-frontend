@@ -23,22 +23,23 @@ const style = {
 
 const Categorie = {
     Toner: "Toner",
-    DisqueStoquage: "DisqueStoquage", 
+    DisqueStockage: "DisqueStockage", 
     Clavier: "Clavier", 
     Souris: "Souris", 
     FlashDisque: "FlashDisque", 
     CarteGraphique: "CarteGraphique", 
     Ram: "Ram", 
-    DisqueDur: "DisqueDur", 
+    DisqueDurExterne: "DisqueDurExterne",
+    DisqueDurInterne:"DisqueDurInterne",
     CartoucheEncre: "CartoucheEncre", 
     Autres: "Autres" 
     
 }
-const TailleHDD =  {
-  SMALL_2_5 : "2.5",
-  LARGE_3_5 : "3.5",
-  M2 : "M2"
-}
+// const TailleHDD =  {
+//   SMALL_2_5 : "2.5",
+//   LARGE_3_5 : "3.5",
+//   M2 : "M2"
+// }
   
 
 
@@ -57,7 +58,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
     couleurToner: null,
     capaciteFlashDvdCdRamHDD: 0,
     typeDisqueStoquage: null,
-    typeConnexionClavierSouris: null,
+    typeConnexionClavierSouris: '',
     dispositionToucheClavier: null,
     nombreBouttonSouris: '',
     memoireCarteGraphiqueRam: null,
@@ -91,8 +92,11 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         capaciteToner:parseInt(formData.capaciteToner),
         capaciteFlashDvdCdRamHDD:parseInt(formData.capaciteFlashDvdCdRamHDD),
         vitesseHDD:parseInt(formData.vitesseHDD),
-        tailleHDD:parseInt(formData.tailleHDD),
+        // tailleHDD:parseInt(formData.tailleHDD),
         nombreBouttonSouris:parseInt(formData.nombreBouttonSouris),
+        memoireCarteGraphiqueRam:parseInt(formData.memoireCarteGraphiqueRam),
+        frequenceCarteGraphiqueRam:parseInt(formData.frequenceCarteGraphiqueRam)
+
 
     }
     if (editItem) {
@@ -130,7 +134,8 @@ const ModalStock = ({ open, handleClose, editItem }) => {
   const isFlashDisqueCategory = formData.categorie === 'FlashDisque';
   const isCarteGraphiqueCategory = formData.categorie === 'CarteGraphique';
   const isRamCategory = formData.categorie === 'Ram';
-  const isDisqueDurCategory = formData.categorie === 'DisqueDur';
+  const isDisqueDurExterneCategory = formData.categorie === 'DisqueDurExterne';
+  const isDisqueDurInterneCategory = formData.categorie === 'DisqueDurInterne';
   const isCartoucheEncreCategory = formData.categorie === 'CartoucheEncre';
   const isAutresCategory = formData.categorie === 'Autres';
 
@@ -152,6 +157,8 @@ const ModalStock = ({ open, handleClose, editItem }) => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          
+
         >
           {Object.values(Categorie).map((category) => (
             <MenuItem key={category} value={category}>
@@ -161,8 +168,8 @@ const ModalStock = ({ open, handleClose, editItem }) => {
         </TextField>
         
         <TextField
-          name="refArt"
           label="Référence"
+          name="refArt"
           value={formData.refArt}
           onChange={handleChange}
           fullWidth
@@ -296,7 +303,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               margin="normal"
             >
                 {[
-                    "USb",
+                    "USB",
                     "WIFI",
                     "BLUETOOTH",                    
                   ].map((type) => (
@@ -427,7 +434,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               margin="normal"
             />
              </>)}             
-             {isDisqueDurCategory && (
+             {(isDisqueDurExterneCategory || isDisqueDurInterneCategory) && (
                 <>
 <TextField
               name="capaciteFlashDvdCdRamHDD"
@@ -476,7 +483,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               fullWidth
               margin="normal"
             >
-                {Object.values(TailleHDD).map((type, index) => (
+                {["2.5","3.5","M2"].map((type, index) => (
         <MenuItem key={index} value={type}>
           {type}
         </MenuItem>
@@ -510,7 +517,7 @@ const ModalStock = ({ open, handleClose, editItem }) => {
               fullWidth
               margin="normal"
             >
-                {["NOIR","COULEUR"].map((type)=>(
+                {["NOIR","COULEUR","MAGENTA","JAUNE","BLEU"].map((type)=>(
                     <MenuItem key={type} value={type}>
                     {type}
                   </MenuItem>
