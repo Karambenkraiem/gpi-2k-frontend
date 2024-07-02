@@ -9,16 +9,18 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import AffectationModal from "../components/AffectationModal";
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
+// @ts-ignore
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { ip } from "constants/ip";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import ReplyIcon from "@mui/icons-material/Reply";
 import EmpruntModal from "components/EmpruntModal";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
-import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
+import LoopIcon from "@mui/icons-material/Loop";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
-
 
 const DetailsMateriel = () => {
   const { numeroSerie } = useParams();
@@ -31,10 +33,16 @@ const DetailsMateriel = () => {
   const [openEmprunt, setOpenEmprunt] = useState(false);
   const navigate = useNavigate();
   // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   const [materiels, setMateriels] = useState([]);
+  // @ts-ignore
+  // @ts-ignore
   // @ts-ignore
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  // @ts-ignore
+  // @ts-ignore
   // @ts-ignore
   const handleClose = () => setOpenAffectation(false);
 
@@ -56,9 +64,13 @@ const DetailsMateriel = () => {
   });
 
   const handleBtnAffecterClick = (numeroSerie) => {
-    console.log(numeroSerie);
     setAffectationData({ ...affectationData, numeroSerie });
     setOpenAffectation(true);
+  };
+
+  const handleBtnEmprunterClick = (numeroSerie) => {
+    setEmpruntData({ ...empruntData, numeroSerie });
+    setOpenEmprunt(true);
   };
 
   const handleChangeAffectation = (e) => {
@@ -69,6 +81,7 @@ const DetailsMateriel = () => {
       [name]: value,
     });
     validateMateriel(name, value);
+    console.log(affectationData)
   };
 
   const handleChangeEmprunt = (e) => {
@@ -79,36 +92,46 @@ const DetailsMateriel = () => {
       [name]: value,
     });
     validateMateriel(name, value);
+    console.log(empruntData)
   };
 
-  const fetchMateriels = () => {
-    axios
-      .get(ip + "/materiel")
-      .then((response) => {
-        setMateriels(response.data);
-        setLoading(false);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  };
+  // // @ts-ignore
+  // const fetchMateriels = () => {
+  //   axios
+  //     .get(ip + "/materiel")
+  //     .then((response) => {
+  //       setMateriels(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // };
 
-  // @ts-ignore
-  const handleAffectation = (idAffectation) => {
-    // @ts-ignore
-    setAffectationData({ ...affectationData, idAffectation });
-    setOpenAffectation(true);
-  };
+  // // @ts-ignore
+  // // @ts-ignore
+  // // @ts-ignore
+  // const handleAffectation = (idAffectation) => {
+  //   // @ts-ignore
+  //   setAffectationData({ ...affectationData, idAffectation });
+  //   setOpenAffectation(true);
+  // };
 
   const handleAffectationEdit = (row) => {
+    console.log(row.idAffectation);
     setAffectationData(row);
     setIsEditing(true);
     setOpenAffectation(true);
   };
 
   const handleEmpruntEdit = (row) => {
+    console.log(row.idEmprunt);
     setEmpruntData(row);
     setIsEditing(true);
     setOpenEmprunt(true);
   };
+
+  // const handleSaveAffectation = () => {
+
+  // };
 
   const handleSaveAffectation = () => {
     const affectationToSave = {
@@ -135,8 +158,11 @@ const DetailsMateriel = () => {
         }),
       ])
         // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         .then(([response1, response2]) => {
-          fetchMateriels();
+          fetchAffectations();
+          fetchMateriel();
           setOpenAffectation(false);
         })
         .catch((error) => {
@@ -144,7 +170,13 @@ const DetailsMateriel = () => {
         });
     } else {
       Promise.all([
-        axios.post(ip + "/affectation/", affectationData),
+        axios.post(ip + "/affectation", {
+          dateAttribution: affectationData.dateAttribution,
+          dateRetour: affectationData.dateRetour,
+          motifRetour: affectationData.motifRetour,
+          idUtilisateur: affectationData.idUtilisateur,
+          numeroSerie: affectationData.numeroSerie,
+        }),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
           // @ts-ignore
           disponibilite: affectationData.disponibilite,
@@ -152,16 +184,19 @@ const DetailsMateriel = () => {
       ])
         // @ts-ignore
         .then((response) => {
-          fetchMateriels();
+          fetchAffectations();
+          fetchMateriel();
           setOpenAffectation(false);
         })
-        .catch((error) => console.error("Erreur emprunt!", error));
+        .catch((error) => {
+          console.error("Erreur affectation!", error);
+        });
     }
   };
 
- 
   const handleSaveEmprunt = () => {
-
+    // @ts-ignore
+    // @ts-ignore
     // @ts-ignore
     const empruntToSave = {
       ...empruntData,
@@ -175,29 +210,39 @@ const DetailsMateriel = () => {
       console.error("Veuillez remplir tous les champs obligatoires!");
       return;
     }
-    if (isEditing){
-    Promise.all([
-      axios.patch(
+    if (isEditing) {
+      Promise.all([
+        axios.patch(
+          // @ts-ignore
+          `${ip}/emprunt/${empruntToSave.idEmprunt}`,
+          empruntData
+        ),
+        axios.patch(`${ip}/materiel/${empruntToSave.numeroSerie}`, {
+          // @ts-ignore
+          disponibilite: empruntData.disponibilite,
+        }),
+      ])
         // @ts-ignore
-        `${ip}/affectation/${empruntData.idEmprunt}`,
-        empruntData
-      ),
-      axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
         // @ts-ignore
-        disponibilite: empruntData.disponibilite,
-      }),
-    ])
-      // @ts-ignore
-      .then(([response1, response2]) => {
-        fetchMateriels();
-        setOpenEmprunt(false);
-      })
-      .catch((error) => {
-        console.error("Erreur Emprunt", error);
-      });
+        // @ts-ignore
+        .then(([response1, response2]) => {
+          fetchEmprunts();
+          fetchMateriel();
+          setOpenEmprunt(false);
+        })
+        .catch((error) => {
+          console.error("Erreur Emprunt", error);
+        });
     } else {
       Promise.all([
-        axios.post(ip + "/emprunt", empruntData),
+        axios.post(ip + "/emprunt", {
+          idUtilisateur: empruntData.idUtilisateur,
+          numeroSerie: empruntData.numeroSerie,
+          dateEmprunt: empruntData.dateEmprunt,
+          dateRestitution: empruntData.dateRestitution,
+          refProjet: empruntData.refProjet,
+          etatMatRestitution: empruntData.etatMatRestitution,
+        }),
         axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
           // @ts-ignore
           disponibilite: empruntData.disponibilite,
@@ -205,10 +250,13 @@ const DetailsMateriel = () => {
       ])
         // @ts-ignore
         .then((response) => {
-          fetchMateriels();
+          fetchEmprunts();
+          fetchMateriel();
           setOpenEmprunt(false);
         })
-        .catch((error) => console.error("Erreur emprunt!", error));
+        .catch((error) => {
+          console.error("Erreur emprunt!", error);
+        });
     }
   };
 
@@ -242,7 +290,10 @@ const DetailsMateriel = () => {
         setAffectations(response.data);
       })
       .catch((error) => {
-        console.error("Erreur récupération de la liste des installations!", error);
+        console.error(
+          "Erreur récupération de la liste des installations!",
+          error
+        );
       });
   };
 
@@ -284,7 +335,7 @@ const DetailsMateriel = () => {
     fetchAffectations();
     fetchEmprunts();
     fetchSocieties();
-  });
+  }, []);
 
   const rowsAffectations = affectations.map((affectation, index) => ({
     id: index,
@@ -299,17 +350,17 @@ const DetailsMateriel = () => {
   const columnsAffectations = [
     {
       field: "actions",
-      headerName: "Modification",
+      headerName: "Action",
       headerAlign: "center",
       width: 100,
       renderCell: (params) => (
         <div text-align="letf">
           <Button
-            title="Affecter matériel"
+            title="Retourner matériel"
             disabled={params.row.statut === "Affecté"}
             onClick={() => handleAffectationEdit(params.row)}
           >
-            <EditNoteIcon />
+            <ReplyIcon />
           </Button>
         </div>
       ),
@@ -325,26 +376,26 @@ const DetailsMateriel = () => {
   const rowsEmprunts = emprunts.map((emprunt, index) => ({
     id: index,
     ...emprunt,
-    fullName: emprunt.utilisateur?.fullName || "N/A",
-    numeroSerie: emprunt.materiel?.numeroSerie || "N/A",
-    categorie: emprunt.materiel?.categorie || "N/A",
-    marque: emprunt.materiel?.marque || "N/A",
+    fullName: emprunt.Utilisateur?.fullName || "N/A",
+    numeroSerie: emprunt.Materiel?.numeroSerie || "N/A",
+    categorie: emprunt.Materiel?.categorie || "N/A",
+    marque: emprunt.Materiel?.marque || "N/A",
     disponibilite: emprunt.Materiel?.disponibilite || "N/A",
   }));
 
   const columnsEmprunts = [
     {
       field: "actions",
-      headerName: "Modification",
+      headerName: "Action",
       headerAlign: "center",
       width: 100,
       renderCell: (params) => (
         <div text-align="letf">
           <Button
-            title="Emprunter matériel"
+            title="Retourner matériel"
             onClick={() => handleEmpruntEdit(params.row)}
           >
-            <EditNoteIcon />
+            <ReplyIcon />
           </Button>
         </div>
       ),
@@ -381,27 +432,16 @@ const DetailsMateriel = () => {
       <h1>Details matériel</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-        <Button
-        onClick={() => navigate(-1)}
-        variant="contained"
-        color="primary" // Use primary color
-        style={{ marginBottom: 16 }}
-        startIcon={<ReplyAllIcon />}
+          <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary" // Use primary color
+            style={{ marginBottom: 16 }}
+            startIcon={<ReplyAllIcon />}
+          >
+            RETOUR
+          </Button>
 
-      >
-        RETOUR
-      </Button>
-          <Row>
-            <Col>
-              <Breadcrumb className="bg-body-tertiary rounded-3 p-3 mb-4">
-                <Breadcrumb.Item href="/">Accueil</Breadcrumb.Item>
-                <Breadcrumb.Item href="/materiel">Matériel</Breadcrumb.Item>
-                <Breadcrumb.Item active aria-current="page">
-                  Détails Matériel
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </Col>
-          </Row>
           <Row>
             <Col lg={4}>
               <Card className="mb-6">
@@ -756,26 +796,41 @@ const DetailsMateriel = () => {
                   justifyContent="center"
                   alignItems="center"
                   gap={2}
-                  mt={2}
+                  m={2}
                 >
                   <Button
                     variant="contained"
                     color="primary"
                     startIcon={<QueuePlayNextOutlinedIcon />}
-
                     sx={{ flexGrow: 1 }}
-                    // @ts-ignore
-                    onClick={() => {handleBtnAffecterClick(materiel?.numeroSerie)}
+                    onClick={() => {
+                      // @ts-ignore
+                      handleBtnAffecterClick(materiel?.numeroSerie);
+                    }}
+                    disabled={
+                      // @ts-ignore
+                      materiel?.disponibilite === "Emprunté" ||
+                      // @ts-ignore
+                      materiel?.disponibilite === "Affecté"
                     }
                   >
                     Affecter
                   </Button>
                   <Button
                     variant="contained"
-                    startIcon={<ManageHistoryOutlinedIcon />}
-
+                    startIcon={<LoopIcon />}
                     color="secondary"
                     sx={{ flexGrow: 1 }}
+                    onClick={() => {
+                      // @ts-ignore
+                      handleBtnEmprunterClick(materiel?.numeroSerie);
+                    }}
+                    disabled={
+                      // @ts-ignore
+                      materiel?.disponibilite === "Emprunté" ||
+                      // @ts-ignore
+                      materiel?.disponibilite === "Affecté"
+                    }
                   >
                     Emprunter
                   </Button>
