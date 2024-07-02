@@ -47,7 +47,7 @@ const EmpruntModal = ({
 
   useEffect(() => {
     fetchUtilisateurs();
-  });
+  }, []);
 
   const style = {
     position: "absolute",

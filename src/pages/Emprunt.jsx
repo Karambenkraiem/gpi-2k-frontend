@@ -19,10 +19,10 @@ const Emprunt = () => {
   const rows = emprunts.map((emprunt, index) => ({
     id: index,
     ...emprunt,
-    'fullName': emprunt?.utilisateur?.fullName,
-    'numeroSerie': emprunt?.materiel?.numeroSerie,
-    'categorie': emprunt?.materiel?.categorie,
-    'marque' : emprunt?.materiel?.marque,
+    'fullName': emprunt?.Utilisateur?.fullName,
+    'numeroSerie': emprunt?.Materiel?.numeroSerie,
+    'categorie': emprunt?.Materiel?.categorie,
+    'marque' : emprunt?.Materiel?.marque,
   }));
   const columns = [
     { field: 'idUtilisateur', headerName: 'ID Utilisateur', width: 150 },

@@ -36,7 +36,7 @@ const AffectationModal = ({
   useEffect(() => {
     fetchUtilisateurs();
     //fetchMateriel();
-  });
+  },[]);
 
   const style = {
     position: "absolute",

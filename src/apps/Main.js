@@ -23,13 +23,13 @@ import { HomeOutlined, PeopleOutline, ExpandLess, ExpandMore } from "@mui/icons-
 import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
 import MultipleStopIcon from '@mui/icons-material/MultipleStop';
 import TextRotationNoneIcon from '@mui/icons-material/TextRotationNone';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AppsIcon from '@mui/icons-material/Apps';
 import BusinessIcon from '@mui/icons-material/Business';
+import ComputerIcon from '@mui/icons-material/Computer';
 
 const drawerWidth = 300;
 
@@ -64,6 +64,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
+// @ts-ignore
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
@@ -82,7 +83,9 @@ const AppBar = styled(MuiAppBar, {
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+})
+// @ts-ignore
+(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
@@ -110,7 +113,7 @@ const initialNavItems = [
   },
   {
     label: "Ressources materielles",
-    icon: <ManageSearchIcon />,
+    icon: <ComputerIcon />,
     items: [
       { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> },
       { label: "Affectation", path: "/affectation", icon: <TextRotationNoneIcon /> },
@@ -142,7 +145,9 @@ export default function Main() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" 
+// @ts-ignore
+      open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -157,7 +162,9 @@ export default function Main() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            <Link component={RouterLink} to="/" underline="none" style={{ color: 'hsl(150, 100%, 50%)' }}>
+            <Link 
+// @ts-ignore
+            component={RouterLink} to="/" underline="none" style={{ color: 'hsl(150, 100%, 50%)' }}>
               GPI-2K-IsetRades-TECI
             </Link>
           </Typography>

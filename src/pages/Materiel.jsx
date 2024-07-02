@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import {
@@ -14,10 +13,9 @@ import {
   FormControlLabel,
   Checkbox,
   Select,
-  colors,
 } from "@mui/material";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
-import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
+import LoopIcon from "@mui/icons-material/Loop";
 import axios from "axios";
 import { ip } from "constants/ip";
 import { FaRegSave } from "react-icons/fa";
@@ -26,14 +24,14 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
-import { Add, AddIcCallOutlined } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
 
   const [affectationData, setAffectationData] = useState({
-    idUtilisateur:"",
+    idUtilisateur: "",
     numeroSerie: "",
     dateAttribution: "",
     dateRetour: null,
@@ -41,6 +39,8 @@ const MaterielPage = () => {
   });
 
   const [empruntData, setEmpruntData] = useState({
+    idUtilisateur: "",
+    numeroSerie: "",
     dateEmprunt: "",
     dateRestitution: null,
     refProjet: "",
@@ -123,7 +123,7 @@ const MaterielPage = () => {
     garantie: "",
     etatMateriel: "",
     dateAcquisition: "",
-    disponibilite:"Disponible",
+    disponibilite: "Disponible",
     idSociete: "",
     nombrePortSwitch: "",
     debitSwitch: "",
@@ -269,7 +269,7 @@ const MaterielPage = () => {
     });
     validateMateriel(name, value);
   };
-  
+
   const handleEdit = (rowData) => {
     setFormData(rowData);
     setIsEditing(true);
@@ -359,33 +359,49 @@ const MaterielPage = () => {
 
   const handleSaveAffectation = () => {
     Promise.all([
-        axios.post(ip + "/affectation",{
-          dateAttribution: affectationData.dateAttribution,
-          dateRetour:affectationData.dateRetour,
-          motifRetour:affectationData.motifRetour,
-          idUtilisateur:affectationData.idUtilisateur,
-          numeroSerie:affectationData.numeroSerie,
-        }),
-        axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
-          // @ts-ignore
-          disponibilite: affectationData.disponibilite,
-        }),
-      ])
+      axios.post(ip + "/affectation", {
+        dateAttribution: affectationData.dateAttribution,
+        dateRetour: affectationData.dateRetour,
+        motifRetour: affectationData.motifRetour,
+        idUtilisateur: affectationData.idUtilisateur,
+        numeroSerie: affectationData.numeroSerie,
+      }),
+      axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
+        // @ts-ignore
+        disponibilite: affectationData.disponibilite,
+      }),
+    ])
       .then((response) => {
         fetchMateriels();
         setOpenAffectation(false);
       })
-      .catch((error) => {console.error("Erreur affectation!", error);});
+      .catch((error) => {
+        console.error("Erreur affectation!", error);
+      });
   };
 
   const handleSaveEmprunt = () => {
-    axios
-      .post(ip + "/emprunt", empruntData)
+    Promise.all([
+      axios.post(ip + "/emprunt", {
+        idUtilisateur: empruntData.idUtilisateur,
+        numeroSerie: empruntData.numeroSerie,
+        dateEmprunt: empruntData.dateEmprunt,
+        dateRestitution: empruntData.dateRestitution,
+        refProjet: empruntData.refProjet,
+        etatMatRestitution: empruntData.etatMatRestitution,
+      }),
+      axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
+        // @ts-ignore
+        disponibilite: empruntData.disponibilite,
+      }),
+    ])
       .then((response) => {
         fetchMateriels();
         setOpenEmprunt(false);
       })
-      .catch((error) => console.error("Erreur emprunt!", error));
+      .catch((error) => {
+        console.error("Erreur emprunt!", error);
+      });
   };
 
   const columns = [
@@ -415,29 +431,14 @@ const MaterielPage = () => {
           >
             <EditNoteIcon />
           </Button>
-          {/* <Button
-            title="Supprimer matériel"
-            onClick={() => handleDelete(params.row.numeroSerie)}
-          >
-            <DeleteOutlineOutlinedIcon />
-          </Button> */}
-          <Button
-            title="Mettre en rebut Materiel"
-            onClick={() => toggleStatus(params.row.numeroSerie)}
-          >
-            <Inventory2OutlinedIcon sx={{color:"red"}}
-            />
-          </Button>
           <Button
             title="Affecter matériel"
-            
             disabled={
               params.row.disponibilite === "Affecté" ||
               params.row.disponibilite === "Emprunté"
             }
             onClick={() => handleAffectation(params.row.numeroSerie)}
-            sx={{  color: "green"}}
-
+            sx={{ color: "green" }}
           >
             <QueuePlayNextOutlinedIcon />
           </Button>
@@ -449,7 +450,13 @@ const MaterielPage = () => {
             }
             onClick={() => handleEmprunt(params.row.numeroSerie)}
           >
-            <ManageHistoryOutlinedIcon />
+            <LoopIcon />
+          </Button>
+          <Button
+            title="Mettre en rebut Materiel"
+            onClick={() => toggleStatus(params.row.numeroSerie)}
+          >
+            <Inventory2OutlinedIcon sx={{ color: "red" }} />
           </Button>
         </div>
       ),
@@ -461,16 +468,17 @@ const MaterielPage = () => {
       <h1>Gestion de Matériel</h1>
       <Box sx={{ height: 800, width: "100%" }}>
         <Box sx={{ mb: 2 }}>
-          <Button onClick={handleOpenModal}
-          variant="contained"
-          startIcon={<Add />}
-
-          color="primary">
+          <Button
+            onClick={handleOpenModal}
+            variant="contained"
+            startIcon={<Add />}
+            color="primary"
+          >
             Ajouter Materiel
           </Button>
         </Box>
         <Box sx={{ height: 1000, width: "100%" }}>
-        <DataGrid
+          <DataGrid
             sx={{
               display: "flex",
               justifyContent: "center",
