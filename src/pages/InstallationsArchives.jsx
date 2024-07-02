@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import { Container } from "react-bootstrap";
-import AssignmentReturnSharpIcon from "@mui/icons-material/AssignmentReturnSharp";
 import InstallLicenceModal from "components/InstallLicenceModal";
 
 function Installations() {
@@ -16,19 +15,19 @@ function Installations() {
   const [openModal, setOpenModal] = useState(false);
   const [materialDetails, setMaterialDetails] = useState("");
   const [installationData, setInstallationData] = useState({
-    idInstallation:"",
+    idInstallation: "",
     numeroLicence: "",
     idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
-    etatOperation:"",
+    etatOperation: "",
     statutLicence: "",
   });
 
   const fetchInstallations = () => {
     axios
-      .get(ip + "/installation/encours/install")
+      .get(ip + "/installation/archives/install")
       .then((response) => {
         setInstallations(response.data);
       })
@@ -59,13 +58,16 @@ function Installations() {
   const handleSaveInstallation = () => {
     if (isEditing) {
       Promise.all([
-        axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
-          dateDesinstallation: installationData.dateDesinstallation,
-          etatOperation:"Désinstallée"
-        }),
+        axios.patch(
+          `${ip}/installation/${parseInt(installationData.idInstallation)}`,
+          {
+            dateDesinstallation: installationData.dateDesinstallation,
+            etatOperation: "Désinstallée",
+          }
+        ),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence
-          }),
+          statutLicence: installationData.statutLicence,
+        }),
       ])
         .then((response1, response2) => {
           handleClose();
@@ -80,7 +82,7 @@ function Installations() {
           numeroSerie: installationData.numeroSerie,
           dateInstallation: installationData.dateInstallation,
           dateDesinstallation: null,
-          etatOperation:"En cours d'utilisation"
+          etatOperation: "En cours d'utilisation",
         }),
         axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
           statutLicence: installationData.statutLicence,
@@ -118,19 +120,10 @@ function Installations() {
     { field: "idInstallation", headerName: "Identifiant", width: 50 },
     { field: "idLicence", headerName: "ID licence", width: 90 },
     { field: "numeroLicence", headerName: "N° licence", width: 250 },
-    //{ field: "numeroSerie", headerName: "Numero Série Materiel", width: 150 },
     {
       field: "numeroSerie",
       headerName: "Numero Série Materiel",
       width: 180,
-      renderCell: (params) => (
-        <div
-          onMouseEnter={() => handleMouseEnter(params.row.numeroSerie)}
-          title={materialDetails || "Aucun détail disponible"}
-        >
-          {params.value}
-        </div>
-      ),
     },
     {
       field: "dateInstallation",
@@ -147,23 +140,6 @@ function Installations() {
       headerName: "Statut",
       width: 150,
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      headerAlign: "center",
-      width: 100,
-      renderCell: (params) => (
-        <div text-align="left">
-          <Button
-            title="Désinstaller Matériel"
-            disabled={params.row.dateDesinstallation !== null}
-            onClick={() => handleEdit(params.row)}
-          >
-            <AssignmentReturnSharpIcon />
-          </Button>
-        </div>
-      ),
-    },
   ];
 
   const navigate = useNavigate();
@@ -176,16 +152,15 @@ function Installations() {
   return (
     <div style={{ height: 1000, width: "100%" }}>
       <Container className="py-4">
-      <Button
-        onClick={() => navigate(-1)}
-        variant="contained"
-        color="primary" // Use primary color
-        style={{ marginBottom: 16 }}
-        startIcon={<ReplyAllIcon />}
-
-      >
-        RETOUR
-      </Button>
+        <Button
+          onClick={() => navigate(-1)}
+          variant="contained"
+          color="primary" // Use primary color
+          style={{ marginBottom: 16 }}
+          startIcon={<ReplyAllIcon />}
+        >
+          RETOUR
+        </Button>
       </Container>
 
       <InstallLicenceModal
@@ -201,8 +176,9 @@ function Installations() {
         rows={rows}
         // @ts-ignore
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        // @ts-ignore
+        pageSize={10}
+        rowsPerPageOptions={[10]}
       />
     </div>
   );

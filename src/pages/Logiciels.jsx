@@ -9,6 +9,7 @@ import LogicielModal from "components/LogicielModal";
 import { useNavigate } from "react-router-dom";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import AddIcon from "@mui/icons-material/Add";
+import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 
 const Logiciels = () => {
   const [logiciels, setLogiciels] = useState([]);
@@ -152,7 +153,7 @@ const Logiciels = () => {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
-      align:'center',
+      align: "center",
       width: 400,
       renderCell: (params) => (
         <div text-align="left">
@@ -168,14 +169,17 @@ const Logiciels = () => {
           >
             <EditNoteIcon />
           </Button>
-          
         </div>
       ),
     },
   ];
 
   const handleHistoriqueInstallations = () => {
-    navigate(`/installations`);
+    navigate(`/installations/archives`);
+  };
+
+  const handleInstallationsEnCours = () => {
+    navigate(`/installations/encours`);
   };
 
   return (
@@ -193,7 +197,6 @@ const Logiciels = () => {
             color="primary"
             startIcon={<AddIcon />}
             onClick={() => handleOpen(null)}
-            style={{ marginRight: 16 }}
           >
             Ajouter Logiciel
           </Button>
@@ -201,8 +204,17 @@ const Logiciels = () => {
             <Button
               // variant="contained"
               color="primary"
+              startIcon={<ManageHistoryOutlinedIcon />}
+              onClick={handleInstallationsEnCours}
+            >
+              Désinstallation des licences
+            </Button>
+            <Button
+              // variant="contained"
+              color="primary"
               startIcon={<HistoryOutlinedIcon />}
               onClick={handleHistoriqueInstallations}
+              style={{ color: "red" }}
             >
               Historique des installations
             </Button>

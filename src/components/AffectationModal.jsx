@@ -17,11 +17,12 @@ const AffectationModal = ({
 }) => {
 
   const [utilisateurs, setUtilisateurs] = useState([]);
-  const EtatAffectation = {
-    Affecté: "Affecté",
-    Emprunté: "Emprunté",
-    Disponible: "Disponible",
-  };
+
+  // const EtatAffectation = {
+  //   Affecté: "Affecté",
+  //   Emprunté: "Emprunté",
+  //   Disponible: "Disponible",
+  // };
   
   const fetchUtilisateurs = () => {
     axios
@@ -117,7 +118,7 @@ const AffectationModal = ({
           // @ts-ignore
           helperText={errors.motifRetour}
         />
-        <TextField
+        {/* <TextField
           select
           label="Etat affectation"
           name="disponibilite"
@@ -135,7 +136,7 @@ const AffectationModal = ({
               {etat}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
         <Box
           display="flex"
           justifyContent="center"

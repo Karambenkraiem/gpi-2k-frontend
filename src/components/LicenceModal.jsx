@@ -4,15 +4,7 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
-import {
-  Box,
-  Button,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Modal, TextField } from "@mui/material";
 
 const LicenceModal = ({
   openModal,
@@ -34,12 +26,6 @@ const LicenceModal = ({
     p: 4,
     maxHeight: "90vh",
     overflowY: "auto",
-  };
-
-  const StatutLicence = {
-    Assignée: "Assignée",
-    Disponible: "Disponible",
-    Expirée: "Expirée"
   };
 
   const fetchSocietes = () => {
@@ -87,7 +73,7 @@ const LicenceModal = ({
           fullWidth
           margin="normal"
         />
-        
+
         <TextField
           label="Prix Licence"
           name="prixLicence"
@@ -98,25 +84,6 @@ const LicenceModal = ({
           fullWidth
           margin="normal"
         />
-
-        <InputLabel htmlFor="statutLicence" hidden={isEditing}>Statut</InputLabel>
-
-        <Select
-          label="Statut"
-          name="statutLicence"
-          required
-          value={licenceData.statutLicence}
-          onChange={handleChange}
-          fullWidth
-          style={{ marginTop: "1rem" }}
-          hidden={isEditing}
-        >
-          {Object.values(StatutLicence).map((elem) => (
-            <MenuItem key={elem} value={elem}>
-              {elem}
-            </MenuItem>
-          ))}
-        </Select>
 
         <Box
           display="flex"

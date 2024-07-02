@@ -23,6 +23,7 @@ import Societe from "pages/Societe";
 import DetailsLogiciel from "pages/DetailsLogiciel";
 import DetailsSociete from "pages/DetailsSociete";
 import Installations from "pages/Installations";
+import InstallationsArchives from "pages/InstallationsArchives";
 
 
 export default function Router() {
@@ -49,7 +50,8 @@ export default function Router() {
             <Route path="/societes" element={< Societe/>} />
             <Route path="/detailsLogiciel/:idLogiciel" element={< DetailsLogiciel/>} />
             <Route path="/detailsSociete/:idSociete" element={< DetailsSociete/>} />
-            <Route path="/installations" element={< Installations/>} />
+            <Route path="/installations/encours" element={< Installations/>} />
+            <Route path="/installations/archives" element={< InstallationsArchives/>} />
 
 
 

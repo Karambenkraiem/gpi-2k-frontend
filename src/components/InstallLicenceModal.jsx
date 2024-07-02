@@ -30,12 +30,7 @@ const InstallLicenceModal = ({
     dateExpiration: "",
     prixLicence: null,
     idLogiciel: "",
-    statutLicence: "",
   });
-  const StatutLicence = {
-    Assignée: "Assignée",
-    Disponible: "Disponible",
-  };
 
   const fetchMateriels = () => {
     axios
@@ -100,6 +95,7 @@ const InstallLicenceModal = ({
           onChange={handleChange}
           fullWidth
           style={{ marginTop: "1rem" }}
+          disabled={isEditing}
         >
           {materiels.map((elem) => (
             <MenuItem key={elem.numeroSerie} value={elem.numeroSerie}>
@@ -112,11 +108,15 @@ const InstallLicenceModal = ({
           label={"Date d'installation"}
           placeholder="Sélectionner une date"
           name="dateInstallation"
-          value={dayjs(installationData?.dateInstallation).format("YYYY-MM-DD") || null}
+          value={
+            dayjs(installationData?.dateInstallation).format("YYYY-MM-DD") ||
+            null
+          }
           type="date"
           onChange={handleChange}
           fullWidth
           margin="normal"
+          disabled={isEditing}
         />
 
         {isEditing && (
@@ -124,33 +124,17 @@ const InstallLicenceModal = ({
             label={"Date désinstallation"}
             placeholder="Sélectionner une date"
             name="dateDesinstallation"
-            value={dayjs(installationData?.dateDesinstallation).format(
-              "YYYY-MM-DD"
-            )  || null}
+            value={
+              dayjs(installationData?.dateDesinstallation).format(
+                "YYYY-MM-DD"
+              ) || null
+            }
             type="date"
             onChange={handleChange}
             fullWidth
             margin="normal"
           />
         )}
-
-        <InputLabel htmlFor="statutLicence">Statut</InputLabel>
-        <Select
-          label="Statut"
-          name="statutLicence"
-          required
-          value={installationData.statutLicence}
-          onChange={handleChange}
-          fullWidth
-          style={{ marginTop: "1rem" }}
-          //disabled={installationData.statutLicence == "Assignée"}
-        >
-          {Object.values(StatutLicence).map((elem) => (
-            <MenuItem key={elem} value={elem}>
-              {elem}
-            </MenuItem>
-          ))}
-        </Select>
 
         <Box
           display="flex"
@@ -164,6 +148,7 @@ const InstallLicenceModal = ({
             color="primary"
             sx={{ flexGrow: 1 }}
             onClick={handleSave}
+            disabled={installationData?.dateDesinstallation == null}
           >
             {isEditing ? <FaRegSave /> : <IoPersonAddOutline />}
             {isEditing ? " Enregistrer" : " Ajouter"}

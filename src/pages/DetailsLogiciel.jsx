@@ -11,6 +11,7 @@ import InstallDesktopIcon from "@mui/icons-material/InstallDesktop";
 import LicenceModal from "components/LicenceModal";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import InstallLicenceModal from "components/InstallLicenceModal";
+import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 
 const DetailsLogiciel = () => {
   const { idLogiciel } = useParams();
@@ -20,27 +21,25 @@ const DetailsLogiciel = () => {
   const [licences, setLicences] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [openInstallModal, setOpenInstallModal] = useState(false);  const navigate = useNavigate();
+  const [openInstallModal, setOpenInstallModal] = useState(false);
+  const navigate = useNavigate();
   const [licenceData, setLicenceData] = useState({
-    idInstallation:"",
+    idInstallation: "",
     idLicence: "",
     numeroLicence: "",
     dateActivation: "",
     dateExpiration: "",
     prixLicence: null,
     idLogiciel: idLogiciel,
-    statutLicence: "",
   });
 
   const [installationData, setInstallationData] = useState({
-    idInstallation:"",
+    idInstallation: "",
     numeroLicence: "",
     idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
-    etatOperation:"",
-    statutLicence: "",
   });
 
   const fetchSocieties = () => {
@@ -54,13 +53,8 @@ const DetailsLogiciel = () => {
       });
   };
 
-  const fetchLogiciels = () => {
-    axios
-      .get(`${ip}/logiciels`)
-      .then((response) => {
-        setLogiciels(response.data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+  const handleInstallationsEnCours = () => {
+    navigate(`/installations/encours`);
   };
 
   const fetchLogiciel = () => {
@@ -95,14 +89,13 @@ const DetailsLogiciel = () => {
       setIsEditing(true);
     } else {
       setLicenceData({
-        idInstallation:"",
+        idInstallation: "",
         idLicence: "",
         numeroLicence: "",
         dateActivation: "",
         dateExpiration: "",
         prixLicence: null,
         idLogiciel: idLogiciel,
-        statutLicence: "",
       });
       console.log(idLogiciel);
       setIsEditing(false);
@@ -110,23 +103,19 @@ const DetailsLogiciel = () => {
     setOpenModal(true);
   };
 
-  
   const handleInstallOpen = (rowData = null, idLic, NumLic) => {
     if (rowData) {
       setInstallationData(rowData);
       setIsEditing(true);
     } else {
       setInstallationData({
-        idInstallation:"",
+        idInstallation: "",
         numeroLicence: NumLic,
         idLicence: idLic,
         numeroSerie: "",
         dateInstallation: "",
         dateDesinstallation: "",
-        etatOperation:"",
-        statutLicence: "",
       });
-      console.log(idLogiciel);
       setIsEditing(false);
     }
     setOpenInstallModal(true);
@@ -140,7 +129,6 @@ const DetailsLogiciel = () => {
           dateActivation: licenceData.dateActivation,
           dateExpiration: licenceData.dateExpiration,
           prixLicence: parseFloat(licenceData.prixLicence),
-          statutLicence: licenceData.statutLicence,
           idLogiciel: parseInt(licenceData.idLogiciel),
         })
         .then((response) => {
@@ -158,11 +146,12 @@ const DetailsLogiciel = () => {
           dateActivation: licenceData.dateActivation,
           dateExpiration: licenceData.dateExpiration,
           prixLicence: parseFloat(licenceData.prixLicence),
-          statutLicence: licenceData.statutLicence,
+          statutLicence: "Disponible",
           idLogiciel: parseInt(licenceData.idLogiciel),
         })
         .then((response) => {
           setLicences([...licences, response.data]);
+          fetchLicences();
           handleClose();
         })
         .catch((error) => {
@@ -172,43 +161,110 @@ const DetailsLogiciel = () => {
   };
 
   const handleSaveInstallation = () => {
+    const { idInstallation, idLicence, numeroSerie, dateInstallation, dateDesinstallation } = installationData;
+  
+    const fetchUpdatedLicenses = () => {
+      axios.get(`${ip}/licence`)
+        .then((response) => {
+          // Assuming you have a method to update the state of licenses in your component
+          setLicenceData(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching updated licenses", error);
+        });
+    };
+  
     if (isEditing) {
       Promise.all([
-        axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
-          dateDesinstallation: installationData.dateDesinstallation,
-          etatOperation:"Désinstallée"
+        axios.patch(`${ip}/installation/${parseInt(idInstallation)}`, {
+          idLicence,
+          numeroSerie,
+          dateInstallation,
+          dateDesinstallation,
+          etatOperation: "Désinstallée",
         }),
-        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence
-          }),
-      ])
-        .then((response1, response2) => {
-          handleClose();
-        })
-        .catch((error) =>
-          console.error("Probleme modification de la licence", error)
-        );
-    } else {
-      Promise.all([
-        axios.post(`${ip}/installation`, {
-          idLicence: installationData.idLicence,
-          numeroSerie: installationData.numeroSerie,
-          dateInstallation: installationData.dateInstallation,
-          dateDesinstallation: null,
-          etatOperation:"En cours d'utilisation"
-        }),
-        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence,
+        axios.patch(`${ip}/licence/${parseInt(idLicence)}`, {
+          statutLicence: "Disponible",
         }),
       ])
-        .then((response1, response2) => {
+        .then(([response1, response2]) => {
+          console.log("Installation and license updated successfully", response1, response2);
+          fetchUpdatedLicenses();
           handleClose();
         })
         .catch((error) => {
-          console.error("Erreur ajout de la licence!");
+          console.error("Error updating installation or license", error);
+        });
+    } else {
+      Promise.all([
+        axios.post(`${ip}/installation`, {
+          idLicence,
+          numeroSerie,
+          dateInstallation,
+          dateDesinstallation: null,
+          etatOperation: "En cours d'utilisation",
+        }),
+        axios.patch(`${ip}/licence/${parseInt(idLicence)}`, {
+          statutLicence: "Assignée",
+        }),
+      ])
+        .then(([response1, response2]) => {
+          console.log("Installation created and license updated successfully", response1, response2);
+          fetchUpdatedLicenses();
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Error creating installation or updating license", error);
         });
     }
   };
+  
+  
+
+  // const handleSaveInstallation = () => {
+  //   if (isEditing) {
+  //     Promise.all([
+  //       axios.patch(
+  //         `${ip}/installation/${parseInt(installationData.idInstallation)}`,
+  //         {
+  //           idLicence: installationData.idLicence,
+  //           numeroSerie: installationData.numeroSerie,
+  //           dateInstallation: installationData.dateInstallation,
+  //           dateDesinstallation: installationData.dateDesinstallation,
+  //           etatOperation: "Désinstallée",
+  //         }
+  //       ),
+  //       axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+  //         statutLicence: "Disponible",
+  //       }),
+  //     ])
+  //       .then((response1, response2) => {
+  //         handleClose();
+  //       })
+  //       .catch((error) =>
+  //         console.error("Probleme modification de la licence", error)
+  //       );
+  //   } else {
+  //     Promise.all([
+  //       axios.post(`${ip}/installation`, {
+  //         idLicence: installationData.idLicence,
+  //         numeroSerie: installationData.numeroSerie,
+  //         dateInstallation: installationData.dateInstallation,
+  //         dateDesinstallation: null,
+  //         etatOperation: "En cours d'utilisation",
+  //       }),
+  //       axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+  //         statutLicence: "Assignée  ",
+  //       }),
+  //     ])
+  //       .then((response1, response2) => {
+  //         handleClose();
+  //       })
+  //       .catch((error) => {
+  //         console.error("Erreur ajout de la licence!");
+  //       });
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -255,6 +311,7 @@ const DetailsLogiciel = () => {
           </Button>
           <Button
             title="Assigner une licence"
+            disabled={params.row.statutLicence === "Assignée"}
             onClick={() =>
               handleInstallOpen(
                 null,
@@ -262,14 +319,9 @@ const DetailsLogiciel = () => {
                 params.row.numeroLicence
               )
             }
-            disabled={
-              params.row.statutLicence === "Assignée" ||
-              params.row.statutLicence === "Expirée"
-            }
           >
             <InstallDesktopIcon />
           </Button>
-
         </div>
       ),
     },
@@ -283,21 +335,36 @@ const DetailsLogiciel = () => {
   ];
 
   return (
-
     <div>
       <h1>Details logiciels</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-        <Button
-        onClick={() => navigate(-1)}
-        variant="contained"
-        color="primary" // Use primary color
-        style={{ marginBottom: 16 }}
-        startIcon={<ReplyAllIcon />}
-
-      >
-        RETOUR
-      </Button>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            marginBottom={2}
+          >
+            <Button
+              onClick={() => navigate(-1)}
+              variant="contained"
+              color="primary" // Use primary color
+              //style={{ marginBottom: 16 }}
+              startIcon={<ReplyAllIcon />}
+            >
+              RETOUR
+            </Button>
+            <Box display="flex" gap={2}>
+              <Button
+                // variant="contained"
+                color="primary"
+                startIcon={<ManageHistoryOutlinedIcon />}
+                onClick={handleInstallationsEnCours}
+              >
+                Désinstallation des licences
+              </Button>
+            </Box>
+          </Box>
 
           <Row>
             <Col lg={4}>
