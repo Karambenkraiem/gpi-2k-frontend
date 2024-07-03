@@ -31,7 +31,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import BusinessIcon from '@mui/icons-material/Business';
 import ComputerIcon from '@mui/icons-material/Computer';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
-
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
@@ -124,6 +124,7 @@ const initialNavItems = [
   {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
   {label: "Ressources logicielles", path:"/logiciels", icon:<AppsIcon/>},
   {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
+  {label: "Contrats", path:"/contrats", icon:<AssignmentOutlinedIcon/>},
   {
     label: "Gestion des incidents",
     icon: <ErrorOutlineOutlinedIcon />,
