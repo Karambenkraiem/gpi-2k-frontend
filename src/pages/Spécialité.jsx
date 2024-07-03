@@ -64,7 +64,6 @@ const Spécialité = () => {
         idSpecialite: "",
         nom: "",
         idDepartement: "",
-       
       });
       setIsEditing(false);
     }
@@ -120,7 +119,7 @@ const Spécialité = () => {
       console.error("Données Introuvables !!!");
       return;
     }
-  
+
     let newStatut;
     switch (specialite.statutSpecialite) {
       case "Actif":
@@ -129,27 +128,28 @@ const Spécialité = () => {
       default:
         newStatut = "Suspendu";
     }
-  
+
     const updatedSpecialite = {
       ...specialite,
       statutSpecialite: newStatut,
     };
-  
+
     const { Departement, ...rest } = updatedSpecialite;
     console.log(newStatut);
-  
+
     axios
       .patch(`${ip}/specialite/${idSpec}`, rest)
       .then((response) => {
         setSpecialites(
-          specialites.map((s) => (s.idSpecialite === idSpec ? response.data : s))
+          specialites.map((s) =>
+            s.idSpecialite === idSpec ? response.data : s
+          )
         );
       })
       .catch((error) => {
         console.error("Erreur Mise à jour statut spécialité !!! ", error);
       });
   };
-  
 
   // const handleDelete = (id) => {
   //   axios
@@ -208,11 +208,11 @@ const Spécialité = () => {
           </Button>
           <Button
             title="Suspendre Spécialité"
-            sx={{  color: "red"}}
+            sx={{ color: "red" }}
             onClick={() => handleBlockSpec(params.row.idSpecialite)}
           >
             <BlockOutlined sx={{ color: "red" }} />
-            </Button>
+          </Button>
         </div>
       ),
     },
@@ -234,7 +234,7 @@ const Spécialité = () => {
   return (
     <div>
       <h1>Gestion des spécialités</h1>
-      <Box sx={{ height: 1000, width: "100%" }}>
+      <Box sx={{ height: 500, width: "100%" }}>
         <Box sx={{ mb: 2 }}>
           <Button
             variant="contained"
@@ -314,11 +314,11 @@ const Spécialité = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 50,
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[5,10,25, 50, 100]}
           disableRowSelectionOnClick
         />
       </Box>

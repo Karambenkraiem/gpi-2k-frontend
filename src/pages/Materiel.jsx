@@ -124,7 +124,7 @@ const MaterielPage = () => {
     etatMateriel: "",
     dateAcquisition: "",
     disponibilite: "Disponible",
-    idSociete: "",
+    idSociete: 0,
     nombrePortSwitch: "",
     debitSwitch: "",
     technologieSwitch: "",
@@ -466,7 +466,7 @@ const MaterielPage = () => {
   return (
     <div>
       <h1>Gestion de Matériel</h1>
-      <Box sx={{ height: 800, width: "100%" }}>
+      <Box sx={{ height: 500, width: "100%" }}>
         <Box sx={{ mb: 2 }}>
           <Button
             onClick={handleOpenModal}
@@ -477,31 +477,33 @@ const MaterielPage = () => {
             Ajouter Materiel
           </Button>
         </Box>
-        <Box sx={{ height: 1000, width: "100%" }}>
+       
           <DataGrid
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
+            // sx={{
+            //   display: "flex",
+            //   justifyContent: "center",
+            // }}
             rows={materiels}
-            pageSize={pageSize}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            pagination
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 25,
-                },
-              },
-            }}
             // @ts-ignore
             columns={columns}
             loading={loading}
-            disableSelectionOnClick
             getRowId={(row) => row.numeroSerie}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 50,
+                },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25, 50, 100]}
+            disableRowSelectionOnClick
+            // pageSize={pageSize}
+            // onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            // rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            // pagination
+            // @ts-ignore
           />
-        </Box>
+        
 
         <AffectationModal
           affectationData={affectationData}

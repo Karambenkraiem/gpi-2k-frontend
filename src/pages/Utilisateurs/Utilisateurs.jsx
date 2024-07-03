@@ -12,7 +12,6 @@ import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
 import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
 import { Add } from "@mui/icons-material";
 
-
 const Utilisateurs = () => {
   const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState({});
@@ -146,14 +145,13 @@ const Utilisateurs = () => {
     validate(name, value);
   };
 
-
   const handleBlockUser = (userId) => {
     const user = users.find((u) => u.idUtilisateur === userId);
     if (!user) {
       console.error("Données Introuvable !!!");
       return;
     }
-  
+
     let newStatus;
     switch (user.etatUtilisateur) {
       case "actif":
@@ -163,11 +161,10 @@ const Utilisateurs = () => {
         newStatus = "suspendu";
         break;
       case "suspendu":
-       
         break;
       default:
         newStatus = "actif";
-    }  
+    }
     const updatedUser = {
       ...user,
       etatUtilisateur: newStatus,
@@ -182,7 +179,7 @@ const Utilisateurs = () => {
       .catch((error) => {
         console.error("Erreur Mise à jour état utilisateur !!! ", error);
       });
-  };  
+  };
 
   const toggleStatus = (userId) => {
     const user = users.find((u) => u.idUtilisateur === userId);
@@ -198,7 +195,7 @@ const Utilisateurs = () => {
         break;
       case "inactif":
         newStatus = "actif";
-        break;     
+        break;
       default:
         newStatus = "actif";
     }
@@ -264,19 +261,21 @@ const Utilisateurs = () => {
           <Button
             title="Modifier Utilisateur"
             onClick={() => handleOpen(params.row)}
-            disabled={ params.row.etatUtilisateur === "suspendu"}
-
+            disabled={params.row.etatUtilisateur === "suspendu"}
           >
             <EditNoteIcon />
           </Button>
           <Button
             title="Activer / Desactiver Utilisateur"
             onClick={() => toggleStatus(params.row.idUtilisateur)}
-            disabled={ params.row.etatUtilisateur === "suspendu"}
+            disabled={params.row.etatUtilisateur === "suspendu"}
           >
             <LockPersonOutlinedIcon />
           </Button>
-          <Button onClick={()=>handleBlockUser(params.row.idUtilisateur)} title="Suspendre le compte">
+          <Button
+            onClick={() => handleBlockUser(params.row.idUtilisateur)}
+            title="Suspendre le compte"
+          >
             <NoAccountsOutlinedIcon sx={{ color: "red" }} />
           </Button>
         </div>
@@ -294,7 +293,6 @@ const Utilisateurs = () => {
             color="primary"
             onClick={() => handleOpen(null)}
             startIcon={<Add />}
-
           >
             Ajouter Utilisateur
           </Button>
@@ -308,28 +306,29 @@ const Utilisateurs = () => {
           handleSave={handleSave}
           errors={errors}
         />
-      <Box sx={{ height: 1000, width: "100%" }}>
+        <Box sx={{ height: 500, width: "100%" }}>
+          <DataGrid
+            // @ts-ignore
+            // pageSize={pageSize}
 
-        <DataGrid
-          rows={users}
-          // @ts-ignore
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          pagination
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 25,
+            // onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            // rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            // pagination
+            rows={users}
+            // @ts-ignore
+            columns={columns}
+            loading={loading}
+            getRowId={(row) => row.idUtilisateur}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 25,
+                },
               },
-            },
-          }}
-          // @ts-ignore
-          columns={columns}
-          loading={loading}
-          disableRowSelectionOnClick
-          getRowId={(row) => row.idUtilisateur}
-        />
+            }}
+            pageSizeOptions={[5, 10, 25, 50, 100]}
+            disableRowSelectionOnClick
+          />
         </Box>
       </Box>
     </div>

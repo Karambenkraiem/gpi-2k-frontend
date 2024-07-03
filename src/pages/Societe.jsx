@@ -107,13 +107,21 @@ const Societes = () => {
           Ajouter Societé
         </Button>
       </Box>
-      <Box sx={{ height: 1000, width: '100%' }}>
+      <Box sx={{ height: 500, width: '100%' }}>
         <DataGrid
           rows={societes}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
           getRowId={(row) => row.idSociete}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 50,
+              },
+            },
+          }}
+          pageSizeOptions={[5,10,25, 50, 100]}
+          disableRowSelectionOnClick
+
         />
       </Box>
       <SocieteModal
