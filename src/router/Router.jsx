@@ -55,7 +55,7 @@ export default function Router() {
             <Route path="/installations/encours" element={< Installations/>} />
             <Route path="/installations/archives" element={< InstallationsArchives/>} />
             <Route path="/incidents/utilisateur" element={< IncidentUtilisateur/>} />
-            <Route path="/incidents/admnistrateur" element={< IncidentAdmin/>} />
+            <Route path="/incidents/administrateur" element={< IncidentAdmin/>} />
           
 
 

@@ -128,8 +128,8 @@ const initialNavItems = [
     label: "Gestion des incidents",
     icon: <ErrorOutlineOutlinedIcon />,
     items: [
-      { label: "Réclamer incident", path: "/incidentsUtilisateur", icon: <DesktopWindowsIcon /> },
-      { label: "Gérer les incidents", path: "/incidentsAdmin", icon: <TextRotationNoneIcon /> },
+      { label: "Réclamer incident", path: "/incidents/utilisateur", icon: <DesktopWindowsIcon /> },
+      { label: "Gérer les incidents", path: "/incidents/administrateur", icon: <TextRotationNoneIcon /> },
     ]
   },
 ];
