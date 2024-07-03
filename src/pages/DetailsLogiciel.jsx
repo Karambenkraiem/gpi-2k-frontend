@@ -16,7 +16,6 @@ import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined
 const DetailsLogiciel = () => {
   const { idLogiciel } = useParams();
   const [societies, setSocieties] = useState([]);
-  const [logiciels, setLogiciels] = useState([]);
   const [logiciel, setLogiciel] = useState([]);
   const [licences, setLicences] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -24,7 +23,6 @@ const DetailsLogiciel = () => {
   const [openInstallModal, setOpenInstallModal] = useState(false);
   const navigate = useNavigate();
   const [licenceData, setLicenceData] = useState({
-    idInstallation: "",
     idLicence: "",
     numeroLicence: "",
     dateActivation: "",
@@ -89,7 +87,6 @@ const DetailsLogiciel = () => {
       setIsEditing(true);
     } else {
       setLicenceData({
-        idInstallation: "",
         idLicence: "",
         numeroLicence: "",
         dateActivation: "",
@@ -103,23 +100,24 @@ const DetailsLogiciel = () => {
     setOpenModal(true);
   };
 
-  const handleInstallOpen = (rowData = null, idLic, NumLic) => {
-    if (rowData) {
-      setInstallationData(rowData);
-      setIsEditing(true);
-    } else {
-      setInstallationData({
-        idInstallation: "",
-        numeroLicence: NumLic,
-        idLicence: idLic,
-        numeroSerie: "",
-        dateInstallation: "",
-        dateDesinstallation: "",
-      });
-      setIsEditing(false);
-    }
+  const handleInstallOpen = (idLic, NumLic) => {
+    setInstallationData({
+      idInstallation: "",
+      numeroLicence: NumLic,
+      idLicence: idLic,
+      numeroSerie: "",
+      dateInstallation: "",
+      dateDesinstallation: "",
+    });
+    setIsEditing(false);
     setOpenInstallModal(true);
   };
+
+  // const handleInstallEdit = (rowData) => {
+  //   setInstallationData(rowData);
+  //   setIsEditing(true);
+  //   setOpenDesinstallModal(true);
+  // };
 
   const handleSave = () => {
     if (isEditing) {
@@ -161,67 +159,29 @@ const DetailsLogiciel = () => {
   };
 
   const handleSaveInstallation = () => {
-    const { idInstallation, idLicence, numeroSerie, dateInstallation, dateDesinstallation } = installationData;
-  
-    const fetchUpdatedLicenses = () => {
-      axios.get(`${ip}/licence`)
-        .then((response) => {
-          // Assuming you have a method to update the state of licenses in your component
-          setLicenceData(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching updated licenses", error);
-        });
-    };
-  
-    if (isEditing) {
-      Promise.all([
-        axios.patch(`${ip}/installation/${parseInt(idInstallation)}`, {
-          idLicence,
-          numeroSerie,
-          dateInstallation,
-          dateDesinstallation,
-          etatOperation: "Désinstallée",
-        }),
-        axios.patch(`${ip}/licence/${parseInt(idLicence)}`, {
-          statutLicence: "Disponible",
-        }),
-      ])
-        .then(([response1, response2]) => {
-          console.log("Installation and license updated successfully", response1, response2);
-          fetchUpdatedLicenses();
-          handleClose();
-        })
-        .catch((error) => {
-          console.error("Error updating installation or license", error);
-        });
-    } else {
-      Promise.all([
-        axios.post(`${ip}/installation`, {
-          idLicence,
-          numeroSerie,
-          dateInstallation,
-          dateDesinstallation: null,
-          etatOperation: "En cours d'utilisation",
-        }),
-        axios.patch(`${ip}/licence/${parseInt(idLicence)}`, {
-          statutLicence: "Assignée",
-        }),
-      ])
-        .then(([response1, response2]) => {
-          console.log("Installation created and license updated successfully", response1, response2);
-          fetchUpdatedLicenses();
-          handleClose();
-        })
-        .catch((error) => {
-          console.error("Error creating installation or updating license", error);
-        });
-    }
+    Promise.all([
+      axios.post(`${ip}/installation`, {
+        numeroSerie: installationData.numeroSerie,
+        idLicence: installationData.idLicence,
+        dateInstallation: installationData.dateInstallation,
+        dateDesinstallation: null,
+        etatOperation: "En cours d'utilisation",
+      }),
+      axios.patch(`${ip}/licence/statut/${installationData.idLicence}`, {
+        statutLicence: "Assignée",
+      }),
+    ])
+      .then((response1, response2) => {
+        handleClose();
+        fetchLicences();
+      })
+      .catch((error) => {
+        console.error("Erreur ajout de la licence!");
+      });
   };
-  
-  
 
-  // const handleSaveInstallation = () => {
+  // const handleSaveDesinstallation = () => {
+  //   console.log(installationData.idLicence);
   //   if (isEditing) {
   //     Promise.all([
   //       axios.patch(
@@ -234,7 +194,7 @@ const DetailsLogiciel = () => {
   //           etatOperation: "Désinstallée",
   //         }
   //       ),
-  //       axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
+  //       axios.patch(`${ip}/licence/statut/${installationData.idLicence}`, {
   //         statutLicence: "Disponible",
   //       }),
   //     ])
@@ -247,18 +207,19 @@ const DetailsLogiciel = () => {
   //   } else {
   //     Promise.all([
   //       axios.post(`${ip}/installation`, {
-  //         idLicence: installationData.idLicence,
   //         numeroSerie: installationData.numeroSerie,
+  //         idLicence: installationData.idLicence,
   //         dateInstallation: installationData.dateInstallation,
   //         dateDesinstallation: null,
   //         etatOperation: "En cours d'utilisation",
   //       }),
-  //       axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-  //         statutLicence: "Assignée  ",
+  //       axios.patch(`${ip}/licence/statut/${installationData.idLicence}`, {
+  //         statutLicence: "Assignée",
   //       }),
   //     ])
   //       .then((response1, response2) => {
   //         handleClose();
+  //         fetchLicences();
   //       })
   //       .catch((error) => {
   //         console.error("Erreur ajout de la licence!");
@@ -313,11 +274,7 @@ const DetailsLogiciel = () => {
             title="Assigner une licence"
             disabled={params.row.statutLicence === "Assignée"}
             onClick={() =>
-              handleInstallOpen(
-                null,
-                params.row.idLicence,
-                params.row.numeroLicence
-              )
+              handleInstallOpen(params.row.idLicence, params.row.numeroLicence)
             }
           >
             <InstallDesktopIcon />
@@ -433,11 +390,18 @@ const DetailsLogiciel = () => {
                   <InstallLicenceModal
                     openInstallModal={openInstallModal}
                     handleClose={handleClose}
-                    isEditing={isEditing}
                     installationData={installationData}
                     handleChange={handleChangeInstall}
                     handleSave={handleSaveInstallation}
                   />
+                  {/* <DesinstallLicenceModal
+                    openInstallModal={openInstallModal}
+                    handleClose={handleClose}
+                    isEditing={isEditing}
+                    installationData={installationData}
+                    handleChange={handleChangeInstall}
+                    handleSave={handleSaveDesinstallation}
+                  /> */}
                 </Card.Body>
               </Card>
             </Col>

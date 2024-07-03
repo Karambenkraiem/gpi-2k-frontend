@@ -13,7 +13,6 @@ import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined
 
 const Logiciels = () => {
   const [logiciels, setLogiciels] = useState([]);
-  const [pageSize, setPageSize] = useState(25);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);

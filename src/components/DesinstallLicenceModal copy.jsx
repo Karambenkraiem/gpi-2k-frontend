@@ -14,9 +14,10 @@ import React, { useEffect, useState } from "react";
 import { FaRegSave } from "react-icons/fa";
 import { IoPersonAddOutline } from "react-icons/io5";
 
-const InstallLicenceModal = ({
+const DesinstallLicenceModal = ({
   installationData,
   openInstallModal,
+  isEditing,
   handleClose,
   handleChange,
   handleSave,
@@ -40,6 +41,17 @@ const InstallLicenceModal = ({
       .catch((error) => console.error("Error fetching data:", error));
   };
 
+  const fetchLicence = () => {
+    axios
+      .get(ip + `/licence/${installationData.idLicence}`)
+      .then((response) => {
+        setLicence(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur récupération de la liste des licences!", error);
+      });
+  };
+
   useEffect(() => {
     fetchMateriels();
   }, []);
@@ -60,7 +72,7 @@ const InstallLicenceModal = ({
   return (
     <Modal open={openInstallModal}>
       <Box sx={style}>
-        <h2>{"Assigner licence"}</h2>
+        <h2>{isEditing ? "Retirer licence" : "Assigner licence"}</h2>
 
         <TextField
           label="N° Licence"
@@ -83,6 +95,7 @@ const InstallLicenceModal = ({
           onChange={handleChange}
           fullWidth
           style={{ marginTop: "1rem" }}
+          disabled
         >
           {materiels.map((elem) => (
             <MenuItem key={elem.numeroSerie} value={elem.numeroSerie}>
@@ -100,7 +113,19 @@ const InstallLicenceModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
+          disabled
         />
+        
+          <TextField
+            label={"Date désinstallation"}
+            placeholder="Sélectionner une date"
+            name="dateDesinstallation"
+            value={ dayjs(installationData?.dateDesinstallation).format("YYYY-MM-DD") }
+            type="date"
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
 
         <Box
           display="flex"
@@ -114,10 +139,10 @@ const InstallLicenceModal = ({
             color="primary"
             sx={{ flexGrow: 1 }}
             onClick={handleSave}
-            disabled={installationData?.dateInstallation === null || installationData.numeroSerie === null}
+            disabled={installationData?.dateDesinstallation == null}
           >
-            <IoPersonAddOutline />
-            Ajouter
+            <FaRegSave />
+            Enregistrer
           </Button>
 
           <Button
@@ -134,4 +159,4 @@ const InstallLicenceModal = ({
   );
 };
 
-export default InstallLicenceModal;
+export default DesinstallLicenceModal;

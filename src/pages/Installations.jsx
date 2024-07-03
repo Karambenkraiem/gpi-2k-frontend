@@ -7,23 +7,20 @@ import { DataGrid } from "@mui/x-data-grid";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import { Container } from "react-bootstrap";
 import AssignmentReturnSharpIcon from "@mui/icons-material/AssignmentReturnSharp";
-import InstallLicenceModal from "components/InstallLicenceModal";
+import DesinstallLicenceModal from "components/DesinstallLicenceModal copy";
 
 function Installations() {
   const [installations, setInstallations] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [openInstallModal, setOpenInstallModal] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openDesinstallModal, setOpenDesinstallModal] = useState(false);
   const [materialDetails, setMaterialDetails] = useState("");
   const [installationData, setInstallationData] = useState({
-    idInstallation:"",
+    idInstallation: "",
     numeroLicence: "",
     idLicence: "",
     numeroSerie: "",
     dateInstallation: "",
     dateDesinstallation: "",
-    etatOperation:"",
-    statutLicence: "",
   });
 
   const fetchInstallations = () => {
@@ -56,55 +53,38 @@ function Installations() {
     fetchInstallations();
   }, []);
 
-  const handleSaveInstallation = () => {
-    if (isEditing) {
-      Promise.all([
-        axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`, {
-          dateDesinstallation: installationData.dateDesinstallation,
-          etatOperation:"Désinstallée"
-        }),
-        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence
-          }),
-      ])
-        .then((response1, response2) => {
-          handleClose();
-        })
-        .catch((error) =>
-          console.error("Probleme modification de la licence", error)
-        );
-    } else {
-      Promise.all([
-        axios.post(`${ip}/installation`, {
+  const handleSaveDesinstallation = () => {
+    Promise.all([
+      axios.patch(`${ip}/installation/${parseInt(installationData.idInstallation)}`,
+        {
           idLicence: installationData.idLicence,
           numeroSerie: installationData.numeroSerie,
           dateInstallation: installationData.dateInstallation,
-          dateDesinstallation: null,
-          etatOperation:"En cours d'utilisation"
-        }),
-        axios.patch(`${ip}/licence/${parseInt(installationData.idLicence)}`, {
-          statutLicence: installationData.statutLicence,
-        }),
-      ])
-        .then((response1, response2) => {
-          handleClose();
-        })
-        .catch((error) => {
-          console.error("Erreur ajout de la licence!");
-        });
-    }
+          dateDesinstallation: installationData.dateDesinstallation,
+          etatOperation:  "Désinstallée",
+        }
+      ),
+      axios.patch(`${ip}/licence/statut/${installationData.idLicence}`, {
+        statutLicence:  "Disponible",
+      }),
+    ])
+      .then((response1, response2) => {
+        handleClose();
+      })
+      .catch((error) =>
+        console.error("Probleme désinstallation de la licence", error)
+      );
   };
 
   const handleEdit = (row) => {
     setInstallationData(row);
     setIsEditing(true);
-    setOpenInstallModal(true);
+    setOpenDesinstallModal(true);
   };
 
   const handleClose = () => {
-    setOpenInstallModal(false);
+    setOpenDesinstallModal(false);
     fetchInstallations();
-    setOpenModal(false);
   };
 
   const rows = installations.map((installation, index) => ({
@@ -118,7 +98,6 @@ function Installations() {
     { field: "idInstallation", headerName: "Identifiant", width: 50 },
     { field: "idLicence", headerName: "ID licence", width: 90 },
     { field: "numeroLicence", headerName: "N° licence", width: 250 },
-    //{ field: "numeroSerie", headerName: "Numero Série Materiel", width: 150 },
     {
       field: "numeroSerie",
       headerName: "Numero Série Materiel",
@@ -176,25 +155,24 @@ function Installations() {
   return (
     <div style={{ height: 1000, width: "100%" }}>
       <Container className="py-4">
-      <Button
-        onClick={() => navigate(-1)}
-        variant="contained"
-        color="primary" // Use primary color
-        style={{ marginBottom: 16 }}
-        startIcon={<ReplyAllIcon />}
-
-      >
-        RETOUR
-      </Button>
+        <Button
+          onClick={() => navigate(-1)}
+          variant="contained"
+          color="primary" // Use primary color
+          style={{ marginBottom: 16 }}
+          startIcon={<ReplyAllIcon />}
+        >
+          RETOUR
+        </Button>
       </Container>
 
-      <InstallLicenceModal
-        openInstallModal={openInstallModal}
+      <DesinstallLicenceModal
+        openInstallModal={openDesinstallModal}
         handleClose={handleClose}
         isEditing={isEditing}
         installationData={installationData}
         handleChange={handleChangeInstall}
-        handleSave={handleSaveInstallation}
+        handleSave={handleSaveDesinstallation}
       />
 
       <DataGrid

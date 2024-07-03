@@ -30,7 +30,9 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AppsIcon from '@mui/icons-material/Apps';
 import BusinessIcon from '@mui/icons-material/Business';
 import ComputerIcon from '@mui/icons-material/Computer';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import AssignmentLateOutlinedIcon from '@mui/icons-material/AssignmentLateOutlined';
+import EditNotificationsOutlinedIcon from '@mui/icons-material/EditNotificationsOutlined';
+import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined';
 
 const drawerWidth = 300;
 
@@ -126,10 +128,10 @@ const initialNavItems = [
   {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
   {
     label: "Gestion des incidents",
-    icon: <ErrorOutlineOutlinedIcon />,
+    icon: <AssignmentLateOutlinedIcon />,
     items: [
-      { label: "Réclamer incident", path: "/incidents/utilisateur", icon: <DesktopWindowsIcon /> },
-      { label: "Gérer les incidents", path: "/incidents/administrateur", icon: <TextRotationNoneIcon /> },
+      { label: "Réclamer incident", path: "/incidents/utilisateur", icon: <EditNotificationsOutlinedIcon /> },
+      { label: "Gérer les incidents", path: "/incidents/administrateur", icon: <MarkUnreadChatAltOutlinedIcon /> },
     ]
   },
 ];
