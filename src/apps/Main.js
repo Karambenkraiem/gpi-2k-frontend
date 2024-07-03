@@ -30,6 +30,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AppsIcon from '@mui/icons-material/Apps';
 import BusinessIcon from '@mui/icons-material/Business';
 import ComputerIcon from '@mui/icons-material/Computer';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const drawerWidth = 300;
 
@@ -123,6 +124,14 @@ const initialNavItems = [
   {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
   {label: "Ressources logicielles", path:"/logiciels", icon:<AppsIcon/>},
   {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
+  {
+    label: "Gestion des incidents",
+    icon: <ErrorOutlineOutlinedIcon />,
+    items: [
+      { label: "Réclamer incident", path: "/incidentsUtilisateur", icon: <DesktopWindowsIcon /> },
+      { label: "Gérer les incidents", path: "/incidentsAdmin", icon: <TextRotationNoneIcon /> },
+    ]
+  },
 ];
 
 export default function Main() {
