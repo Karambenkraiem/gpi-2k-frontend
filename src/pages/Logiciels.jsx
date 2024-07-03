@@ -185,7 +185,7 @@ const Logiciels = () => {
   return (
     <div>
       <h1>Gestion des logiciels</h1>
-      <Box sx={{ height: 800, width: "100%" }}>
+      <Box sx={{ height: 500, width: "100%" }}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -233,10 +233,9 @@ const Logiciels = () => {
         <DataGrid
           rows={logiciels}
           // @ts-ignore
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          pagination
+          columns={columns}
+          loading={loading}
+          getRowId={(row) => row.idLogiciel}
           initialState={{
             pagination: {
               paginationModel: {
@@ -244,11 +243,8 @@ const Logiciels = () => {
               },
             },
           }}
-          // @ts-ignore
-          columns={columns}
-          loading={loading}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           disableRowSelectionOnClick
-          getRowId={(row) => row.idLogiciel}
         />
       </Box>
     </div>

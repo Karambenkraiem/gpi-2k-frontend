@@ -154,7 +154,7 @@ const Département = () => {
   const columns = [
     {
       field: "idDepartement",
-      headerName: "#ID",
+      headerName: "Identifiant",
       width: 90,
     },
     {
@@ -268,7 +268,7 @@ const Département = () => {
           </Box>
         </Modal>
 
-        <Box sx={{ height: 1000, width: "100%" }}>
+        <Box sx={{ height: 550, width: "100%" }}>
           <DataGrid
             rows={departements}
             // @ts-ignore
@@ -278,12 +278,11 @@ const Département = () => {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 5,
+                  pageSize: 50,
                 },
               },
             }}
-            pageSizeOptions={[5]}
-            // checkboxSelection
+            pageSizeOptions={[5,10,25, 50, 100]}
             disableRowSelectionOnClick
           />
         </Box>

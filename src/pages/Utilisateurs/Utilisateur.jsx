@@ -1,7 +1,7 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {  Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import { RxDividerVertical } from "react-icons/rx";
 import UtilisateurModal from "../../components/UtilisateurModal";
@@ -160,6 +160,18 @@ const Utilisateur = () => {
       });
   };
 
+  const formattedDateCreated = new Date(user.createdAt).toLocaleDateString(
+    "fr-FR",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
+  const formattedDateLogin =user.lastLogin? new Date(user.lastLogin).toLocaleDateString(
+    "fr-FR"
+  ) : "-";
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -175,7 +187,8 @@ const Utilisateur = () => {
           <Button
             onClick={() => navigate(-1)}
             variant="contained"
-            color="primary" // Use primary color
+            color="primary"
+            startIcon={<ReplyAllIcon />}
             style={{
               marginBottom: 16,
               backgroundColor: "#3B71CA",
@@ -256,14 +269,18 @@ const Utilisateur = () => {
               </Card>
               <Card>
                 <Card.Body className="text-center">
-                  <Button title="Modifier Utilisateur" onClick={handleEdit}>
+                  <Button
+                    title="Modifier Utilisateur"
+                    onClick={handleEdit}
+                    disabled={user.etatUtilisateur === "suspendu"}
+                  >
                     <EditNoteIcon />
                   </Button>
                   <RxDividerVertical />
                   <Button
-                  disabled={user.etatUtilisateur === "suspendu"}
                     title="Activer / Desactiver le compte"
                     onClick={toggleStatus}
+                    disabled={user.etatUtilisateur === "suspendu"}
                   >
                     <LockPersonOutlinedIcon />
                   </Button>
@@ -272,8 +289,6 @@ const Utilisateur = () => {
                   <Button onClick={handleBlockUser} title="Suspendre le compte">
                     <NoAccountsOutlinedIcon sx={{ color: "red" }} />
                   </Button>
-
-
                 </Card.Body>
               </Card>
             </Col>
@@ -288,7 +303,7 @@ const Utilisateur = () => {
                       <p className="text-muted mb-0">
                         {
                           // @ts-ignore
-                          user.createdAt
+                          formattedDateCreated
                         }
                       </p>
                     </Col>
@@ -302,8 +317,7 @@ const Utilisateur = () => {
                       <p className="text-muted mb-0">
                         {
                           // @ts-ignore
-                          user.lastLogin || "N/A"
-                        }
+                          formattedDateLogin                        }
                       </p>
                     </Col>
                   </Row>

@@ -6,25 +6,39 @@ import { Box, Button } from '@mui/material';
 import { ip } from 'constants/ip';
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 
+
+
+
 const Alimentations = () => {
   const [alimentations, setAlimentations] = useState([]);
 
   useEffect(() => {
     axios.get(ip + '/alimentation')
       .then(response => {
-        setAlimentations(response.data);
+        const transformedData = response.data.map(item => ({
+          ...item,
+          raisonSociale: item.Societe?.raisonSociale || 'N/A',
+          categorie:item.Stocks?.categorie,
+          dateAlimentation: item.dateAlimentation
+          ? new Date(item.dateAlimentation).toLocaleDateString('fr-FR') 
+          : "-",
+
+        }));
+        setAlimentations(transformedData);
       })
       .catch(error => {
         console.error('There was an error fetching the alimentations!', error);
       });
   }, []);
+  console.log(alimentations)
 
   const columns = [
     { field: 'idAlimentation', headerName: 'Identifiant', width: 90 },
-    { field: 'idSociete', headerName: 'ID Societe', width: 150 },
+    { field: 'raisonSociale', headerName: 'Nom de Societe', width: 150 }, 
     { field: 'refArt', headerName: 'Reference Article', width: 150 },
+    { field: 'categorie', headerName: 'Article', width: 150 },
     { field: 'dateAlimentation', headerName: 'Date Alimentation', width: 200 },
-    { field: 'quantiteAlimente', headerName: 'Quantite Alimente', width: 150 },
+    { field: 'quantiteAlimente', headerName: 'Quantite Alimente',headerAlign:"center", align:"center", width: 150 },
   ];
   const navigate = useNavigate();
   return (
@@ -40,14 +54,14 @@ const Alimentations = () => {
       >
         RETOUR
       </Button>
-      <Box sx={{ height: 1000, width: "100%" }}>
+      <Box sx={{ height: 550, width: "100%" }}>
 
       <DataGrid
         rows={alimentations}
         columns={columns}
         // @ts-ignore
         pageSize={5}
-        rowsPerPageOptions={[5]}
+        rowsPerPageOptions={[50]}
         getRowId={(row) => row.idAlimentation}
       />
       </Box>

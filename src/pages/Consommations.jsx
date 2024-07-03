@@ -12,7 +12,14 @@ const Consommations = () => {
   useEffect(() => {
     axios.get(ip+'/consommation')
       .then(response => {
-        setConsommations(response.data);
+        const transformedData = response.data.map(item => ({
+          ...item,
+          fullName: item.Utilisateur?.fullName,
+          categorie:item.Stocks?.categorie,
+          dateConsommation: new Date(item.dateConsommation).toLocaleDateString('fr-FR') // Format date
+
+        }));
+        setConsommations(transformedData);
       })
       .catch(error => {
         console.error('There was an error fetching the alimentations!', error);
@@ -21,9 +28,9 @@ const Consommations = () => {
 
   const columns = [
     { field: 'idConsommation', headerName: 'Identifiant', width: 90 },
+    { field: 'fullName', headerName: 'Utilisateur', width: 150 },
     { field: 'refArt', headerName: 'Reference Article', width: 150 },
-    { field: 'idUtilisateur', headerName: 'ID Utilisateur', width: 150 },
-    { field: 'numeroSerie', headerName: 'Numero Série Materiel', width: 150 },
+    { field: 'categorie', headerName: 'Article', width: 150 },
     { field: 'dateConsommation', headerName: 'Date Consommation', width: 200 },
     { field: 'quantiteConsomme', headerName: 'Quantite Consomme', width: 150 },
   ];
