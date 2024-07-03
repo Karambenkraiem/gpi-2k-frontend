@@ -26,6 +26,8 @@ import Installations from "pages/Installations";
 import InstallationsArchives from "pages/InstallationsArchives";
 import IncidentUtilisateur from "pages/IncidentUtilisateur";
 import IncidentAdmin from "pages/IncidentAdmin";
+import Contrat from "pages/Contrat";
+import Signature from "pages/Signature";
 
 
 export default function Router() {
@@ -56,7 +58,9 @@ export default function Router() {
             <Route path="/installations/archives" element={< InstallationsArchives/>} />
             <Route path="/incidents/utilisateur" element={< IncidentUtilisateur/>} />
             <Route path="/incidents/administrateur" element={< IncidentAdmin/>} />
-          
+            <Route path="/contrats" element={< Contrat/>} />
+            <Route path="/signature" element={< Signature/>} />
+
 
 
 

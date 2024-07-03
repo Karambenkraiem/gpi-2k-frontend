@@ -33,7 +33,7 @@ import ComputerIcon from '@mui/icons-material/Computer';
 import AssignmentLateOutlinedIcon from '@mui/icons-material/AssignmentLateOutlined';
 import EditNotificationsOutlinedIcon from '@mui/icons-material/EditNotificationsOutlined';
 import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined';
-
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
@@ -126,6 +126,7 @@ const initialNavItems = [
   {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
   {label: "Ressources logicielles", path:"/logiciels", icon:<AppsIcon/>},
   {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
+  {label: "Contrats", path:"/contrats", icon:<AssignmentOutlinedIcon/>},
   {
     label: "Gestion des incidents",
     icon: <AssignmentLateOutlinedIcon />,
