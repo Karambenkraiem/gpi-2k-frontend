@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -42,6 +41,7 @@ import MarkUnreadChatAltOutlinedIcon from "@mui/icons-material/MarkUnreadChatAlt
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Badge, Stack } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import ToggleButton from '../ToggleButton';
 
 const drawerWidth = 300;
 
@@ -194,7 +194,7 @@ export default function Main() {
     </Box>
   );
 
-  
+
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -218,17 +218,26 @@ export default function Main() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-        <Link
-          component={RouterLink}
-          to="/"
-          underline="none"
-          style={{ color: "hsl(150, 100%, 50%)" }}
-        >
-          GPI-2K-IsetRades-TECI
-        </Link>
-      </Typography>
+            <Link
+              component={RouterLink}
+              to="/"
+              underline="none"
+              style={{ color: "hsl(150, 100%, 50%)" }}
+            >
+              GPI-2K-IsetRades-TECI
+            </Link>
+          </Typography>
+
+
+
+          <ToggleButton/> 
+
+
+
+
+          
           <Stack spacing={3} direction="row">
-          <Badge color="warning" overlap="circular" /* badgeContent={reclamationCount}*/ variant="dot"> 
+            <Badge color="warning" overlap="circular" /* badgeContent={reclamationCount}*/ variant="dot">
               {circle}
             </Badge>
           </Stack>
