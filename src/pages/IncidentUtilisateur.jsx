@@ -8,10 +8,12 @@ import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import { ip } from "constants/ip";
 import axios from "axios";
+import ReclamationModal from "components/ReclamationModal";
 
 const IncidentUtilisateur = () => {
   const [loading, setLoading] = useState(true);
   const [incidents, setIncidents] = useState([]);
+  const [openReclamation, setOpenReclamation] = useState(false);
   const demandeurId = 448;
   // const [demandeurId, setDemandeurId] = useState();
   // setDemandeurId('616');
@@ -33,7 +35,14 @@ const IncidentUtilisateur = () => {
   const handleView = () => {}
   
   const handleEdit = () => {}
-  const handleOpen = () => {}
+
+  const handleOpenModalReclamation = () => {
+    setOpenReclamation(true)
+  }
+
+  const handleCloseModalReclamation = () => {
+    setOpenReclamation(false)
+  }
 
   const columns = [
     { field: "idIncident", headerName: "N° Réclamation", width: 150 },
@@ -64,6 +73,7 @@ const IncidentUtilisateur = () => {
     },
   ];
 
+
   return (
     <div>
       <h1>Suivi des réclamations</h1>
@@ -78,7 +88,7 @@ const IncidentUtilisateur = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={null}
+            onClick={()=>handleOpenModalReclamation()}
           >
             Réclamer un incident
           </Button>
@@ -94,6 +104,12 @@ const IncidentUtilisateur = () => {
             </Button>
           </Box>
         </Box>
+
+        <ReclamationModal
+          openReclamation = {openReclamation}
+          handleCloseModalReclamation={()=>setOpenReclamation(false)}
+          //handleCloseModalReclamation={handleCloseModalReclamation}
+        />
 
         <DataGrid
           rows={incidents}

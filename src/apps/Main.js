@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -16,24 +17,32 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { HomeOutlined, PeopleOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
-import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
-import MultipleStopIcon from '@mui/icons-material/MultipleStop';
-import TextRotationNoneIcon from '@mui/icons-material/TextRotationNone';
-import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
-import DomainAddIcon from '@mui/icons-material/DomainAdd';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import AppsIcon from '@mui/icons-material/Apps';
-import BusinessIcon from '@mui/icons-material/Business';
-import ComputerIcon from '@mui/icons-material/Computer';
-import AssignmentLateOutlinedIcon from '@mui/icons-material/AssignmentLateOutlined';
-import EditNotificationsOutlinedIcon from '@mui/icons-material/EditNotificationsOutlined';
-import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import {
+  HomeOutlined,
+  PeopleOutline,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
+import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
+import MultipleStopIcon from "@mui/icons-material/MultipleStop";
+import TextRotationNoneIcon from "@mui/icons-material/TextRotationNone";
+import RoomPreferencesIcon from "@mui/icons-material/RoomPreferences";
+import DomainAddIcon from "@mui/icons-material/DomainAdd";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import AppsIcon from "@mui/icons-material/Apps";
+import BusinessIcon from "@mui/icons-material/Business";
+import ComputerIcon from "@mui/icons-material/Computer";
+import AssignmentLateOutlinedIcon from "@mui/icons-material/AssignmentLateOutlined";
+import EditNotificationsOutlinedIcon from "@mui/icons-material/EditNotificationsOutlined";
+import MarkUnreadChatAltOutlinedIcon from "@mui/icons-material/MarkUnreadChatAltOutlined";
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import { Badge, Stack } from "@mui/material";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+
 const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
@@ -67,7 +76,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-// @ts-ignore
+  // @ts-ignore
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
@@ -86,22 +95,23 @@ const AppBar = styled(MuiAppBar, {
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})
-// @ts-ignore
-(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
+})(
+  // @ts-ignore
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+    boxSizing: "border-box",
+    ...(open && {
+      ...openedMixin(theme),
+      "& .MuiDrawer-paper": openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      "& .MuiDrawer-paper": closedMixin(theme),
+    }),
+  })
+);
 
 const initialNavItems = [
   { label: "Accueil", path: "/", icon: <HomeOutlined /> },
@@ -112,28 +122,44 @@ const initialNavItems = [
       { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
       { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
       { label: "Spécialités", path: "/specialite", icon: <ListAltIcon /> },
-    ]
+    ],
   },
   {
     label: "Ressources materielles",
     icon: <ComputerIcon />,
     items: [
       { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> },
-      { label: "Affectation", path: "/affectation", icon: <TextRotationNoneIcon /> },
+      {
+        label: "Affectation",
+        path: "/affectation",
+        icon: <TextRotationNoneIcon />,
+      },
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
-    ]
+    ],
   },
-  {label: "Gestion du stock", path:"/stocks", icon:<InventoryIcon/>},
-  {label: "Ressources logicielles", path:"/logiciels", icon:<AppsIcon/>},
-  {label: "Societés et Fournisseurs", path:"/societes", icon:<BusinessIcon/>},
-  {label: "Contrats", path:"/contrats", icon:<AssignmentOutlinedIcon/>},
+  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon /> },
+  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon /> },
+  {
+    label: "Societés et Fournisseurs",
+    path: "/societes",
+    icon: <BusinessIcon />,
+  },
+  { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon /> },
   {
     label: "Gestion des incidents",
     icon: <AssignmentLateOutlinedIcon />,
     items: [
-      { label: "Réclamer incident", path: "/incidents/utilisateur", icon: <EditNotificationsOutlinedIcon /> },
-      { label: "Gérer les incidents", path: "/incidents/administrateur", icon: <MarkUnreadChatAltOutlinedIcon /> },
-    ]
+      {
+        label: "Réclamer incident",
+        path: "/incidents/utilisateur",
+        icon: <EditNotificationsOutlinedIcon />,
+      },
+      {
+        label: "Gérer les incidents",
+        path: "/incidents/administrateur",
+        icon: <MarkUnreadChatAltOutlinedIcon />,
+      },
+    ],
   },
 ];
 
@@ -141,7 +167,7 @@ export default function Main() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [submenuOpen, setSubmenuOpen] = React.useState({});
-
+  //const [reclamationCount, setReclamationCount ]= useState(5);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -154,12 +180,30 @@ export default function Main() {
     setSubmenuOpen((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
+  const shapeStyles = { bgcolor: "primary.main", width: 50, height: 50 };
+  const shapeCircleStyles = { borderRadius: "50%" };
+  const circle = (
+    <Box
+      component="span"
+      sx={{ ...shapeStyles, ...shapeCircleStyles }}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <NotificationsOutlinedIcon />
+    </Box>
+  );
+
+  
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" 
-// @ts-ignore
-      open={open}>
+      <AppBar
+        position="fixed"
+        // @ts-ignore
+        open={open}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -173,13 +217,21 @@ export default function Main() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            <Link 
-// @ts-ignore
-            component={RouterLink} to="/" underline="none" style={{ color: 'hsl(150, 100%, 50%)' }}>
-              GPI-2K-IsetRades-TECI
-            </Link>
-          </Typography>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+        <Link
+          component={RouterLink}
+          to="/"
+          underline="none"
+          style={{ color: "hsl(150, 100%, 50%)" }}
+        >
+          GPI-2K-IsetRades-TECI
+        </Link>
+      </Typography>
+          <Stack spacing={3} direction="row">
+          <Badge color="warning" overlap="circular" /* badgeContent={reclamationCount}*/ variant="dot"> 
+              {circle}
+            </Badge>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -224,7 +276,11 @@ export default function Main() {
                 </Nav.Link>
               ) : (
                 <>
-                  <ListItem disablePadding sx={{ display: "block" }} onClick={() => handleSubmenuToggle(elem.label)}>
+                  <ListItem
+                    disablePadding
+                    sx={{ display: "block" }}
+                    onClick={() => handleSubmenuToggle(elem.label)}
+                  >
                     <ListItemButton
                       sx={{
                         minHeight: 48,
@@ -245,36 +301,45 @@ export default function Main() {
                         primary={elem.label}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-                      {submenuOpen[elem.label] ? <ExpandLess /> : <ExpandMore />}
+                      {submenuOpen[elem.label] ? (
+                        <ExpandLess />
+                      ) : (
+                        <ExpandMore />
+                      )}
                     </ListItemButton>
                   </ListItem>
-                  {submenuOpen[elem.label] && elem.items && elem.items.map((subItem) => (
-                    <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
-                      <ListItem disablePadding sx={{ display: "block", pl: 4 }}>
-                        <ListItemButton
-                          sx={{
-                            minHeight: 48,
-                            justifyContent: open ? "initial" : "center",
-                            px: 2.5,
-                          }}
+                  {submenuOpen[elem.label] &&
+                    elem.items &&
+                    elem.items.map((subItem) => (
+                      <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
+                        <ListItem
+                          disablePadding
+                          sx={{ display: "block", pl: 4 }}
                         >
-                          <ListItemIcon
+                          <ListItemButton
                             sx={{
-                              minWidth: 0,
-                              mr: open ? 3 : "auto",
-                              justifyContent: "center",
+                              minHeight: 48,
+                              justifyContent: open ? "initial" : "center",
+                              px: 2.5,
                             }}
                           >
-                            {subItem.icon}
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={subItem.label}
-                            sx={{ opacity: open ? 1 : 0 }}
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    </Nav.Link>
-                  ))}
+                            <ListItemIcon
+                              sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : "auto",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {subItem.icon}
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={subItem.label}
+                              sx={{ opacity: open ? 1 : 0 }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      </Nav.Link>
+                    ))}
                 </>
               )}
             </React.Fragment>
