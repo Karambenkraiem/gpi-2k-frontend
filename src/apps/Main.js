@@ -194,7 +194,8 @@ export default function Main() {
     </Box>
   );
 
-
+  const drawerWidthOpen = 290; // Width when the drawer is open
+  const drawerWidthClosed = 90; // Width when the drawer is closed
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -230,12 +231,12 @@ export default function Main() {
 
 
 
-          <ToggleButton/> 
+          <ToggleButton />
 
 
 
 
-          
+
           <Stack spacing={3} direction="row">
             <Badge color="warning" overlap="circular" /* badgeContent={reclamationCount}*/ variant="dot">
               {circle}
@@ -243,7 +244,16 @@ export default function Main() {
           </Stack>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent"
+        open={open}
+        sx={{
+          width: open ? drawerWidthOpen : drawerWidthClosed,
+          '& .MuiDrawer-paper': {
+            width: open ? drawerWidthOpen : drawerWidthClosed,
+            transition: 'width 0.8s',
+          },
+        }}
+      >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
