@@ -41,7 +41,8 @@ import MarkUnreadChatAltOutlinedIcon from "@mui/icons-material/MarkUnreadChatAlt
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Badge, Stack } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import ToggleButton from '../ToggleButton';
+import ToggleButton from "../ToggleButton";
+import { UserContext } from "router/Router";
 
 const drawerWidth = 300;
 
@@ -114,10 +115,11 @@ const Drawer = styled(MuiDrawer, {
 );
 
 const initialNavItems = [
-  { label: "Accueil", path: "/", icon: <HomeOutlined /> },
+  { label: "Accueil", path: "/", icon: <HomeOutlined />, roles: ["*"] },
   {
     label: "Gestion des utilisateurs",
     icon: <RoomPreferencesIcon />,
+    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
     items: [
       { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
       { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
@@ -127,6 +129,7 @@ const initialNavItems = [
   {
     label: "Ressources materielles",
     icon: <ComputerIcon />,
+    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
     items: [
       { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> },
       {
@@ -137,17 +140,19 @@ const initialNavItems = [
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
     ],
   },
-  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon /> },
-  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon /> },
+  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
+  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
   {
+    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
     label: "Societés et Fournisseurs",
     path: "/societes",
     icon: <BusinessIcon />,
   },
-  { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon /> },
+  { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
   {
     label: "Gestion des incidents",
     icon: <AssignmentLateOutlinedIcon />,
+    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
     items: [
       {
         label: "Réclamer incident",
@@ -165,6 +170,8 @@ const initialNavItems = [
 
 export default function Main() {
   const theme = useTheme();
+  const { user, setUser } = React.useContext(UserContext);
+
   const [open, setOpen] = React.useState(false);
   const [submenuOpen, setSubmenuOpen] = React.useState({});
   //const [reclamationCount, setReclamationCount ]= useState(5);
@@ -229,31 +236,29 @@ export default function Main() {
             </Link>
           </Typography>
 
-
-
           <ToggleButton />
 
-
-
-
-
           <Stack spacing={3} direction="row">
-            <Badge color="warning" overlap="circular" /* badgeContent={reclamationCount}*/ variant="dot">
+            <Badge
+              color="warning"
+              overlap="circular"
+              /* badgeContent={reclamationCount}*/ variant="dot"
+            >
               {circle}
             </Badge>
           </Stack>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent"
+      <Drawer
+        variant="permanent"
         open={open}
         sx={{
           width: open ? drawerWidthOpen : drawerWidthClosed,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: open ? drawerWidthOpen : drawerWidthClosed,
-            transition: 'width 0.8s',
+            transition: "width 0.8s",
           },
-           marginRight: open ? '0px' : '16px'
-
+          marginRight: open ? "0px" : "16px",
         }}
       >
         <DrawerHeader>
@@ -268,102 +273,110 @@ export default function Main() {
         <Divider />
         <List>
           {initialNavItems.map((elem) => (
-            <React.Fragment key={elem.label}>
-              {elem.path ? (
-                <Nav.Link as={Link} to={elem.path}>
-                  <ListItem disablePadding sx={{ display: "block" }}>
-                    <ListItemButton
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2.5,
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {elem.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={elem.label}
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                </Nav.Link>
-              ) : (
-                <>
-                  <ListItem
-                    disablePadding
-                    sx={{ display: "block" }}
-                    onClick={() => handleSubmenuToggle(elem.label)}
-                  >
-                    <ListItemButton
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2.5,
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {elem.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={elem.label}
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                      {submenuOpen[elem.label] ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      )}
-                    </ListItemButton>
-                  </ListItem>
-                  {submenuOpen[elem.label] &&
-                    elem.items &&
-                    elem.items.map((subItem) => (
-                      <Nav.Link as={Link} to={subItem.path} key={subItem.label}>
-                        <ListItem
-                          disablePadding
-                          sx={{ display: "block", pl: 4 }}
+            <>
+              {elem?.roles?.includes(user.roleUtilisateur)||elem?.roles?.includes('*') ? (
+                <React.Fragment key={elem.label}>
+                  {elem.path ? (
+                    <Nav.Link as={Link} to={elem.path}>
+                      <ListItem disablePadding sx={{ display: "block" }}>
+                        <ListItemButton
+                          sx={{
+                            minHeight: 48,
+                            justifyContent: open ? "initial" : "center",
+                            px: 2.5,
+                          }}
                         >
-                          <ListItemButton
+                          <ListItemIcon
                             sx={{
-                              minHeight: 48,
-                              justifyContent: open ? "initial" : "center",
-                              px: 2.5,
+                              minWidth: 0,
+                              mr: open ? 3 : "auto",
+                              justifyContent: "center",
                             }}
                           >
-                            <ListItemIcon
-                              sx={{
-                                minWidth: 0,
-                                mr: open ? 3 : "auto",
-                                justifyContent: "center",
-                              }}
+                            {elem.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={elem.label}
+                            sx={{ opacity: open ? 1 : 0 }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    </Nav.Link>
+                  ) : (
+                    <>
+                      <ListItem
+                        disablePadding
+                        sx={{ display: "block" }}
+                        onClick={() => handleSubmenuToggle(elem.label)}
+                      >
+                        <ListItemButton
+                          sx={{
+                            minHeight: 48,
+                            justifyContent: open ? "initial" : "center",
+                            px: 2.5,
+                          }}
+                        >
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                              mr: open ? 3 : "auto",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {elem.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={elem.label}
+                            sx={{ opacity: open ? 1 : 0 }}
+                          />
+                          {submenuOpen[elem.label] ? (
+                            <ExpandLess />
+                          ) : (
+                            <ExpandMore />
+                          )}
+                        </ListItemButton>
+                      </ListItem>
+                      {submenuOpen[elem.label] &&
+                        elem.items &&
+                        elem.items.map((subItem) => (
+                          <Nav.Link
+                            as={Link}
+                            to={subItem.path}
+                            key={subItem.label}
+                          >
+                            <ListItem
+                              disablePadding
+                              sx={{ display: "block", pl: 4 }}
                             >
-                              {subItem.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={subItem.label}
-                              sx={{ opacity: open ? 1 : 0 }}
-                            />
-                          </ListItemButton>
-                        </ListItem>
-                      </Nav.Link>
-                    ))}
-                </>
-              )}
-            </React.Fragment>
+                              <ListItemButton
+                                sx={{
+                                  minHeight: 48,
+                                  justifyContent: open ? "initial" : "center",
+                                  px: 2.5,
+                                }}
+                              >
+                                <ListItemIcon
+                                  sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : "auto",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  {subItem.icon}
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={subItem.label}
+                                  sx={{ opacity: open ? 1 : 0 }}
+                                />
+                              </ListItemButton>
+                            </ListItem>
+                          </Nav.Link>
+                        ))}
+                    </>
+                  )}
+                </React.Fragment>
+              ) : null}
+            </>
           ))}
         </List>
         <Divider />

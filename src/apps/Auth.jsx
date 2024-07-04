@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import { Outlet } from "react-router-dom";
 
 function Auth() {
   return (
-    <div>Auth</div>
-  )
+    <div>
+      <Outlet />
+    </div>
+  );
 }
 
-export default Auth
+export default Auth;

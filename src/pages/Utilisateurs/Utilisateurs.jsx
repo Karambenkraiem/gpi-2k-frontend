@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
@@ -11,8 +11,11 @@ import { ip } from "constants/ip";
 import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
 import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
 import { Add } from "@mui/icons-material";
+import { getWithHeaders, postWithHeaders } from "helpers/axiosWithHeaders";
+import { UserContext } from "router/Router";
 
 const Utilisateurs = () => {
+  const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState({});
   const Navigate = useNavigate();
@@ -33,8 +36,7 @@ const Utilisateurs = () => {
   });
 
   useEffect(() => {
-    axios
-      .get(ip + "/utilisateur")
+    getWithHeaders("/utilisateur")
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -116,8 +118,7 @@ const Utilisateurs = () => {
           console.error("Problème modification Utilisateur", error);
         });
     } else {
-      axios
-        .post(ip + "/utilisateur", userToSave)
+      postWithHeaders("/utilisateur", userToSave)
         .then((response) => {
           setUsers([...users, response.data]);
           handleClose();
@@ -287,16 +288,18 @@ const Utilisateurs = () => {
     <div>
       <h1>Gestion des utilisateurs</h1>
       <Box sx={{ height: 560, width: "100%" }}>
-        <Box sx={{ mb: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleOpen(null)}
-            startIcon={<Add />}
-          >
-            Ajouter Utilisateur
-          </Button>
-        </Box>
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+          <Box sx={{ mb: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleOpen(null)}
+              startIcon={<Add />}
+            >
+              Ajouter Utilisateur
+            </Button>
+          </Box>
+        ) : null}
         <UtilisateurModal
           open={open}
           handleClose={() => setOpen(false)}
