@@ -48,15 +48,23 @@ const Consommations = () => {
       >
         RETOUR
       </Button>
-      <Box sx={{ height: 1000, width: "100%" }}>
+      <Box sx={{ height: 500, width: "100%" }}>
 
       <DataGrid
         rows={consommations}
-        columns={columns}
         // @ts-ignore
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        columns={columns}
         getRowId={(row) => row.idConsommation}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 50,
+            },
+          },
+        }}       
+        pageSizeOptions={[5,10,25, 50, 100]}
+        disableRowSelectionOnClick
+
       />
       </Box>
     </div>

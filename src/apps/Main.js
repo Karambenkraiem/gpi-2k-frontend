@@ -252,6 +252,8 @@ export default function Main() {
             width: open ? drawerWidthOpen : drawerWidthClosed,
             transition: 'width 0.8s',
           },
+           marginRight: open ? '0px' : '16px'
+
         }}
       >
         <DrawerHeader>

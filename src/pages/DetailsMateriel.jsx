@@ -429,7 +429,7 @@ const DetailsMateriel = () => {
 
   return (
     <div>
-      <h1>Details matériel</h1>
+      <h1 style={{margin:15}}>Details matériel</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
           <Button

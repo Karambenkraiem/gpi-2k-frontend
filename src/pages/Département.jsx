@@ -209,7 +209,7 @@ const Département = () => {
   };
 
   return (
-    <div>
+    <div style={{margin:15}}>
       <h1>Gestion des départements</h1>
       <Box sx={{ height: 560, width: "100%" }}>
         <Box sx={{ mb: 2 }}>

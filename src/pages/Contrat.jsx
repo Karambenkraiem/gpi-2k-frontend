@@ -95,7 +95,7 @@ const Contrat = () => {
         dateSignature: signatureData.dateSignature,
       }),
       axios.patch(ip + `/contrat/${signatureData.idContrat}`, {
-        etatContrat: signatureData.etatContrat,
+        etatContrat: "actif",
       }),
     ])
       .then((response) => {

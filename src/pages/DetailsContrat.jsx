@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -7,15 +7,18 @@ import {
   Grid,
   Switch,
   FormControlLabel,
-} from '@mui/material';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { ip } from 'constants/ip';
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { ip } from "constants/ip";
+import ReplyAllIcon from "@mui/icons-material/ReplyAll";
+import { Button } from "react-bootstrap";
 
 const DetailsContrat = () => {
   const { idContrat } = useParams();
   const [contrat, setContrat] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchContrat = async () => {
     try {
@@ -23,7 +26,7 @@ const DetailsContrat = () => {
       setContrat(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching contrat:', error);
+      console.error("Error fetching contrat:", error);
     }
   };
 
@@ -34,7 +37,17 @@ const DetailsContrat = () => {
   if (loading) return <Typography>Loading...</Typography>;
 
   return (
-    <Container>
+    <Container >
+      <Button
+        onClick={() => navigate(-1)}
+        variant="contained"
+        color="primary" // Use primary color
+        style={{ marginBottom: 16 }}
+        startIcon={<ReplyAllIcon />}
+      >
+        RETOUR
+      </Button>
+
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" gutterBottom>
           Détails du Contrat
@@ -56,7 +69,11 @@ const DetailsContrat = () => {
             <TextField
               fullWidth
               label="Date de Fin"
-              value={contrat.dateFinContrat ? new Date(contrat.dateFinContrat).toLocaleDateString() : ''}
+              value={
+                contrat.dateFinContrat
+                  ? new Date(contrat.dateFinContrat).toLocaleDateString()
+                  : ""
+              }
               InputProps={{
                 readOnly: true,
               }}
@@ -68,7 +85,7 @@ const DetailsContrat = () => {
             <TextField
               fullWidth
               label="Montant"
-              value={contrat.montantContrat || ''}
+              value={contrat.montantContrat || ""}
               InputProps={{
                 readOnly: true,
               }}
@@ -80,7 +97,7 @@ const DetailsContrat = () => {
             <TextField
               fullWidth
               label="Description"
-              value={contrat.descriptionContrat || ''}
+              value={contrat.descriptionContrat || ""}
               InputProps={{
                 readOnly: true,
               }}
@@ -90,7 +107,9 @@ const DetailsContrat = () => {
           </Grid>
           <Grid item xs={12}>
             <FormControlLabel
-              control={<Switch checked={!!contrat.contratRenouvable} disabled />}
+              control={
+                <Switch checked={!!contrat.contratRenouvable} disabled />
+              }
               label="Contrat Renouvable"
             />
           </Grid>
@@ -98,7 +117,7 @@ const DetailsContrat = () => {
             <TextField
               fullWidth
               label="Type de Contrat"
-              value={contrat.typeContrat || ''}
+              value={contrat.typeContrat || ""}
               InputProps={{
                 readOnly: true,
               }}
@@ -110,7 +129,7 @@ const DetailsContrat = () => {
             <TextField
               fullWidth
               label="État du Contrat"
-              value={contrat.etatContrat || ''}
+              value={contrat.etatContrat || ""}
               InputProps={{
                 readOnly: true,
               }}
@@ -124,10 +143,14 @@ const DetailsContrat = () => {
               contrat.Signature.map((signature) => (
                 <Box key={signature.idSignature} sx={{ mt: 2 }}>
                   <Typography>
-                    Signé par la société: {contrat.Societe ? contrat.Societe.raisonSociale : 'Inconnue'}
+                    Signé par la société:{" "}
+                    {contrat.Societe
+                      ? contrat.Societe.raisonSociale
+                      : "Inconnue"}
                   </Typography>
                   <Typography>
-                    Date de Signature: {new Date(signature.dateSignature).toLocaleDateString()}
+                    Date de Signature:{" "}
+                    {new Date(signature.dateSignature).toLocaleDateString()}
                   </Typography>
                 </Box>
               ))

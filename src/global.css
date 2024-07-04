@@ -9,6 +9,6 @@ body, html, #root {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    transition: background-color 0.5s, color 0.3s;
+    transition: background-color 0.5s, color 0.5s;
 
   }

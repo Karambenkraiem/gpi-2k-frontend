@@ -114,13 +114,13 @@ const DetailsSociete = () => {
     fetchSociete();
 
   };
-  const handleRowClick = (params, type) => {
-    const item = params.row;
-    // You can navigate to a detail view or show a modal with item details
-    console.log("Selected item:", item);
-    // For now, just logging the item. You can add navigation or modal code here.
-    navigate(`/detail/${type}/${item.id}`);
-  };
+
+  // const handleRowClick = (params, type) => {
+  //   const item = params.row;
+  //   console.log("Selected item:", item);
+  //   navigate(`/detail/${type}/${item.id}`);
+  // };
+
   const handleEditSociete = () => {
     setEditItem(societe);
     setModalOpen(true);

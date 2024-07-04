@@ -38,8 +38,7 @@ const Signature = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-        <h1>Historique des signature des contrats</h1>
+    <div style={{margin:15}}>
       <Button
         onClick={() => navigate(-1)}
         variant="contained"
@@ -49,6 +48,7 @@ const Signature = () => {
       >
         RETOUR
       </Button>
+        <h1>Historique des signature des contrats</h1>
       <Box sx={{ height: 500, width: '100%' }}>
         <DataGrid
           rows={signatures}

@@ -54,15 +54,23 @@ const Alimentations = () => {
       >
         RETOUR
       </Button>
-      <Box sx={{ height: 550, width: "100%" }}>
+      <Box sx={{ height: 500, width: "100%" }}>
 
       <DataGrid
         rows={alimentations}
-        columns={columns}
         // @ts-ignore
-        pageSize={5}
-        rowsPerPageOptions={[50]}
+        columns={columns}
         getRowId={(row) => row.idAlimentation}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 50,
+            },
+          },
+        }}       
+        pageSizeOptions={[5,10,25, 50, 100]}
+        disableRowSelectionOnClick
+
       />
       </Box>
     </div>
