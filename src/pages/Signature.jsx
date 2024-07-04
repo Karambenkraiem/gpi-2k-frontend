@@ -10,12 +10,12 @@ const Signature = () => {
   const [signatures, setSignatures] = useState([]);
 
   useEffect(() => {
-    axios.get(`${ip}/signatures`)
+    axios.get(`${ip}/signature`)
       .then(response => {
         const transformedData = response.data.map(item => ({
           ...item,
           dateSignature: item.dateSignature ? new Date(item.dateSignature).toLocaleDateString('fr-FR') : '-',
-          societeName: item.Societe ? item.Societe.name : '-',
+          societeName: item.Societe ? item.Societe.raisonSociale : '-',
           contratDescription: item.Contrat ? item.Contrat.descriptionContrat : '-',
         }));
         setSignatures(transformedData);
@@ -24,6 +24,9 @@ const Signature = () => {
         console.error('There was an error fetching the signatures!', error);
       });
   }, []);
+
+
+
 
   const columns = [
     { field: 'idSignature', headerName: 'ID Signature', width: 150 },

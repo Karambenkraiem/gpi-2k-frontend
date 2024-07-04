@@ -29,13 +29,13 @@ const ContratModal = ({ open, handleClose, editItem }) => {
   const [contrats, setContrats] = useState([]);
 
   const [formData, setFormData] = useState({
-    dateDebutContrat: " ",
-    dateFinContrat: " ",
-    montantContrat: null,
-    descriptionContrat: " ",
-    contratRenouvable: false,
-    typeContrat: null,
-    etatContrat: "Pret à signer",
+    dateDebutContrat: '',
+    dateFinContrat: '',
+    montantContrat: '',
+    descriptionContrat: '',
+    contratRenouvable: '',
+    typeContrat: '',
+    etatContrat: 'Pret à signer',
   });
 
   useEffect(() => {
@@ -56,16 +56,12 @@ const ContratModal = ({ open, handleClose, editItem }) => {
     const contratToSave = {
       ...formData,
       dateDebutContrat: formData.dateDebutContrat
-        ? new Date().toLocaleDateString()
+        ? new Date().toISOString()
         : "-",
       dateFinContrat: formData.dateFinContrat
-        ? new Date().toLocaleDateString()
+        ? new Date().toISOString()
         : "-",
       montantContrat: parseFloat(formData.montantContrat),
-      descriptionContrat: formData.descriptionContrat,
-      contratRenouvable: formData.contratRenouvable,
-      typeContrat: formData.typeContrat,
-      etatContrat: formData.etatContrat,
     };
     if (editItem) {
       // @ts-ignore
@@ -167,7 +163,7 @@ const ContratModal = ({ open, handleClose, editItem }) => {
           label="Renouvelable ou Non"
         />
 
-<TextField
+        <TextField
           select
           name="typeContrat"
           label="Type de Contrat"
@@ -176,13 +172,13 @@ const ContratModal = ({ open, handleClose, editItem }) => {
           fullWidth
           margin="normal"
         >
-          {["Achat", "Service", "Achat_Service",].map((type) => (
+          {["Achat", "Service", "Achat_Service"].map((type) => (
             <MenuItem key={type} value={type}>
               {type}
             </MenuItem>
           ))}
         </TextField>
-       
+
         <TextField
           select
           name="etatContrat"

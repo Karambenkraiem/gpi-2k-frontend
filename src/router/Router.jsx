@@ -28,6 +28,7 @@ import IncidentUtilisateur from "pages/IncidentUtilisateur";
 import IncidentAdmin from "pages/IncidentAdmin";
 import Contrat from "pages/Contrat";
 import Signature from "pages/Signature";
+import DetailsContrat from "pages/DetailsContrat";
 
 
 export default function Router() {
@@ -59,7 +60,10 @@ export default function Router() {
             <Route path="/incidents/utilisateur" element={< IncidentUtilisateur/>} />
             <Route path="/incidents/administrateur" element={< IncidentAdmin/>} />
             <Route path="/contrats" element={< Contrat/>} />
+            <Route path="/detailsContrat/:idContrat" element={< DetailsContrat/>} />
+
             <Route path="/signature" element={< Signature/>} />
+
 
 
 

@@ -11,8 +11,10 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import ContratModal from "components/ContratModal";
 import SignatureModal from "components/SignatureModal";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 
-const Stocks = () => {
+const Contrat = () => {
   const [contrats, setContrats] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openSignatureModal, setOpenSignatureModal] = useState(false);
@@ -90,7 +92,7 @@ const Stocks = () => {
       axios.post(ip + "/signature", {
         idSociete: signatureData.idSociete,
         idContrat: signatureData.idContrat,
-        dateAlimentation: signatureData.dateSignature,
+        dateSignature: signatureData.dateSignature,
       }),
       axios.patch(ip + `/contrat/${signatureData.idContrat}`, {
         etatContrat: signatureData.etatContrat,
@@ -107,7 +109,33 @@ const Stocks = () => {
   const handleView = (id) => {
     Navigate(`/detailsContrat/${id}`);
   };
-  const handleBlockContract = () => {};
+
+  const handleBlockContract = (ContratId) => {
+    const contrat = contrats.find((c) => c.idContrat === ContratId);
+    if (!contrat) {
+      console.error("Données Introuvable !!!");
+      return;
+    }
+    const updatedContrat = {
+      ...contrat,
+      etatContrat: ["Pret à signer", "actif", "inactif", "suspendu"].includes(
+        contrat.etatContrat
+      )
+        ? "suspendu"
+        : contrat.etatContrat,
+    };
+    const { Signature, ...rest } = updatedContrat;
+    axios
+      .patch(ip + `/contrat/${ContratId}`, rest)
+      .then((response) => {
+        setContrats(
+          contrats.map((c) => (c.idContrat === ContratId ? response.data : c))
+        );
+      })
+      .catch((error) => {
+        console.error("Erreur Suspension contrat !!! ", error);
+      });
+  };
   const columns = [
     { field: "idContrat", headerName: "Num Contrat", width: 150 },
     { field: "dateDebutContrat", headerName: "Date debut contrat", width: 150 },
@@ -127,18 +155,30 @@ const Stocks = () => {
       width: 300,
       renderCell: (params) => (
         <>
-          {/* <IconButton
+          <IconButton
             color="primary"
             title="Voir détails article"
-            onClick={() => handleView(params.row.idContrat)}            
+            onClick={() => handleView(params.row.idContrat)}
           >
             <VisibilityOutlinedIcon />
-          </IconButton> */}
+          </IconButton>
+
+          <Button
+            // variant="contained"
+            color="primary"
+            title="Signer Le contrat"
+            onClick={() => handleSignature(params.row)}
+            sx={{ color: "green" }}
+            disabled={params.row.etatContrat === "suspendu"}
+          >
+            <HandshakeOutlinedIcon />
+          </Button>
 
           <IconButton
             color="primary"
             title="Modifier le contrat"
             onClick={() => handleEdit(params.row)}
+            disabled={params.row.etatContrat === "suspendu"}
           >
             <EditNoteIcon />
           </IconButton>
@@ -146,9 +186,9 @@ const Stocks = () => {
           <IconButton
             color="primary"
             title="Suspendre le contrat"
-            onClick={() => handleBlockContract(params.row)}
+            onClick={() => handleBlockContract(params.row.idContrat)}
           >
-            <HighlightOffOutlinedIcon />
+            <HighlightOffOutlinedIcon sx={{ color: "red" }} />
           </IconButton>
         </>
       ),
@@ -222,10 +262,10 @@ const Stocks = () => {
         openSignatureModal={openSignatureModal}
         handleClose={() => setOpenSignatureModal(false)}
         handleChange={handleChangeSignature}
-        handleSaveAlimentation={handleSaveSignature}
+        handleSaveSignature={handleSaveSignature}
       />
     </div>
   );
 };
 
-export default Stocks;
+export default Contrat;
