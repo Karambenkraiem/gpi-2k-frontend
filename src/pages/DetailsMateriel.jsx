@@ -9,8 +9,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import AffectationModal from "../components/AffectationModal";
 // @ts-ignore
-// @ts-ignore
-// @ts-ignore
+
 import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { Card, Col, Container, Row } from "react-bootstrap";
@@ -33,17 +32,11 @@ const DetailsMateriel = () => {
   const [openEmprunt, setOpenEmprunt] = useState(false);
   const navigate = useNavigate();
   // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
-  const [materiels, setMateriels] = useState([]);
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
-  const [loading, setLoading] = useState(true);
+
+ 
   const [isEditing, setIsEditing] = useState(false);
   // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
+  
   const handleClose = () => setOpenAffectation(false);
 
   const [affectationData, setAffectationData] = useState({
@@ -95,25 +88,6 @@ const DetailsMateriel = () => {
     console.log(empruntData)
   };
 
-  // // @ts-ignore
-  // const fetchMateriels = () => {
-  //   axios
-  //     .get(ip + "/materiel")
-  //     .then((response) => {
-  //       setMateriels(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // };
-
-  // // @ts-ignore
-  // // @ts-ignore
-  // // @ts-ignore
-  // const handleAffectation = (idAffectation) => {
-  //   // @ts-ignore
-  //   setAffectationData({ ...affectationData, idAffectation });
-  //   setOpenAffectation(true);
-  // };
 
   const handleAffectationEdit = (row) => {
     console.log(row.idAffectation);
@@ -129,9 +103,6 @@ const DetailsMateriel = () => {
     setOpenEmprunt(true);
   };
 
-  // const handleSaveAffectation = () => {
-
-  // };
 
   const handleSaveAffectation = () => {
     const affectationToSave = {
@@ -154,11 +125,9 @@ const DetailsMateriel = () => {
         ),
         axios.patch(`${ip}/materiel/${affectationToSave.numeroSerie}`, {
           // @ts-ignore
-          disponibilite: affectationData.disponibilite,
+          disponibilite: "Disponible",
         }),
       ])
-        // @ts-ignore
-        // @ts-ignore
         // @ts-ignore
         .then(([response1, response2]) => {
           fetchAffectations();
@@ -179,7 +148,7 @@ const DetailsMateriel = () => {
         }),
         axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
           // @ts-ignore
-          disponibilite: affectationData.disponibilite,
+          disponibilite: "Affecté",
         }),
       ])
         // @ts-ignore
@@ -195,8 +164,6 @@ const DetailsMateriel = () => {
   };
 
   const handleSaveEmprunt = () => {
-    // @ts-ignore
-    // @ts-ignore
     // @ts-ignore
     const empruntToSave = {
       ...empruntData,
@@ -219,11 +186,10 @@ const DetailsMateriel = () => {
         ),
         axios.patch(`${ip}/materiel/${empruntToSave.numeroSerie}`, {
           // @ts-ignore
-          disponibilite: empruntData.disponibilite,
+          disponibilite: "Disponible",
         }),
       ])
-        // @ts-ignore
-        // @ts-ignore
+
         // @ts-ignore
         .then(([response1, response2]) => {
           fetchEmprunts();
@@ -245,7 +211,7 @@ const DetailsMateriel = () => {
         }),
         axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
           // @ts-ignore
-          disponibilite: empruntData.disponibilite,
+          disponibilite: "Emprunté",
         }),
       ])
         // @ts-ignore

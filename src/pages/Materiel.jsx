@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useRef } from "react";
-=======
-import React, { useState, useEffect, useContext } from "react";
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
+import React from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
@@ -29,21 +26,16 @@ import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
 import { Add } from "@mui/icons-material";
-<<<<<<< HEAD
 import { useReactToPrint } from "react-to-print";
-=======
 import { UserContext } from "router/Router";
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
-<<<<<<< HEAD
   const componentRef = useRef();
-const [inprint,setInprint]=useState(false);
-=======
+  const [inprint, setInprint] = useState(false);
   const { user } = useContext(UserContext);
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
+
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -383,7 +375,7 @@ const [inprint,setInprint]=useState(false);
       }),
       axios.patch(`${ip}/materiel/${affectationData.numeroSerie}`, {
         // @ts-ignore
-        disponibilite: affectationData.disponibilite,
+        disponibilite: "Affecté",
       }),
     ])
       .then((response) => {
@@ -407,7 +399,7 @@ const [inprint,setInprint]=useState(false);
       }),
       axios.patch(`${ip}/materiel/${empruntData.numeroSerie}`, {
         // @ts-ignore
-        disponibilite: empruntData.disponibilite,
+        disponibilite: "Emprunté",
       }),
     ])
       .then((response) => {
@@ -421,14 +413,12 @@ const [inprint,setInprint]=useState(false);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  useEffect(()=>{
-    if(inprint){
-
+  useEffect(() => {
+    if (inprint) {
       handlePrint();
-    setInprint(false)
-    };
-
-  },[inprint])
+      setInprint(false);
+    }
+  }, [inprint]);
   const columns = [
     { field: "numeroSerie", headerName: "Numero Série", width: 150 },
     { field: "categorie", headerName: "Catégorie", width: 140 },
@@ -478,12 +468,13 @@ const [inprint,setInprint]=useState(false);
             <LoopIcon />
           </Button>
           {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
-          <Button
-            title="Mettre en rebut Materiel"
-            onClick={() => toggleStatus(params.row.numeroSerie)}
-          >
-            <Inventory2OutlinedIcon sx={{ color: "red" }} />
-          </Button>):null}
+            <Button
+              title="Mettre en rebut Materiel"
+              onClick={() => toggleStatus(params.row.numeroSerie)}
+            >
+              <Inventory2OutlinedIcon sx={{ color: "red" }} />
+            </Button>
+          ) : null}
         </div>
       ),
     },
@@ -493,22 +484,27 @@ const [inprint,setInprint]=useState(false);
     <div>
       <h1>Gestion de Matériel</h1>
       <Box sx={{ height: 500, width: "100%" }}>
-      {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
-        <Box sx={{ mb: 2 }}>
-          <Button
-            onClick={handleOpenModal}
-            variant="contained"
-            startIcon={<Add />}
-            color="primary"
-          >
-            Ajouter Materiel
-          </Button>
-        </Box>
-      ):null}
-       <div ref={componentRef}>
-        {inprint&&<div> <h1 className="text-center">Liste de Materiel</h1></div>}
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+          <Box sx={{ mb: 2 }}>
+            <Button
+              onClick={handleOpenModal}
+              variant="contained"
+              startIcon={<Add />}
+              color="primary"
+            >
+              Ajouter Materiel
+            </Button>
+          </Box>
+        ) : null}
+        <div ref={componentRef}>
+          {inprint && (
+            <div>
+              {" "}
+              <h1 className="text-center">Liste de Materiel</h1>
+            </div>
+          )}
           <DataGrid
-          slots={!inprint?{ toolbar: GridToolbar }:{}}
+            slots={!inprint ? { toolbar: GridToolbar } : {}}
             // sx={{
             //   display: "flex",
             //   justifyContent: "center",
@@ -533,9 +529,8 @@ const [inprint,setInprint]=useState(false);
             // pagination
             // @ts-ignore
           />
-          </div>
-          <button onClick={()=>setInprint(true)}>Print this out!</button>
-        
+        </div>
+        <button onClick={() => setInprint(true)}>Print this out!</button>
 
         <AffectationModal
           affectationData={affectationData}
@@ -563,122 +558,122 @@ const [inprint,setInprint]=useState(false);
             <h2>{isEditing ? "Editer matériel" : "Ajouter matériel"}</h2>
             {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
               <>
-            <TextField
-              select
-              label="Categorie"
-              name="categorie"
-              value={formData.categorie}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.categorie}
-              // @ts-ignore
-              helperText={errors.categorie}
-            >
-              {Object.values(Categorie).map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
-            </TextField>
-            
-            <TextField
-              label="Numéro de Série"
-              name="numeroSerie"
-              value={formData.numeroSerie || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.numeroSerie}
-              // @ts-ignore
-              helperText={errors.numeroSerie}
-            />
-            <TextField
-              label="Marque"
-              name="marque"
-              value={formData.marque || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.marque}
-              // @ts-ignore
-              helperText={errors.marque}
-            />
-            <TextField
-              label="Modèle"
-              name="modele"
-              value={formData.modele || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.modele}
-              // @ts-ignore
-              helperText={errors.modele}
-            />
-            <TextField
-              label="Prix"
-              name="prix"
-              value={formData.prix || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.prix}
-              // @ts-ignore
-              helperText={errors.prix}
-            />
-            <TextField
-              label="Garantie"
-              name="garantie"
-              value={formData.garantie || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.garantie}
-              // @ts-ignore
-              helperText={errors.garantie}
-            />
-            <TextField
-              label={"Date d'acquisition"}
-              placeholder="Sélectionner une date"
-              name="dateAcquisition"
-              value={dayjs(formData?.dateAcquisition).format("YYYY-MM-DD")}
-              type="date"
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.dateAcquisition}
-              // @ts-ignore
-              helperText={errors.dateAcquisition}
-            />
+                <TextField
+                  select
+                  label="Categorie"
+                  name="categorie"
+                  value={formData.categorie}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.categorie}
+                  // @ts-ignore
+                  helperText={errors.categorie}
+                >
+                  {Object.values(Categorie).map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </TextField>
 
-            <Select
-              label="Fournisseur"
-              name="idSociete"
-              required
-              value={formData.idSociete}
-              onChange={handleChange}
-              fullWidth
-              // error={!!errors.idSpecialite}
-              // style={{marginTop: '1rem'}}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {societies.map((elem) => (
-                <MenuItem key={elem.idSociete} value={elem.idSociete}>
-                  {elem.raisonSociale}
-                </MenuItem>
-              ))}
-            </Select>
-            </>
-          ):null}
+                <TextField
+                  label="Numéro de Série"
+                  name="numeroSerie"
+                  value={formData.numeroSerie || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.numeroSerie}
+                  // @ts-ignore
+                  helperText={errors.numeroSerie}
+                />
+                <TextField
+                  label="Marque"
+                  name="marque"
+                  value={formData.marque || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.marque}
+                  // @ts-ignore
+                  helperText={errors.marque}
+                />
+                <TextField
+                  label="Modèle"
+                  name="modele"
+                  value={formData.modele || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.modele}
+                  // @ts-ignore
+                  helperText={errors.modele}
+                />
+                <TextField
+                  label="Prix"
+                  name="prix"
+                  value={formData.prix || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.prix}
+                  // @ts-ignore
+                  helperText={errors.prix}
+                />
+                <TextField
+                  label="Garantie"
+                  name="garantie"
+                  value={formData.garantie || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.garantie}
+                  // @ts-ignore
+                  helperText={errors.garantie}
+                />
+                <TextField
+                  label={"Date d'acquisition"}
+                  placeholder="Sélectionner une date"
+                  name="dateAcquisition"
+                  value={dayjs(formData?.dateAcquisition).format("YYYY-MM-DD")}
+                  type="date"
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  // @ts-ignore
+                  error={!!errors.dateAcquisition}
+                  // @ts-ignore
+                  helperText={errors.dateAcquisition}
+                />
+
+                <Select
+                  label="Fournisseur"
+                  name="idSociete"
+                  required
+                  value={formData.idSociete}
+                  onChange={handleChange}
+                  fullWidth
+                  // error={!!errors.idSpecialite}
+                  // style={{marginTop: '1rem'}}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {societies.map((elem) => (
+                    <MenuItem key={elem.idSociete} value={elem.idSociete}>
+                      {elem.raisonSociale}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </>
+            ) : null}
             <TextField
               select
               label="Etat matériel"
@@ -698,7 +693,6 @@ const [inprint,setInprint]=useState(false);
                 </MenuItem>
               ))}
             </TextField>
-          
 
             {/* ------------------------------------------------------- */}
             {/*Unite Centrale */}

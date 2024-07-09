@@ -67,6 +67,7 @@ const EmpruntModal = ({
       <Box sx={style}>
         <h2>{isEditing ? "Modifier emprunt" : "Emprunter matériel"}</h2>
         <TextField
+        disabled={isEditing}
           select
           label="Utilisateur"
           name="idUtilisateur"
@@ -89,6 +90,8 @@ const EmpruntModal = ({
           ))}
         </TextField>
         <TextField
+                disabled={isEditing}
+
           label={"Date d'emprunt"}
           placeholder="Sélectionner une date"
           name="dateEmprunt"
@@ -103,6 +106,7 @@ const EmpruntModal = ({
           helperText={errors.dateEmprunt}
         />
         <TextField
+        hidden={!isEditing}
           label={"Date Restitution"}
           placeholder="Sélectionner une date"
           name="dateRestitution"
@@ -117,6 +121,8 @@ const EmpruntModal = ({
           helperText={errors.dateRestitution}
         />
         <TextField
+                disabled={isEditing}
+
           label="Référence projet"
           name="refProjet"
           value={empruntData.refProjet || ""}
@@ -146,6 +152,8 @@ const EmpruntModal = ({
           }}
         />
         <TextField
+                hidden={!isEditing}
+
           label="Etat matériel restitué"
           name="etatMatRestitution"
           value={empruntData.etatMatRestitution}
@@ -157,25 +165,7 @@ const EmpruntModal = ({
           // @ts-ignore
           helperText={errors.categorie}
         ></TextField>
-        <TextField
-          select
-          label="Etat équipement"
-          name="disponibilite"
-          value={formData.disponibilite}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          // @ts-ignore
-          error={!!errors.categorie}
-          // @ts-ignore
-          helperText={errors.categorie}
-        >
-          {Object.values(EtatEmprunt).map((etat) => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
-            </MenuItem>
-          ))}
-        </TextField>
+        
 
         <Box
           display="flex"
