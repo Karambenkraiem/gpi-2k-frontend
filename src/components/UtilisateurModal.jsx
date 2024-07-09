@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -7,6 +7,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { Box, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import { ip } from "constants/ip";
+import { UserContext } from "router/Router";
 
 const UtilisateurModal = ({
   open,
@@ -18,7 +19,7 @@ const UtilisateurModal = ({
   errors,
 }) => {
   const [specialites, setSpecialities] = useState([]);
-
+  const {user} = useContext(UserContext);
   const style = {
     position: "absolute",
     top: "50%",
@@ -67,7 +68,6 @@ const UtilisateurModal = ({
           error={!!errors.idUtilisateur}
           helperText={errors.idUtilisateur}
           disabled={isEditing}
-
         />
 
         <TextField
@@ -82,19 +82,20 @@ const UtilisateurModal = ({
           error={!!errors.fullName}
           helperText={errors.fullName}
         />
-
-        <TextField
-          label="Mot de Passe"
-          required
-          name="password"
-          type="password"
-          value={currentUser.password}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          error={!!errors.password}
-          helperText={errors.password}
-        />
+        {!isEditing && (
+          <TextField
+            label="Mot de Passe"
+            required
+            name="password"
+            type="password"
+            value={currentUser.password}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!errors.password}
+            helperText={errors.password}
+          />
+        )}
 
         <TextField
           label="Email"
@@ -108,6 +109,8 @@ const UtilisateurModal = ({
           error={!!errors.email}
           helperText={errors.email}
         />
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+          <>
         <InputLabel htmlFor="specialite">Spécialité</InputLabel>
 
         <Select
@@ -126,44 +129,52 @@ const UtilisateurModal = ({
             </MenuItem>
           ))}
         </Select>
-        <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
 
-        <Select
-          label="Role"
-          name="roleUtilisateur"
-          required
-          value={currentUser.roleUtilisateur}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.roleUtilisateur}
-          style={{ marginTop: "1rem" }}
-        >
-          {Object.values(RoleUtilisateur).map((role) => (
-            <MenuItem key={role} value={role}>
-              {role}
-            </MenuItem>
-          ))}
-        </Select>
-        <InputLabel htmlFor="etatUtilisateur">Etat</InputLabel>
+        
+            <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
 
-        <Select
-          label="Etat"
-          name="etatUtilisateur"
-          required
-          value={currentUser.etatUtilisateur}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.etatUtilisateur}
-          style={{ marginTop: "1rem" }}
-          disabled={currentUser.etatUtilisateur === "suspendu"}
+            <Select
+              label="Role"
+              name="roleUtilisateur"
+              required
+              value={currentUser.roleUtilisateur}
+              onChange={handleChange}
+              fullWidth
+              error={!!errors.roleUtilisateur}
+              style={{ marginTop: "1rem" }}
+            >
+              {Object.values(RoleUtilisateur).map((role) => (
+                <MenuItem key={role} value={role}>
+                  {role}
+                </MenuItem>
+              ))}
+            </Select>
+          </>
+        ) : null}
 
-        >
-          {Object.values(EtatUtilisateur).map((etat) => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
-            </MenuItem>
-          ))}
-        </Select>
+        {!isEditing && (
+          <>
+            <InputLabel htmlFor="etatUtilisateur">Etat</InputLabel>
+
+            <Select
+              label="Etat"
+              name="etatUtilisateur"
+              required
+              value={currentUser.etatUtilisateur}
+              onChange={handleChange}
+              fullWidth
+              error={!!errors.etatUtilisateur}
+              style={{ marginTop: "1rem" }}
+              disabled={currentUser.etatUtilisateur === "suspendu"}
+            >
+              {Object.values(EtatUtilisateur).map((etat) => (
+                <MenuItem key={etat} value={etat}>
+                  {etat}
+                </MenuItem>
+              ))}
+            </Select>
+          </>
+        )}
 
         <TextField
           label="Telephone Fixe"

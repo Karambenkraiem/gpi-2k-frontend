@@ -1,5 +1,5 @@
 // @ts-ignore
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
@@ -10,6 +10,7 @@ import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
 import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { UserContext } from "router/Router";
 
 const Utilisateur = () => {
   const { idUtilisateur } = useParams();
@@ -18,6 +19,7 @@ const Utilisateur = () => {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const me = useContext(UserContext);
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
@@ -168,9 +170,9 @@ const Utilisateur = () => {
       day: "numeric",
     }
   );
-  const formattedDateLogin =user.lastLogin? new Date(user.lastLogin).toLocaleDateString(
-    "fr-FR"
-  ) : "-";
+  const formattedDateLogin = user.lastLogin
+    ? new Date(user.lastLogin).toLocaleDateString("fr-FR")
+    : "-";
 
   if (loading) {
     return <div>Loading...</div>;
@@ -284,11 +286,17 @@ const Utilisateur = () => {
                   >
                     <LockPersonOutlinedIcon />
                   </Button>
-                  <RxDividerVertical />
-
-                  <Button onClick={handleBlockUser} title="Suspendre le compte">
-                    <NoAccountsOutlinedIcon sx={{ color: "red" }} />
-                  </Button>
+                  {["ADMINISTRATEUR"].includes(me.user.roleUtilisateur) ? (
+                    <>
+                      <RxDividerVertical />
+                      <Button
+                        onClick={handleBlockUser}
+                        title="Suspendre le compte"
+                      >
+                        <NoAccountsOutlinedIcon sx={{ color: "red" }} />
+                      </Button>{" "}
+                    </>
+                  ) : null}
                 </Card.Body>
               </Card>
             </Col>
@@ -317,7 +325,8 @@ const Utilisateur = () => {
                       <p className="text-muted mb-0">
                         {
                           // @ts-ignore
-                          formattedDateLogin                        }
+                          formattedDateLogin
+                        }
                       </p>
                     </Col>
                   </Row>
