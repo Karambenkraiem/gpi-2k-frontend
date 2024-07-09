@@ -14,19 +14,37 @@ const IncidentUtilisateur = () => {
   const [loading, setLoading] = useState(true);
   const [incidents, setIncidents] = useState([]);
   const [openReclamation, setOpenReclamation] = useState(false);
-  const demandeurId = 448;
+  //const demandeurId = 448;
   // const [demandeurId, setDemandeurId] = useState();
   // setDemandeurId('616');
   
-  const fetchReclamationsEnCours = () =>{
+  // const fetchReclamationsEnCours = () =>{
+  //   axios
+  //   .get(`${ip}/incident/encours/incidents`)
+  //   .then((response)=>{
+  //     setIncidents(response.data);
+  //     setLoading(false);
+  //   })
+  //   .catch((error)=>console.error("Erreur de chargement de données!"))
+  // }
+
+  const fetchReclamationsEnCours = () => {
+    const token = localStorage.getItem("token");
     axios
-    .get(`${ip}/incident/encours/incidents/${demandeurId}`)
-    .then((response)=>{
-      setIncidents(response.data);
-      setLoading(false);
-    })
-    .catch((error)=>console.error("Erreur de chargement de données!"))
-  }
+      .get(`${ip}/incident/encours/incidents`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setIncidents(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur de chargement de données!", error);
+        setLoading(false);
+      });
+  };
 
   useEffect(() =>{
     fetchReclamationsEnCours();
