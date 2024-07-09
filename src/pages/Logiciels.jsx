@@ -1,5 +1,5 @@
 import { Button, Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { ip } from "constants/ip";
@@ -10,12 +10,14 @@ import { useNavigate } from "react-router-dom";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
+import { UserContext } from "router/Router";
 
 const Logiciels = () => {
   const [logiciels, setLogiciels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const  {user} = useContext(UserContext);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [logicielData, setLogicielData] = useState({
@@ -162,12 +164,15 @@ const Logiciels = () => {
           >
             <VisibilityOutlinedIcon />
           </Button>
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur)? (
+
           <Button
             title="Modifier logiciel"
             onClick={() => handleEdit(params.row)}
           >
             <EditNoteIcon />
           </Button>
+          ):null}
         </div>
       ),
     },
@@ -191,14 +196,16 @@ const Logiciels = () => {
           alignItems="center"
           marginBottom={2}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={() => handleOpen(null)}
+          {["ADMINISTATEUR"].includes(user.roleUtilisateur)?
+          (<Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={() => handleOpen(null)}
           >
             Ajouter Logiciel
-          </Button>
+          </Button>): null
+          }
           <Box display="flex" gap={2}>
             <Button
               // variant="contained"

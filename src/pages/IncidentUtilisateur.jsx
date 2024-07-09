@@ -14,19 +14,6 @@ const IncidentUtilisateur = () => {
   const [loading, setLoading] = useState(true);
   const [incidents, setIncidents] = useState([]);
   const [openReclamation, setOpenReclamation] = useState(false);
-  //const demandeurId = 448;
-  // const [demandeurId, setDemandeurId] = useState();
-  // setDemandeurId('616');
-  
-  // const fetchReclamationsEnCours = () =>{
-  //   axios
-  //   .get(`${ip}/incident/encours/incidents`)
-  //   .then((response)=>{
-  //     setIncidents(response.data);
-  //     setLoading(false);
-  //   })
-  //   .catch((error)=>console.error("Erreur de chargement de données!"))
-  // }
 
   const fetchReclamationsEnCours = () => {
     const token = localStorage.getItem("token");

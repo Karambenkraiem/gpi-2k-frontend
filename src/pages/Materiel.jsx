@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
@@ -25,11 +25,12 @@ import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
 import { Add } from "@mui/icons-material";
+import { UserContext } from "router/Router";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
-
+  const { user } = useContext(UserContext);
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -203,6 +204,7 @@ const MaterielPage = () => {
       nombrePortSwitch: parseInt(formData.nombrePortSwitch),
       debitSwitch: parseInt(formData.debitSwitch),
       tailleEcran: parseFloat(formData.tailleEcran),
+      // @ts-ignore
       idSociete: formData.idSociete === "" ? null : formData.idSociete,
     };
 
@@ -452,12 +454,13 @@ const MaterielPage = () => {
           >
             <LoopIcon />
           </Button>
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
           <Button
             title="Mettre en rebut Materiel"
             onClick={() => toggleStatus(params.row.numeroSerie)}
           >
             <Inventory2OutlinedIcon sx={{ color: "red" }} />
-          </Button>
+          </Button>):null}
         </div>
       ),
     },
@@ -467,6 +470,7 @@ const MaterielPage = () => {
     <div>
       <h1>Gestion de Matériel</h1>
       <Box sx={{ height: 500, width: "100%" }}>
+      {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
         <Box sx={{ mb: 2 }}>
           <Button
             onClick={handleOpenModal}
@@ -477,7 +481,7 @@ const MaterielPage = () => {
             Ajouter Materiel
           </Button>
         </Box>
-       
+      ):null}
           <DataGrid
           slots={{ toolbar: GridToolbar }}
             // sx={{
@@ -530,7 +534,8 @@ const MaterielPage = () => {
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>
             <h2>{isEditing ? "Editer matériel" : "Ajouter matériel"}</h2>
-
+            {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+              <>
             <TextField
               select
               label="Categorie"
@@ -550,7 +555,7 @@ const MaterielPage = () => {
                 </MenuItem>
               ))}
             </TextField>
-
+            
             <TextField
               label="Numéro de Série"
               name="numeroSerie"
@@ -612,26 +617,6 @@ const MaterielPage = () => {
               helperText={errors.garantie}
             />
             <TextField
-              select
-              label="Etat matériel"
-              name="etatMateriel"
-              value={formData.etatMateriel || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.etatMateriel}
-              // @ts-ignore
-              helperText={errors.etatMateriel}
-            >
-              {Object.values(EtatMateriel).map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
               label={"Date d'acquisition"}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
@@ -665,6 +650,28 @@ const MaterielPage = () => {
                 </MenuItem>
               ))}
             </Select>
+            </>
+          ):null}
+            <TextField
+              select
+              label="Etat matériel"
+              name="etatMateriel"
+              value={formData.etatMateriel || ""}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.etatMateriel}
+              // @ts-ignore
+              helperText={errors.etatMateriel}
+            >
+              {Object.values(EtatMateriel).map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </TextField>
+          
 
             {/* ------------------------------------------------------- */}
             {/*Unite Centrale */}

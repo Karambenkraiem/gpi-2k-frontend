@@ -141,8 +141,8 @@ const initialNavItems = [
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon />, roles: ["ADMINISTRATEUR","TECHNICIEN","DIRECTEUR"], },
     ],
   },
-  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
   { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
+  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
   {
     roles: ["ADMINISTRATEUR","DIRECTEUR"],
     label: "Societés et Fournisseurs",
