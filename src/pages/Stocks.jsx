@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useContext, useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Box, Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
@@ -173,8 +173,8 @@ const Stocks = () => {
     {
       field: "actions",
       headerName: "Actions",
-      headerAlign:"center",
-      align:"right",
+      headerAlign: "center",
+      align: "right",
       width: 450,
       renderCell: (params) => (
         <>
@@ -182,19 +182,19 @@ const Stocks = () => {
             color="primary"
             title="Voir détails article"
             onClick={() => handleView(params.row.refArt)}
-            
           >
             <VisibilityOutlinedIcon />
           </IconButton>
-         
-         
-          {["ADMINISTRATEUR"].includes(user.roleUtilisateur)?(
 
-          <IconButton color="primary" 
-          title="Modifier l'article"
-          onClick={() => handleEdit(params.row)}>
-            <EditNoteIcon />
-          </IconButton>):null}
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+            <IconButton
+              color="primary"
+              title="Modifier l'article"
+              onClick={() => handleEdit(params.row)}
+            >
+              <EditNoteIcon />
+            </IconButton>
+          ) : null}
 
           <Button
             // variant="contained"
@@ -202,15 +202,15 @@ const Stocks = () => {
             title="Alimenter le stock"
             startIcon={<AddIcon />}
             onClick={() => handleAlimentation(params.row)}
-            sx={{color:"green"}}
+            sx={{ color: "green" }}
           >
             Alimenter
           </Button>
           <Button
-            // variant="contained"            
+            // variant="contained"
             color="secondary"
             onClick={() => handleConsommation(params.row)}
-            sx={{color:"red"}}
+            sx={{ color: "red" }}
             title="consommer les accessoires et consommables"
             startIcon={<RemoveIcon />}
           >
@@ -235,9 +235,9 @@ const Stocks = () => {
       [name]: value,
     });
   };
-const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{ height: 600, width: "100%" }}>
       <h1>Gestion de stock des consommables et accessoires</h1>
       <Box
         display="flex"
@@ -245,17 +245,17 @@ const user = useContext(UserContext);
         alignItems="center"
         marginBottom={2}
       >
-
-        {["ADMINISTRATEUR"].includes(user.roleUtilisateur)?(
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
-          style={{ marginRight: 16 }}
-        >
-          Ajouter Article
-        </Button>) :null}
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+            style={{ marginRight: 16 }}
+          >
+            Ajouter Article
+          </Button>
+        ) : null}
 
         <Box display="flex" gap={2}>
           <Button
@@ -278,6 +278,7 @@ const user = useContext(UserContext);
       </Box>
       <Box sx={{ height: 500, width: "100%" }}>
         <DataGrid
+          slots={{ toolbar: GridToolbar }}
           rows={stocks}
           // @ts-ignore
           columns={columns}
@@ -290,9 +291,8 @@ const user = useContext(UserContext);
               },
             },
           }}
-          pageSizeOptions={[5,10,25, 50, 100]}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           disableRowSelectionOnClick
-
         />
       </Box>
       <StockModal
