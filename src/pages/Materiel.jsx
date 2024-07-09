@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -479,6 +479,7 @@ const MaterielPage = () => {
         </Box>
        
           <DataGrid
+          slots={{ toolbar: GridToolbar }}
             // sx={{
             //   display: "flex",
             //   justifyContent: "center",

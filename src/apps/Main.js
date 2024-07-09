@@ -119,50 +119,53 @@ const initialNavItems = [
   {
     label: "Gestion des utilisateurs",
     icon: <RoomPreferencesIcon />,
-    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
+    roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"],
     items: [
-      { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline /> },
-      { label: "Départements", path: "/departement", icon: <DomainAddIcon /> },
-      { label: "Spécialités", path: "/specialite", icon: <ListAltIcon /> },
+      { label: "Utilisateurs", path: "/utilisateurs", icon: <PeopleOutline />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
+      { label: "Départements", path: "/departement", icon: <DomainAddIcon />, roles: ["ADMINISTRATEUR","DIRECTEUR"], },
+      { label: "Spécialités", path: "/specialite", icon: <ListAltIcon />, roles: ["ADMINISTRATEUR","DIRECTEUR"], },
     ],
   },
   {
     label: "Ressources materielles",
     icon: <ComputerIcon />,
-    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
+    roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"],
     items: [
-      { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> },
+      { label: "Materiels", path: "/materiel", icon: <DesktopWindowsIcon /> , roles: ["ADMINISTRATEUR","TECHNICIEN","DIRECTEUR"],},
       {
         label: "Affectation",
         path: "/affectation",
         icon: <TextRotationNoneIcon />,
+        roles: ["ADMINISTRATEUR","TECHNICIEN","DIRECTEUR"],
       },
-      { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon /> },
+      { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon />, roles: ["ADMINISTRATEUR","TECHNICIEN","DIRECTEUR"], },
     ],
   },
-  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
-  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
+  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
+  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
   {
-    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
+    roles: ["ADMINISTRATEUR","DIRECTEUR"],
     label: "Societés et Fournisseurs",
     path: "/societes",
     icon: <BusinessIcon />,
   },
-  { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN"], },
+  { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon />, roles: ["ADMINISTRATEUR","DIRECTEUR"], },
   {
     label: "Gestion des incidents",
     icon: <AssignmentLateOutlinedIcon />,
-    roles: ["ADMINISTRATEUR", "TECHNICIEN"],
+    roles: ["*"],
     items: [
       {
         label: "Réclamer incident",
         path: "/incidents/utilisateur",
         icon: <EditNotificationsOutlinedIcon />,
+        roles: ["*"],
       },
       {
         label: "Gérer les incidents",
         path: "/incidents/administrateur",
         icon: <MarkUnreadChatAltOutlinedIcon />,
+        roles: ["ADMINISTRATEUR","TECHNICIEN"],
       },
     ],
   },
@@ -274,7 +277,7 @@ export default function Main() {
         <List>
           {initialNavItems.map((elem) => (
             <>
-              {elem?.roles?.includes(user.roleUtilisateur)||elem?.roles?.includes('*') ? (
+              {elem?.roles?.includes(user.roleUtilisateur) || elem?.roles?.includes('*') ? (
                 <React.Fragment key={elem.label}>
                   {elem.path ? (
                     <Nav.Link as={Link} to={elem.path}>
@@ -339,38 +342,41 @@ export default function Main() {
                       {submenuOpen[elem.label] &&
                         elem.items &&
                         elem.items.map((subItem) => (
-                          <Nav.Link
-                            as={Link}
-                            to={subItem.path}
-                            key={subItem.label}
-                          >
-                            <ListItem
-                              disablePadding
-                              sx={{ display: "block", pl: 4 }}
+                          <>
+                            {subItem.roles.includes(user.roleUtilisateur) ||subItem.roles.includes("*") ? <Nav.Link
+                              as={Link}
+                              to={subItem.path}
+                              key={subItem.label}
                             >
-                              <ListItemButton
-                                sx={{
-                                  minHeight: 48,
-                                  justifyContent: open ? "initial" : "center",
-                                  px: 2.5,
-                                }}
+                              <ListItem
+                                disablePadding
+                                sx={{ display: "block", pl: 4 }}
                               >
-                                <ListItemIcon
+                                <ListItemButton
                                   sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : "auto",
-                                    justifyContent: "center",
+                                    minHeight: 48,
+                                    justifyContent: open ? "initial" : "center",
+                                    px: 2.5,
                                   }}
                                 >
-                                  {subItem.icon}
-                                </ListItemIcon>
-                                <ListItemText
-                                  primary={subItem.label}
-                                  sx={{ opacity: open ? 1 : 0 }}
-                                />
-                              </ListItemButton>
-                            </ListItem>
-                          </Nav.Link>
+                                  <ListItemIcon
+                                    sx={{
+                                      minWidth: 0,
+                                      mr: open ? 3 : "auto",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    {subItem.icon}
+                                  </ListItemIcon>
+                                  <ListItemText
+                                    primary={subItem.label}
+                                    sx={{ opacity: open ? 1 : 0 }}
+                                  />
+                                </ListItemButton>
+                              </ListItem>
+                            </Nav.Link>:null}
+
+                          </>
                         ))}
                     </>
                   )}

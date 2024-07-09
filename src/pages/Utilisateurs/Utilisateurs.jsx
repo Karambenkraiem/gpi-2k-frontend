@@ -273,12 +273,13 @@ const Utilisateurs = () => {
           >
             <LockPersonOutlinedIcon />
           </Button>
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ?
           <Button
             onClick={() => handleBlockUser(params.row.idUtilisateur)}
             title="Suspendre le compte"
           >
             <NoAccountsOutlinedIcon sx={{ color: "red" }} />
-          </Button>
+          </Button> : null}
         </div>
       ),
     },
