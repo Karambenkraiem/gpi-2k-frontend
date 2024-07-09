@@ -10,6 +10,7 @@ import { ip } from "constants/ip";
 import { UserContext } from "router/Router";
 
 const UtilisateurModal = ({
+  isProfile,
   open,
   handleClose,
   isEditing,
@@ -19,7 +20,7 @@ const UtilisateurModal = ({
   errors,
 }) => {
   const [specialites, setSpecialities] = useState([]);
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const style = {
     position: "absolute",
     top: "50%",
@@ -109,46 +110,48 @@ const UtilisateurModal = ({
           error={!!errors.email}
           helperText={errors.email}
         />
-        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) && !isProfile ? (
           <>
-        <InputLabel htmlFor="specialite">Spécialité</InputLabel>
-
-        <Select
-          label="Spécialité"
-          name="idSpecialite"
-          required
-          value={currentUser.idSpecialite}
-          onChange={handleChange}
-          fullWidth
-          error={!!errors.idSpecialite}
-          style={{ marginTop: "1rem" }}
-        >
-          {specialites.map((elem) => (
-            <MenuItem key={elem.idSpecialite} value={elem.idSpecialite}>
-              {elem.nom}
-            </MenuItem>
-          ))}
-        </Select>
-
-        
-            <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
+            <InputLabel htmlFor="specialite">Spécialité</InputLabel>
 
             <Select
-              label="Role"
-              name="roleUtilisateur"
+              label="Spécialité"
+              name="idSpecialite"
               required
-              value={currentUser.roleUtilisateur}
+              value={currentUser.idSpecialite}
               onChange={handleChange}
               fullWidth
-              error={!!errors.roleUtilisateur}
+              error={!!errors.idSpecialite}
               style={{ marginTop: "1rem" }}
             >
-              {Object.values(RoleUtilisateur).map((role) => (
-                <MenuItem key={role} value={role}>
-                  {role}
+              {specialites.map((elem) => (
+                <MenuItem key={elem.idSpecialite} value={elem.idSpecialite}>
+                  {elem.nom}
                 </MenuItem>
               ))}
             </Select>
+            {currentUser.roleUtilisateur !== "ADMINISTRATEUR" && (
+              <>
+                <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
+
+                <Select
+                  label="Role"
+                  name="roleUtilisateur"
+                  required
+                  value={currentUser.roleUtilisateur}
+                  onChange={handleChange}
+                  fullWidth
+                  error={!!errors.roleUtilisateur}
+                  style={{ marginTop: "1rem" }}
+                >
+                  {Object.values(RoleUtilisateur).map((role) => (
+                    <MenuItem key={role} value={role}>
+                      {role}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </>
+            )}
           </>
         ) : null}
 

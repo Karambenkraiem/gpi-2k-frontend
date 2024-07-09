@@ -15,5 +15,11 @@ export const postWithHeaders = async (url, body) => {
       headers: { Authorization: "Bearer " + token },
     });
 };
-export const patchWithHeaders = () => {};
-export const deleteWithHeaders = () => {};
+export const patchWithHeaders = async (url,body) => {
+  const token = localStorage.getItem("token");
+  if (token)
+    return await axios.patch(ip + url, body, {
+      headers: { Authorization: "Bearer " + token },
+    });
+};
+export const deleteWithHeaders = () => { };

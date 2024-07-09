@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
@@ -25,11 +25,13 @@ import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
 import { Add } from "@mui/icons-material";
+import { useReactToPrint } from "react-to-print";
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
-
+  const componentRef = useRef();
+const [inprint,setInprint]=useState(false);
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -403,7 +405,17 @@ const MaterielPage = () => {
         console.error("Erreur emprunt!", error);
       });
   };
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+  useEffect(()=>{
+    if(inprint){
 
+      handlePrint();
+    setInprint(false)
+    };
+
+  },[inprint])
   const columns = [
     { field: "numeroSerie", headerName: "Numero Série", width: 150 },
     { field: "categorie", headerName: "Catégorie", width: 140 },
@@ -477,9 +489,10 @@ const MaterielPage = () => {
             Ajouter Materiel
           </Button>
         </Box>
-       
+       <div ref={componentRef}>
+        {inprint&&<div> <h1 className="text-center">Liste de Materiel</h1></div>}
           <DataGrid
-          slots={{ toolbar: GridToolbar }}
+          slots={!inprint?{ toolbar: GridToolbar }:{}}
             // sx={{
             //   display: "flex",
             //   justifyContent: "center",
@@ -504,6 +517,8 @@ const MaterielPage = () => {
             // pagination
             // @ts-ignore
           />
+          </div>
+          <button onClick={()=>setInprint(true)}>Print this out!</button>
         
 
         <AffectationModal

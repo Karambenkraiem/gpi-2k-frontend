@@ -43,6 +43,7 @@ import { Badge, Stack } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import ToggleButton from "../ToggleButton";
 import { UserContext } from "router/Router";
+import ProfileMenu from "components/ProfileMenu";
 
 const drawerWidth = 300;
 
@@ -250,6 +251,8 @@ export default function Main() {
               {circle}
             </Badge>
           </Stack>
+
+          <ProfileMenu/>
         </Toolbar>
       </AppBar>
       <Drawer

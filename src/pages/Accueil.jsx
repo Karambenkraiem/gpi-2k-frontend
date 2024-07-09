@@ -14,7 +14,6 @@ const Accueil = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    // Rediriger vers la page de connexion ou page d'accueil publique après déconnexion
     window.location.href = '/';
   };
 

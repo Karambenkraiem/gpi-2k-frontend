@@ -107,31 +107,7 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
     }
   };
 
-  //////////////////////////////////////////////////////////////////////
-  //   const handleSaveSociete = () => {
-  //     const request = editItem
-  //       ? axios.patch(`http://localhost:3000/societe/${societeData.idSociete}`, {
-  //         raisonSociale:societeData.raisonSociale,
-  //         adresse: societeData.adresse,
-  //         responsable: societeData.responsable,
-  //         email: societeData.email,
-  //         numtel: societeData.numtel,
-  //         secteurActivite: societeData.secteurActivite,
-  //         typeSociete: societeData.typeSociete,
-  //       })
-  //       : axios.post(`${ip}/societe`, societeData);
-
-  //     request
-  //       .then(() => {
-  //         handleClose();
-  //         fetchSociete();
-
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error saving Societé:", error);
-  //       });
-  //   };
-  ///////////////////////////////////////////////////////////////////////
+  
 
   return (
     <Modal open={open} onClose={handleClose}>

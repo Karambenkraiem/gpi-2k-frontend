@@ -32,6 +32,7 @@ import DetailsContrat from "pages/DetailsContrat";
 import { getWithHeaders } from "helpers/axiosWithHeaders";
 import { Spinner } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
+import Monprofile from "pages/Monprofile";
 export const UserContext = createContext(null);
 export default function Router() {
   const [user, setUser] = useState(null);
@@ -59,6 +60,7 @@ export default function Router() {
             <Routes>
               <Route element={<Main />} path="/">
                 <Route index element={<Accueil />} />
+                <Route path="/monprofile" element={<Monprofile />} />
                 <Route
                   path="/utilisateurs"
                   element={
