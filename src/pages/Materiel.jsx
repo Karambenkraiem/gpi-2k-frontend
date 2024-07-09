@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useRef } from "react";
-=======
-import React, { useState, useEffect, useContext } from "react";
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
@@ -29,21 +25,14 @@ import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
 import { Add } from "@mui/icons-material";
-<<<<<<< HEAD
-import { useReactToPrint } from "react-to-print";
-=======
 import { UserContext } from "router/Router";
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
-<<<<<<< HEAD
   const componentRef = useRef();
 const [inprint,setInprint]=useState(false);
-=======
   const { user } = useContext(UserContext);
->>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
