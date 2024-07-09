@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
 import { ip } from "constants/ip";
 import { Box } from "@mui/material";
@@ -54,6 +54,7 @@ const Affectations = () => {
       <h1>Historique des affectations</h1>
       <Box sx={{ height: 500, width: "100%" }}>
         <DataGrid
+        slots={{ toolbar: GridToolbar }}
           rows={rows}
           // @ts-ignore
           columns={columns}

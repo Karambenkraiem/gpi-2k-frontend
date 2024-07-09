@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
@@ -312,6 +312,7 @@ const Utilisateurs = () => {
         />
         <Box sx={{ height: 500, width: "100%" }}>
           <DataGrid
+          slots={{ toolbar: GridToolbar }}
             // @ts-ignore
             // pageSize={pageSize}
 

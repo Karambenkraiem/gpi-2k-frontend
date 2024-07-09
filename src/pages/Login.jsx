@@ -9,17 +9,33 @@ const Login = () => {
   const [idUtilisateur, setIdUtilisateur] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useContext(UserContext);
+  const [error, setError] = useState("");
+
   const handleLogin = () => {
-    // Handle login logic here
+    setError(""); // Clear previous error messages
     axios
-      .post(ip + "/auth/login", { idUtilisateur: +idUtilisateur, password })
+      .post(`${ip}/auth/login`, { idUtilisateur: +idUtilisateur, password })
       .then((res) => {
         localStorage.setItem("token", res.data);
-        getWithHeaders("/auth/my-info").then((response) =>
-          setUser(response.data)
-        );
+        return getWithHeaders("/auth/my-info");
+      })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          setError(`Error: ${err.response.data.message || err.response.statusText}`);
+        } else if (err.request) {
+          // The request was made but no response was received
+          setError("Error: No response received from server.");
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          setError(`Error: ${err.message}`);
+        }
       });
   };
+
   return (
     <Container maxWidth="sm">
       <Box
@@ -32,6 +48,11 @@ const Login = () => {
         <Typography variant="h4" gutterBottom>
           Login
         </Typography>
+        {error && (
+          <Typography variant="body1" color="error" gutterBottom>
+            {error}
+          </Typography>
+        )}
         <TextField
           label="ID"
           variant="outlined"

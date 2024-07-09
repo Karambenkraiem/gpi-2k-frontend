@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
+=======
+import React, { useState, useEffect, useContext } from "react";
+>>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
@@ -25,13 +29,21 @@ import dayjs from "dayjs";
 import AffectationModal from "components/AffectationModal";
 import EmpruntModal from "components/EmpruntModal";
 import { Add } from "@mui/icons-material";
+<<<<<<< HEAD
 import { useReactToPrint } from "react-to-print";
+=======
+import { UserContext } from "router/Router";
+>>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
 
 const MaterielPage = () => {
   const [materiels, setMateriels] = useState([]);
   const [open, setOpen] = useState(false);
+<<<<<<< HEAD
   const componentRef = useRef();
 const [inprint,setInprint]=useState(false);
+=======
+  const { user } = useContext(UserContext);
+>>>>>>> 0d2e4ad65adf67265c0798675e9a441d8d12415e
   const [affectationData, setAffectationData] = useState({
     idUtilisateur: "",
     numeroSerie: "",
@@ -205,6 +217,7 @@ const [inprint,setInprint]=useState(false);
       nombrePortSwitch: parseInt(formData.nombrePortSwitch),
       debitSwitch: parseInt(formData.debitSwitch),
       tailleEcran: parseFloat(formData.tailleEcran),
+      // @ts-ignore
       idSociete: formData.idSociete === "" ? null : formData.idSociete,
     };
 
@@ -464,12 +477,13 @@ const [inprint,setInprint]=useState(false);
           >
             <LoopIcon />
           </Button>
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
           <Button
             title="Mettre en rebut Materiel"
             onClick={() => toggleStatus(params.row.numeroSerie)}
           >
             <Inventory2OutlinedIcon sx={{ color: "red" }} />
-          </Button>
+          </Button>):null}
         </div>
       ),
     },
@@ -479,6 +493,7 @@ const [inprint,setInprint]=useState(false);
     <div>
       <h1>Gestion de Matériel</h1>
       <Box sx={{ height: 500, width: "100%" }}>
+      {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
         <Box sx={{ mb: 2 }}>
           <Button
             onClick={handleOpenModal}
@@ -489,6 +504,7 @@ const [inprint,setInprint]=useState(false);
             Ajouter Materiel
           </Button>
         </Box>
+      ):null}
        <div ref={componentRef}>
         {inprint&&<div> <h1 className="text-center">Liste de Materiel</h1></div>}
           <DataGrid
@@ -545,7 +561,8 @@ const [inprint,setInprint]=useState(false);
         <Modal open={open} onClose={handleCloseModal}>
           <Box sx={style}>
             <h2>{isEditing ? "Editer matériel" : "Ajouter matériel"}</h2>
-
+            {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+              <>
             <TextField
               select
               label="Categorie"
@@ -565,7 +582,7 @@ const [inprint,setInprint]=useState(false);
                 </MenuItem>
               ))}
             </TextField>
-
+            
             <TextField
               label="Numéro de Série"
               name="numeroSerie"
@@ -627,26 +644,6 @@ const [inprint,setInprint]=useState(false);
               helperText={errors.garantie}
             />
             <TextField
-              select
-              label="Etat matériel"
-              name="etatMateriel"
-              value={formData.etatMateriel || ""}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              // @ts-ignore
-              error={!!errors.etatMateriel}
-              // @ts-ignore
-              helperText={errors.etatMateriel}
-            >
-              {Object.values(EtatMateriel).map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
               label={"Date d'acquisition"}
               placeholder="Sélectionner une date"
               name="dateAcquisition"
@@ -680,6 +677,28 @@ const [inprint,setInprint]=useState(false);
                 </MenuItem>
               ))}
             </Select>
+            </>
+          ):null}
+            <TextField
+              select
+              label="Etat matériel"
+              name="etatMateriel"
+              value={formData.etatMateriel || ""}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              // @ts-ignore
+              error={!!errors.etatMateriel}
+              // @ts-ignore
+              helperText={errors.etatMateriel}
+            >
+              {Object.values(EtatMateriel).map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </TextField>
+          
 
             {/* ------------------------------------------------------- */}
             {/*Unite Centrale */}

@@ -166,7 +166,6 @@ function Installations() {
       <InstallLicenceModal
         openInstallModal={openInstallModal}
         handleClose={handleClose}
-        isEditing={isEditing}
         installationData={installationData}
         handleChange={handleChangeInstall}
         handleSave={handleSaveInstallation}
