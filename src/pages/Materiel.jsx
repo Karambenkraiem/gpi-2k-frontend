@@ -283,18 +283,6 @@ const MaterielPage = () => {
     setOpen(true);
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(ip + `/materiel/${id}`)
-      .then((response) => {
-        setMateriels(
-          materiels.filter((materiel) => materiel.numeroSerie !== id)
-        );
-      })
-      .catch((error) => {
-        console.error("Erreur suppression de matériel ....", error);
-      });
-  };
 
   const toggleStatus = (numeroSerie) => {
     const materiel = materiels.find((m) => m.numeroSerie === numeroSerie);
@@ -419,6 +407,8 @@ const MaterielPage = () => {
       setInprint(false);
     }
   }, [inprint]);
+
+  
   const columns = [
     { field: "numeroSerie", headerName: "Numero Série", width: 150 },
     { field: "categorie", headerName: "Catégorie", width: 140 },
@@ -479,7 +469,6 @@ const MaterielPage = () => {
       ),
     },
   ];
-  const [pageSize, setPageSize] = useState(25);
   return (
     <div>
       <h1>Gestion de Matériel</h1>
@@ -523,11 +512,7 @@ const MaterielPage = () => {
             }}
             pageSizeOptions={[5, 10, 25, 50, 100]}
             disableRowSelectionOnClick
-            // pageSize={pageSize}
-            // onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            // rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            // pagination
-            // @ts-ignore
+            
           />
         </div>
         <button onClick={() => setInprint(true)}>Print this out!</button>

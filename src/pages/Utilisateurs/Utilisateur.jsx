@@ -1,4 +1,5 @@
 // @ts-ignore
+// @ts-ignore
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
@@ -76,6 +77,7 @@ const Utilisateur = () => {
     }
 
     let newStatus;
+    // @ts-ignore
     switch (user.etatUtilisateur) {
       case "actif":
       case "inactif":
@@ -162,6 +164,7 @@ const Utilisateur = () => {
       });
   };
 
+  // @ts-ignore
   const formattedDateCreated = new Date(user.createdAt).toLocaleDateString(
     "fr-FR",
     {
@@ -170,7 +173,9 @@ const Utilisateur = () => {
       day: "numeric",
     }
   );
+  // @ts-ignore
   const formattedDateLogin = user.lastLogin
+    // @ts-ignore
     ? new Date(user.lastLogin).toLocaleDateString("fr-FR")
     : "-";
 
@@ -190,6 +195,7 @@ const Utilisateur = () => {
             onClick={() => navigate(-1)}
             variant="contained"
             color="primary"
+            // @ts-ignore
             startIcon={<ReplyAllIcon />}
             style={{
               marginBottom: 16,
@@ -274,6 +280,7 @@ const Utilisateur = () => {
                   <Button
                     title="Modifier Utilisateur"
                     onClick={handleEdit}
+                    // @ts-ignore
                     disabled={user.etatUtilisateur === "suspendu"}
                   >
                     <EditNoteIcon />
@@ -282,6 +289,7 @@ const Utilisateur = () => {
                   <Button
                     title="Activer / Desactiver le compte"
                     onClick={toggleStatus}
+                    // @ts-ignore
                     disabled={user.etatUtilisateur === "suspendu"}
                   >
                     <LockPersonOutlinedIcon />
@@ -336,6 +344,7 @@ const Utilisateur = () => {
           </Row>
         </Container>
         <UtilisateurModal
+          isProfile={true}
           open={modalOpen}
           handleClose={handleModalClose}
           isEditing={true}
@@ -350,52 +359,3 @@ const Utilisateur = () => {
 };
 
 export default Utilisateur;
-
-//Code fourni par Khalil
-// import { CircularProgress, Typography } from "@mui/material";
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-
-// export default function Utilisateur() {
-
-//   const { idUtilisateur } = useParams();
-//   const [user, setUser] = useState(null);
-//  const [state, setState] = useState(); // Removed as it is not used
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     console.log(`Recuperation de donnée de l'utilisateur avec le id: ${idUtilisateur}`);
-//     axios.get(`http://localhost:3000/utilisateur/${idUtilisateur}`)
-//     .then((res) => {
-//       console.log('API response:', res.data);
-
-//       setUser(res.data);
-//       setLoading(false);
-//     })
-//     .catch(error => {
-//       console.error('Error recuperation donnée utilisateur !!!', error);
-//       setLoading(false);
-//     });
-//   }, [idUtilisateur]); // Updated dependencies to include idUtilisateur
-
-//   if (loading) {
-//     return <CircularProgress />;
-//   }
-
-//   if (!user) {
-//     return <Typography variant="h6">User not found.</Typography>;
-//   }
-
-//   return (
-//     <div>{user.fullName}</div>
-//   );
-// }
-
-//-------------------------------------------
-
-//-----------------------------------------------------------------
-
-//
-
-//----------------------***************************-----

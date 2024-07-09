@@ -1,26 +1,20 @@
 // @ts-ignore
-import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import axios from "axios";
-import { RxDividerVertical } from "react-icons/rx";
 import UtilisateurModal from "../components/UtilisateurModal";
-import { ip } from "constants/ip";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
-import NoAccountsOutlinedIcon from "@mui/icons-material/NoAccountsOutlined";
-import LockPersonOutlinedIcon from "@mui/icons-material/LockPersonOutlined";
+
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { UserContext } from "router/Router";
 import { patchWithHeaders } from "helpers/axiosWithHeaders";
 
 const Monprofile = () => {
-  const { idUtilisateur } = useParams();
 
-  const [users, setUsers] = useState([]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -54,30 +48,6 @@ const Monprofile = () => {
     validate(name, value);
   };
 
-  const handleBlockUser = () => {
-    if (!user) {
-      console.error("Données Introuvable !!!");
-      return;
-    }
-
-    let newStatus;
-    switch (user.etatUtilisateur) {
-      case "actif":
-      case "inactif":
-        newStatus = "suspendu";
-        break;
-      case "suspendu":
-        break;
-      default:
-        newStatus = "actif";
-    }
-
-    const updatedUser = {
-      ...user,
-      // @ts-ignore
-      etatUtilisateur: newStatus,
-    };
-  };
   const handleEdit = () => {
     setCurrentUser(user);
     setModalOpen(true);

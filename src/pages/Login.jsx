@@ -12,7 +12,7 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleLogin = () => {
-    setError(""); // Clear previous error messages
+    setError(""); 
     axios
       .post(`${ip}/auth/login`, { idUtilisateur: +idUtilisateur, password })
       .then((res) => {
@@ -24,13 +24,10 @@ const Login = () => {
       })
       .catch((err) => {
         if (err.response) {
-          // The request was made and the server responded with a status code that falls out of the range of 2xx
           setError(`Error: ${err.response.data.message || err.response.statusText}`);
         } else if (err.request) {
-          // The request was made but no response was received
           setError("Error: No response received from server.");
         } else {
-          // Something happened in setting up the request that triggered an Error
           setError(`Error: ${err.message}`);
         }
       });
@@ -70,6 +67,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <Button
           variant="contained"
           color="primary"

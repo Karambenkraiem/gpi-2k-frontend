@@ -17,25 +17,18 @@ const AffectationModal = ({
 }) => {
   const [utilisateurs, setUtilisateurs] = useState([]);
 
-  // const EtatAffectation = {
-  //   Affecté: "Affecté",
-  //   Emprunté: "Emprunté",
-  //   Disponible: "Disponible",
-  // };
 
   const fetchUtilisateurs = () => {
     axios
       .get(ip + "/utilisateur")
       .then((response) => {
         setUtilisateurs(response.data);
-        // setLoading(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
 
   useEffect(() => {
     fetchUtilisateurs();
-    //fetchMateriel();
   }, []);
 
   const style = {
@@ -117,25 +110,7 @@ const AffectationModal = ({
           // @ts-ignore
           helperText={errors.motifRetour}
         />
-        {/* <TextField
-          select
-          label="Etat affectation"
-          name="disponibilite"
-          value={affectationData?.disponibilite}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          // @ts-ignore
-          error={!!errors.categorie}
-          // @ts-ignore
-          helperText={errors.categorie}
-        >
-          {Object.values(EtatAffectation).map((etat) => (
-            <MenuItem key={etat} value={etat}>
-              {etat}
-            </MenuItem>
-          ))}
-        </TextField> */}
+      
         <Box
           display="flex"
           justifyContent="center"

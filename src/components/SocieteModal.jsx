@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Box, TextField, Button, MenuItem } from "@mui/material";
 import axios from "axios";
 import { ip } from "constants/ip";
-import { useParams } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",
@@ -28,24 +27,10 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
   });
 
 
-
-  const fetchSociete = () => {
-    axios
-      .get(ip + `/societe/${idSociete}`)
-      .then((response) => {
-        setSociete(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur récupération société !!!", error);
-      });
-  };
-
-
   useEffect(() => {
     if (editItem) {
       setSocieteData(editItem);
-      fetchSociete();
+      // fetchSociete();
     } else {
       setSocieteData({
         raisonSociale: "",
@@ -56,7 +41,6 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
         secteurActivite: "",
         typeSociete: "",
       });
-      fetchSociete();
 
     }
   }, [editItem]);
@@ -68,9 +52,7 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
       [name]: value,
     }));
   };
-  const { idSociete } = useParams();
-  const [societe, setSociete] = useState({});
-  const [loading, setLoading] = useState(true);
+ 
 
   
   const [societes, setSocietes] = useState([]);
@@ -79,6 +61,7 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
     const societeToSave = { ...societeData };
 
     if (editItem) {
+      
       const { Alimentation, Materiel, Logiciel, ...rest } = societeToSave;
       axios
         .patch(`${ip}/societe/${societeToSave.idSociete}`, rest)
@@ -91,7 +74,6 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
             )
           );
           handleClose();
-          fetchSociete();
         })
         .catch((error) => console.error('Error updating stock:', error));
     }else{
@@ -99,7 +81,6 @@ const SocieteModal = ({ open, handleClose, editItem }) => {
         .then((response) => {
             setSocietes([...societes,response.data]);
           handleClose();
-          fetchSociete();
         })
         .catch((error) => {
             console.error('Error Ajout societes:', error);

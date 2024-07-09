@@ -65,7 +65,6 @@ const Utilisateurs = () => {
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
   };
-  ///////////////////////////////////////////////
 
   const handleOpen = (user = null) => {
     if (user) {
@@ -128,17 +127,6 @@ const Utilisateurs = () => {
         });
     }
   };
-
-  // const handleDelete = (id) => {
-  //   axios
-  //     .delete(ip + `/utilisateur/${id}`)
-  //     .then((response) => {
-  //       setUsers(users.filter((user) => user.idUtilisateur !== id));
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erreur Suppression de utilisateur....", error);
-  //     });
-  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -273,18 +261,19 @@ const Utilisateurs = () => {
           >
             <LockPersonOutlinedIcon />
           </Button>
-          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ?
-          <Button
-            onClick={() => handleBlockUser(params.row.idUtilisateur)}
-            title="Suspendre le compte"
-          >
-            <NoAccountsOutlinedIcon sx={{ color: "red" }} />
-          </Button> : null}
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur) ? (
+            <Button
+              onClick={() => handleBlockUser(params.row.idUtilisateur)}
+              title="Suspendre le compte"
+            >
+              <NoAccountsOutlinedIcon sx={{ color: "red" }} />
+            </Button>
+          ) : null}
         </div>
       ),
     },
   ];
-  const [pageSize, setPageSize] = useState(25);
+  
   return (
     <div>
       <h1>Gestion des utilisateurs</h1>
@@ -302,6 +291,7 @@ const Utilisateurs = () => {
           </Box>
         ) : null}
         <UtilisateurModal
+          isProfile={true}
           open={open}
           handleClose={() => setOpen(false)}
           isEditing={isEditing}
@@ -312,7 +302,7 @@ const Utilisateurs = () => {
         />
         <Box sx={{ height: 500, width: "100%" }}>
           <DataGrid
-          slots={{ toolbar: GridToolbar }}
+            slots={{ toolbar: GridToolbar }}
             // @ts-ignore
             // pageSize={pageSize}
 

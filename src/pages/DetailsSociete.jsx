@@ -1,7 +1,8 @@
 import { Box, Button } from "@mui/material";
 import axios from "axios";
+// @ts-ignore
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { ip } from "constants/ip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -9,14 +10,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import SocieteModal from "components/SocieteModal";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 
-
 const DetailsSociete = () => {
   const { idSociete } = useParams();
   const [societe, setSociete] = useState({});
   const [materiels, setMateriels] = useState([]);
   const [alimentations, setAlimentations] = useState([]);
   const [logiciels, setLogiciels] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // @ts-ignore
+  const {setLoading} = useState(true);
 
   const fetchSociete = () => {
     axios
@@ -26,7 +27,7 @@ const DetailsSociete = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Erreur récupération société !!!", error);
+        console.error("Erreur récupération société !!!!!!!!!!", error);
       });
   };
 
@@ -62,8 +63,8 @@ const DetailsSociete = () => {
 
   const fetchLogiciels = () => {
     axios
-    .get(ip + `/societe/${idSociete}/logiciel`)
-    .then((response) => {
+      .get(ip + `/societe/${idSociete}/logiciel`)
+      .then((response) => {
         const formattedData = response.data.map((logiciel, index) => ({
           id: logiciel.idLogiciel || index + 1, // Ensure each item has a unique id
           ...logiciel,
@@ -80,10 +81,9 @@ const DetailsSociete = () => {
     fetchMateriels();
     fetchAlimentations();
     fetchLogiciels();
-  }, [idSociete]);
+  }, []);
 
   const navigate = useNavigate();
-
 
   const columnsMateriels = [
     { field: "numeroSerie", headerName: "Numéro de Série", width: 150 },
@@ -112,14 +112,7 @@ const DetailsSociete = () => {
   const handleModalClose = () => {
     setModalOpen(false);
     fetchSociete();
-
   };
-
-  // const handleRowClick = (params, type) => {
-  //   const item = params.row;
-  //   console.log("Selected item:", item);
-  //   navigate(`/detail/${type}/${item.id}`);
-  // };
 
   const handleEditSociete = () => {
     setEditItem(societe);
@@ -130,41 +123,53 @@ const DetailsSociete = () => {
       <h1>Détails Société</h1>
       <section style={{ backgroundColor: "#eee" }}>
         <Container className="py-4">
-        <Button
-        onClick={() => navigate(-1)}
-        variant="contained"
-        color="primary" // Use primary color
-        style={{ marginBottom: 16 }}
-        startIcon={<ReplyAllIcon />}
-
-      >
-        RETOUR
-      </Button>
-          <Row >
+          <Button
+            onClick={() => navigate(-1)}
+            variant="contained"
+            color="primary" // Use primary color
+            style={{ marginBottom: 16 }}
+            startIcon={<ReplyAllIcon />}
+          >
+            RETOUR
+          </Button>
+          <Row>
             <Col lg={4}>
               <Card className="mb-6">
                 <Card.Body className="text-left">
                   <h6 className="my-1">
-                    <b>Raison Sociale:</b> {societe.raisonSociale || "N/A"}
+                    <b>Raison Sociale:</b>{" "}
+                    {// @ts-ignore
+                    societe.raisonSociale || "N/A"}
                   </h6>
                   <p className="text-muted mb-1">
-                    <b>Adresse:</b> {societe.adresse || "N/A"}
+                    <b>Adresse:</b>{" "}
+                    {// @ts-ignore
+                    societe.adresse || "N/A"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Email:</b> {societe.email || "N/A"}
+                    <b>Email:</b>{" "}
+                    {// @ts-ignore
+                    societe.email || "N/A"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Téléphone:</b> {societe.numtel || "N/A"}
+                    <b>Téléphone:</b>{" "}
+                    {// @ts-ignore
+                    societe.numtel || "N/A"}
                   </p>
                   <p className="text-muted mb-1">
                     <b>Secteur d'Activité:</b>{" "}
-                    {societe.secteurActivite || "N/A"}
+                    {// @ts-ignore
+                    societe.secteurActivite || "N/A"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Type de Société:</b> {societe.typeSociete || "N/A"}
+                    <b>Type de Société:</b>{" "}
+                    {// @ts-ignore
+                    societe.typeSociete || "N/A"}
                   </p>
                   <p className="text-muted mb-1">
-                    <b>Responsable:</b> {societe.responsable || "N/A"}
+                    <b>Responsable:</b>{" "}
+                    {// @ts-ignore
+                    societe.responsable || "N/A"}
                   </p>
                 </Card.Body>
               </Card>
@@ -189,26 +194,6 @@ const DetailsSociete = () => {
               </Card>
             </Col>
             <Col lg={8}>
-              {/* <Card className="mb-4">
-                  <Card.Body>
-                    <Row>
-                      <Col sm={6}>
-                        <p className="mb-0">Utilisateurs Associés</p>
-                      </Col>
-                      <Col sm={12}>
-                        <div style={{ height: 300, width: "100%" }}>
-                          <DataGrid
-                            rows={utilisateurs}
-                            columns={columnsUtilisateurs}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                            disableSelectionOnClick
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card> */}
               <Card className="mb-4">
                 <Card.Body>
                   <Row>
@@ -220,11 +205,10 @@ const DetailsSociete = () => {
                         <DataGrid
                           rows={materiels}
                           columns={columnsMateriels}
+                          // @ts-ignore
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
-
-                          
                         />
                       </div>
                     </Col>
@@ -235,13 +219,16 @@ const DetailsSociete = () => {
                 <Card.Body>
                   <Row>
                     <Col sm={6}>
-                      <p className="mb-0">Accessoires et consommables Associées</p>
+                      <p className="mb-0">
+                        Accessoires et consommables Associées
+                      </p>
                     </Col>
                     <Col sm={12}>
                       <div style={{ height: 300, width: "100%" }}>
                         <DataGrid
                           rows={alimentations}
                           columns={columnsAlimentations}
+                          // @ts-ignore
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
@@ -262,10 +249,10 @@ const DetailsSociete = () => {
                         <DataGrid
                           rows={logiciels}
                           columns={columnsLogiciels}
+                          // @ts-ignore
                           pageSize={5}
                           rowsPerPageOptions={[5]}
                           disableSelectionOnClick
-
                         />
                       </div>
                     </Col>
@@ -278,7 +265,7 @@ const DetailsSociete = () => {
         <SocieteModal
           open={modalOpen}
           handleClose={handleModalClose}
-          editItem={editItem}         
+          editItem={editItem}
         />
       </section>
     </div>
