@@ -196,7 +196,7 @@ const Logiciels = () => {
           alignItems="center"
           marginBottom={2}
         >
-          {["ADMINISTATEUR"].includes(user.roleUtilisateur)?
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur)?
           (<Button
           variant="contained"
           color="primary"
