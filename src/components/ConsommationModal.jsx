@@ -34,16 +34,6 @@ const ConsommationModal = ({
     fetchUtilisateurs();
     fetchMateriels();
   },[]);
-
-  // const handleSubmit = () => {
-  //   axios.post(ip + "/alimentation", consommationData).then((response) => {
-  //     fetchStock();
-  //   });
-
-    // onSave(quantity);
-    // handleClose();
-  // };
-
   
   return (
     <Modal open={openConsommationModal} onClose={handleClose}>
@@ -66,7 +56,6 @@ const ConsommationModal = ({
       margin="normal"
     />
 
-
         <TextField
           select
           label="Utilisateur"
@@ -75,10 +64,7 @@ const ConsommationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.categorie}
-          // // @ts-ignore
-          // helperText={errors.categorie}
+    
         >
           {utilisateurs.map((elem) => (
             <MenuItem key={elem?.idUtilisateur} value={elem?.idUtilisateur}>
@@ -94,10 +80,7 @@ const ConsommationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.categorie}
-          // // @ts-ignore
-          // helperText={errors.categorie}
+  
         >
           {materiels.map((elem) => (
             <MenuItem key={elem?.numeroSerie} value={elem?.numeroSerie}>
@@ -115,14 +98,17 @@ const ConsommationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.dateAcquisition}
-          // // @ts-ignore
-          // helperText={errors.dateAcquisition}
+     
         />
+        <div className="d-flex gap-5 p-3 justify-content-center"> 
+          
         <Button variant="contained" color="primary" onClick={handleSaveConsommation}>
-          Save
+          Enregistrer
         </Button>
+        <Button variant="contained" color="secondary" onClick={handleClose}>
+          Annuler
+        </Button>
+        </div>
       </Box>
     </Modal>
   );

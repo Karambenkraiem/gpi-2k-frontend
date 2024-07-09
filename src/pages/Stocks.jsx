@@ -1,5 +1,5 @@
 // @ts-ignore
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,6 +13,7 @@ import ConsommationModal from "components/ConsommationModal";
 import RemoveIcon from "@mui/icons-material/Remove";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { UserContext } from "router/Router";
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
@@ -185,11 +186,15 @@ const Stocks = () => {
           >
             <VisibilityOutlinedIcon />
           </IconButton>
+         
+         
+          {["ADMINISTRATEUR"].includes(user.roleUtilisateur)?(
+
           <IconButton color="primary" 
           title="Modifier l'article"
           onClick={() => handleEdit(params.row)}>
             <EditNoteIcon />
-          </IconButton>
+          </IconButton>):null}
 
           <Button
             // variant="contained"
@@ -230,7 +235,7 @@ const Stocks = () => {
       [name]: value,
     });
   };
-
+const user = useContext(UserContext);
   return (
     <div style={{ height: 600, width: '100%' }}>
       <h1>Gestion de stock des consommables et accessoires</h1>
@@ -240,6 +245,8 @@ const Stocks = () => {
         alignItems="center"
         marginBottom={2}
       >
+
+        {["ADMINISTRATEUR"].includes(user.roleUtilisateur)?(
         <Button
           variant="contained"
           color="primary"
@@ -248,7 +255,7 @@ const Stocks = () => {
           style={{ marginRight: 16 }}
         >
           Ajouter Article
-        </Button>
+        </Button>) :null}
 
         <Box display="flex" gap={2}>
           <Button

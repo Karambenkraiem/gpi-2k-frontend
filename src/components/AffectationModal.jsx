@@ -15,7 +15,6 @@ const AffectationModal = ({
   handleSave,
   errors,
 }) => {
-
   const [utilisateurs, setUtilisateurs] = useState([]);
 
   // const EtatAffectation = {
@@ -23,7 +22,7 @@ const AffectationModal = ({
   //   Emprunté: "Emprunté",
   //   Disponible: "Disponible",
   // };
-  
+
   const fetchUtilisateurs = () => {
     axios
       .get(ip + "/utilisateur")
@@ -37,7 +36,7 @@ const AffectationModal = ({
   useEffect(() => {
     fetchUtilisateurs();
     //fetchMateriel();
-  },[]);
+  }, []);
 
   const style = {
     position: "absolute",
@@ -70,10 +69,7 @@ const AffectationModal = ({
           helperText={errors.categorie}
         >
           {utilisateurs.map((elem) => (
-            <MenuItem
-              key={elem.idUtilisateur}
-              value={elem.idUtilisateur}
-            >
+            <MenuItem key={elem.idUtilisateur} value={elem.idUtilisateur}>
               {elem.fullName}
             </MenuItem>
           ))}
@@ -93,6 +89,7 @@ const AffectationModal = ({
           helperText={errors.dateAttribution}
         />
         <TextField
+          hidden={!isEditing}
           label={"Date Retour"}
           placeholder="Sélectionner une date"
           name="dateRetour"
@@ -106,7 +103,9 @@ const AffectationModal = ({
           // @ts-ignore
           helperText={errors.dateRetour}
         />
+
         <TextField
+          hidden={!isEditing}
           label="Motif Retour"
           name="motifRetour"
           value={affectationData.motifRetour || ""}

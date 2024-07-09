@@ -25,14 +25,7 @@ const AlimentationModal = ({
     fetchSocietes();
   },[]);
 
-  // const handleSubmit = () => {
-  //   axios.post(ip + "/alimentation", alimentationData).then((response) => {
-  //     fetchStock();
-  //   });
-
-    // onSave(quantity);
-    // handleClose();
-  // };
+  
 
   
   return (
@@ -66,10 +59,7 @@ const AlimentationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.categorie}
-          // // @ts-ignore
-          // helperText={errors.categorie}
+         
         >
           {societes.map((elem) => (
             <MenuItem key={elem?.idSociete} value={elem?.idSociete}>
@@ -87,14 +77,16 @@ const AlimentationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.dateAcquisition}
-          // // @ts-ignore
-          // helperText={errors.dateAcquisition}
+         
         />
+        <div className="d-flex gap-5 p-3 justify-content-center">
         <Button variant="contained" color="primary" onClick={handleSaveAlimentation}>
-          Save
+          Enregistrer
         </Button>
+        <Button variant="contained" color="secondary" onClick={handleClose}>
+          Annuler
+        </Button>
+        </div>
       </Box>
     </Modal>
   );
