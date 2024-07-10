@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 import {
   Modal,
@@ -33,7 +34,7 @@ const ContratModal = ({ open, handleClose, editItem }) => {
     dateFinContrat: '',
     montantContrat: '',
     descriptionContrat: '',
-    contratRenouvable: '',
+    contratRenouvable: false,
     typeContrat: '',
     etatContrat: 'Pret à signer',
   });
@@ -67,10 +68,12 @@ const ContratModal = ({ open, handleClose, editItem }) => {
       // @ts-ignore
       const { Signature, ...rest } = contratToSave;
       axios
+        // @ts-ignore
         .patch(`${ip}/contrat/${contratToSave.idContrat}`, rest)
         .then((response) => {
           setContrats(
             contrats.map((contrat) =>
+              // @ts-ignore
               contrat.idContrat === contratToSave.idContrat
                 ? response.data
                 : contrat
