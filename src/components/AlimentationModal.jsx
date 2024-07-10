@@ -23,11 +23,8 @@ const AlimentationModal = ({
 
   useEffect(() => {
     fetchSocietes();
-  },[]);
+  }, []);
 
-  
-
-  
   return (
     <Modal open={openAlimentationModal} onClose={handleClose}>
       <Box sx={{ ...style, width: 400 }}>
@@ -39,17 +36,15 @@ const AlimentationModal = ({
           disabled
         />
 
-
         <TextField
-      label="Quantité à Alimenter"
-      name="quantiteAlimente"
-      type="number"
-      value={alimentationData.quantiteAlimente}
-      onChange={handleChange}
-      fullWidth
-      margin="normal"
-    />
-
+          label="Quantité à Alimenter"
+          name="quantiteAlimente"
+          type="number"
+          value={alimentationData.quantiteAlimente}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
 
         <TextField
           select
@@ -59,7 +54,6 @@ const AlimentationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-         
         >
           {societes.map((elem) => (
             <MenuItem key={elem?.idSociete} value={elem?.idSociete}>
@@ -77,15 +71,19 @@ const AlimentationModal = ({
           onChange={handleChange}
           fullWidth
           margin="normal"
-         
         />
         <div className="d-flex gap-5 p-3 justify-content-center">
-        <Button variant="contained" color="primary" onClick={handleSaveAlimentation}>
-          Enregistrer
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleClose}>
-          Annuler
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!alimentationData.quantiteAlimente }
+            onClick={handleSaveAlimentation}
+          >
+            Enregistrer
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleClose}>
+            Annuler
+          </Button>
         </div>
       </Box>
     </Modal>

@@ -102,7 +102,10 @@ const ConsommationModal = ({
         />
         <div className="d-flex gap-5 p-3 justify-content-center"> 
           
-        <Button variant="contained" color="primary" onClick={handleSaveConsommation}>
+        <Button variant="contained" 
+        color="primary" 
+        onClick={handleSaveConsommation}
+        disabled={!consommationData.quantiteConsomme}>
           Enregistrer
         </Button>
         <Button variant="contained" color="secondary" onClick={handleClose}>

@@ -22,7 +22,6 @@ const LogicielModal = ({
   handleSave,
   handleClose,
 }) => {
-  
   const [societes, setSocietes] = useState([]);
   const style = {
     position: "absolute",
@@ -42,13 +41,11 @@ const LogicielModal = ({
     technique: "Technique",
   };
 
-  const fetchSocietes = ()=>{
-    axios
-    .get(`${ip}/societe`)
-    .then((res)=>setSocietes(res.data));
-  }
+  const fetchSocietes = () => {
+    axios.get(`${ip}/societe`).then((res) => setSocietes(res.data));
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchSocietes();
   }, []);
 
@@ -118,15 +115,16 @@ const LogicielModal = ({
           fullWidth
           margin="normal"
         />
+        <InputLabel id="fournisseur-label">Fournisseur</InputLabel>
 
         <Select
-          label="Société"
+          labelId="fournisseur-label"
           name="idSociete"
           required
           value={logicielData.idSociete}
           onChange={handleChange}
           fullWidth
-          style={{ marginTop: "1rem" }}
+         
         >
           {societes.map((elem) => (
             <MenuItem key={elem.idSociete} value={elem.idSociete}>

@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   Checkbox,
   Select,
+  InputLabel,
 } from "@mui/material";
 import QueuePlayNextOutlinedIcon from "@mui/icons-material/QueuePlayNextOutlined";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -283,7 +284,6 @@ const MaterielPage = () => {
     setOpen(true);
   };
 
-
   const toggleStatus = (numeroSerie) => {
     const materiel = materiels.find((m) => m.numeroSerie === numeroSerie);
     if (!materiel) {
@@ -408,7 +408,6 @@ const MaterielPage = () => {
     }
   }, [inprint]);
 
-  
   const columns = [
     { field: "numeroSerie", headerName: "Numero Série", width: 150 },
     { field: "categorie", headerName: "Catégorie", width: 140 },
@@ -512,7 +511,6 @@ const MaterielPage = () => {
             }}
             pageSizeOptions={[5, 10, 25, 50, 100]}
             disableRowSelectionOnClick
-            
           />
         </div>
         <button onClick={() => setInprint(true)}>Print this out!</button>
@@ -637,9 +635,9 @@ const MaterielPage = () => {
                   // @ts-ignore
                   helperText={errors.dateAcquisition}
                 />
-
+                <InputLabel id="fournisseur-label">Fournisseur</InputLabel>
                 <Select
-                  label="Fournisseur"
+                  labelId="fournisseur-label"
                   name="idSociete"
                   required
                   value={formData.idSociete}

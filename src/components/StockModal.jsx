@@ -540,10 +540,22 @@ const ModalStock = ({ open, handleClose, editItem }) => {
             />
           </>
         )}
-        
-        <Button onClick={handleSubmit} variant="contained" color="primary">
+        <div className='d-flex gap-5 p-3 justify-content-center'>
+        <Button
+         onClick={handleSubmit}
+          variant="contained" 
+          color="primary"
+          disabled={!formData.categorie || !formData.refArt || !formData.marque || !formData.modele || !formData.prix }
+          >
           {editItem ? 'Éditer' : 'Ajouter'}
         </Button>
+        <Button
+         onClick={handleClose}
+          variant="contained" 
+          color="secondary">
+          Annuler
+        </Button>
+        </div>
       </Box>
     </Modal>
   );
