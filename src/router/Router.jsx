@@ -33,6 +33,7 @@ import { getWithHeaders } from "helpers/axiosWithHeaders";
 import { Spinner } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
 import Monprofile from "pages/Monprofile";
+import Dashboard from "pages/Dashboard";
 export const UserContext = createContext(null);
 export default function Router() {
   const [user, setUser] = useState(null);
@@ -60,6 +61,7 @@ export default function Router() {
             <Routes>
               <Route element={<Main />} path="/">
                 <Route index element={<Accueil />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/monprofile" element={<Monprofile />} />
                 <Route
                   path="/utilisateurs"
@@ -97,37 +99,51 @@ export default function Router() {
                     />
                   }
                 />
-                <Route path="/specialite" 
-                 element={
+                <Route
+                  path="/specialite"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={Spécialité}
                     />
-                  }/>
-                <Route path="/departement"  element={
+                  }
+                />
+                <Route
+                  path="/departement"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={Département}
                     />
-                  } />
-                <Route path="/affectation"  element={
+                  }
+                />
+                <Route
+                  path="/affectation"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Affectation}
                     />
-                  } />
-                <Route path="/emprunt"  element={
+                  }
+                />
+                <Route
+                  path="/emprunt"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Emprunt}
                     />
-                  } />
-                <Route path="/stocks"  element={
+                  }
+                />
+                <Route
+                  path="/stocks"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Stocks}
                     />
-                  } />
+                  }
+                />
                 <Route
                   path="/detailsStock/:refArt"
                   element={
@@ -137,31 +153,42 @@ export default function Router() {
                     />
                   }
                 />
-                <Route path="/logiciels" 
-                 element={
-                  <PrivateRoute
-                    roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
-                    Component={Logiciels}
-                  />
-                } />
-                <Route path="/alimentations"  element={
+                <Route
+                  path="/logiciels"
+                  element={
+                    <PrivateRoute
+                      roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
+                      Component={Logiciels}
+                    />
+                  }
+                />
+                <Route
+                  path="/alimentations"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Alimentations}
                     />
-                  }/>
-                <Route path="/consommations"element={
+                  }
+                />
+                <Route
+                  path="/consommations"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Consommations}
                     />
-                  }/>
-                <Route path="/societes" element={
+                  }
+                />
+                <Route
+                  path="/societes"
+                  element={
                     <PrivateRoute
-                      roles={["ADMINISTRATEUR",  "DIRECTEUR"]}
+                      roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={Societe}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/detailsLogiciel/:idLogiciel"
                   element={
@@ -169,7 +196,8 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={DetailsLogiciel}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/detailsSociete/:idSociete"
                   element={
@@ -177,7 +205,8 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={DetailsSociete}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/installations/encours"
                   element={
@@ -185,7 +214,8 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={Installations}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/installations/archives"
                   element={
@@ -193,7 +223,8 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "TECHNICIEN", "DIRECTEUR"]}
                       Component={InstallationsArchives}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/incidents/utilisateur"
                   element={<IncidentUtilisateur />}
@@ -205,13 +236,17 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "TECHNICIEN"]}
                       Component={IncidentAdmin}
                     />
-                  }/>
-                <Route path="/contrats" element={
+                  }
+                />
+                <Route
+                  path="/contrats"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={Contrat}
                     />
-                  }/>
+                  }
+                />
                 <Route
                   path="/detailsContrat/:idContrat"
                   element={
@@ -219,14 +254,18 @@ export default function Router() {
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={DetailsContrat}
                     />
-                  }/>
+                  }
+                />
 
-                <Route path="/signature" element={
+                <Route
+                  path="/signature"
+                  element={
                     <PrivateRoute
                       roles={["ADMINISTRATEUR", "DIRECTEUR"]}
                       Component={Signature}
                     />
-                  }/>
+                  }
+                />
               </Route>
               <Route path="*" element={<div>404</div>} />
             </Routes>

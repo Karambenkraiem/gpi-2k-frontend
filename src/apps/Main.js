@@ -19,6 +19,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { Link as RouterLink } from "react-router-dom";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
+import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
+
 import {
   HomeOutlined,
   PeopleOutline,
@@ -116,7 +118,9 @@ const Drawer = styled(MuiDrawer, {
 );
 
 const initialNavItems = [
+
   { label: "Accueil", path: "/", icon: <HomeOutlined />, roles: ["*"] },
+  { label: "Dashboard", path: "/dashboard", icon: <SpeedOutlinedIcon />, roles: ["*"] },
   {
     label: "Gestion des utilisateurs",
     icon: <RoomPreferencesIcon />,
