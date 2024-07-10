@@ -39,11 +39,6 @@ const Contrat = () => {
     fetchContrats();
   }, []);
 
-  // @ts-ignore
-  // const [stockToSave, setStockToSave] = useState({
-  //   refArt: "",
-  // });
-
   const handleEdit = (item) => {
     setEditItem(item);
     setOpenModal(true);
@@ -79,15 +74,7 @@ const Contrat = () => {
       .catch((error) => console.error("Error fetching stocks:", error));
   };
 
-  const handleCloseSignerModal = () => {
-    setOpenSignatureModal(false);
-    axios
-      .get(ip + "/contrats")
-      .then((response) => setContrats(response.data))
-      .catch((error) => console.error("Error fetching contrats:", error));
-  };
-
-  const handleSaveSignature = () => {
+   const handleSaveSignature = () => {
     Promise.all([
       axios.post(ip + "/signature", {
         idSociete: signatureData.idSociete,
