@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Container, Box } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import logoTECI1 from '../assets/logoTECI.jpg'; // Assurez-vous que le chemin est correct
+import logoTECI2 from '../assets/ISETRADESLOGO.jpg'; // Assurez-vous que le chemin est correct
 
 const Accueil = () => {
   const [dateTime, setDateTime] = useState(new Date());
@@ -34,6 +36,10 @@ const Accueil = () => {
         </Toolbar>
       </AppBar>
       <Container style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+          <img src={logoTECI1} alt="Logo TECI 1" style={{ maxWidth: '100px', marginRight: '20px' }} />
+          <img src={logoTECI2} alt="Logo TECI 2" style={{ maxWidth: '100px' }} />
+        </Box>
         <Typography variant="h4" gutterBottom>
           Bienvenue sur la page d'accueil
         </Typography>

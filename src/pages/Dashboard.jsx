@@ -1,6 +1,6 @@
 // src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
-import { logoTECI } from "../assets/logoTECI.jpg";
+import logoTECI from '../assets/logoTECI.jpg';
 import axios from "axios";
 import {
   CircularProgress,
@@ -65,6 +65,9 @@ const Dashboard = () => {
   const COLORS = [lightBlue[400], pink[400]];
 
   return (
+             <div>
+
+             
     <Container maxWidth="lg">
       <Typography variant="h4" component="h1" gutterBottom>
         Tableau de bord
@@ -81,6 +84,11 @@ const Dashboard = () => {
                   Administrateur: {data.adminName}
                 </Typography>
               </Box>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent>
+            <img src={logoTECI} alt="Logo_TECI" style={{ maxWidth: '100%' }} />
             </CardContent>
           </Card>
           
@@ -139,6 +147,7 @@ const Dashboard = () => {
         </Grid>
       </Grid>
     </Container>
+    </div>
   );
 };
 
