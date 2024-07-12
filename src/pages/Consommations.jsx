@@ -38,6 +38,7 @@ const Consommations = () => {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
+      <h1>Historique des consommation des articles de stock</h1>
        <Button
         onClick={() => navigate(-1)}
         variant="contained"

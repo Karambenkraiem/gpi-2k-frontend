@@ -51,7 +51,7 @@ const Accueil = () => {
           <img src={logo2K} alt="Logo 2K" style={{ maxWidth: '140px', marginRight: '20px' }} />
         </Box>
         <Typography variant="body1" style={{ marginTop: '5px' }}>
-          Développé par 2K Info
+          Développé par 2KSoft
         </Typography>
         <Typography variant="body2">
           2023 / 2024

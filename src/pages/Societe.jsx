@@ -85,9 +85,9 @@ const Societes = () => {
           <Button onClick={() => handleEditSociete(params.row)}>
             <EditNoteIcon />
           </Button>
-          <Button onClick={() => handleDeleteSociete(params.row.idSociete)}>
+          {/* <Button onClick={() => handleDeleteSociete(params.row.idSociete)}>
             <DeleteIcon />
-          </Button>
+          </Button> */}
         </Box>
       ),
     },

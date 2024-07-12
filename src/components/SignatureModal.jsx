@@ -96,7 +96,7 @@ const SignatureModal = ({
           color="primary"
           onClick={handleSaveSignature}
         >
-          Save
+          Signer
         </Button>
       </Box>
     </Modal>

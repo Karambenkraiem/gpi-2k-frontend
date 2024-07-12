@@ -20,6 +20,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link, Outlet } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
+import AlbumOutlinedIcon from '@mui/icons-material/AlbumOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import EmojiTransportationOutlinedIcon from '@mui/icons-material/EmojiTransportationOutlined';
 
 import {
   HomeOutlined,
@@ -146,13 +149,13 @@ const initialNavItems = [
       { label: "Emprunt", path: "/emprunt", icon: <MultipleStopIcon />, roles: ["ADMINISTRATEUR","TECHNICIEN","DIRECTEUR"], },
     ],
   },
-  { label: "Ressources logicielles", path: "/logiciels", icon: <AppsIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
-  { label: "Gestion du stock", path: "/stocks", icon: <InventoryIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
+  { label: "Ressources logicielles", path: "/logiciels", icon: <AlbumOutlinedIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
+  { label: "Gestion du stock", path: "/stocks", icon: < Inventory2OutlinedIcon />, roles: ["ADMINISTRATEUR", "TECHNICIEN","DIRECTEUR"], },
   {
     roles: ["ADMINISTRATEUR","DIRECTEUR"],
     label: "Societés et Fournisseurs",
     path: "/societes",
-    icon: <BusinessIcon />,
+    icon: <EmojiTransportationOutlinedIcon />,
   },
   { label: "Contrats", path: "/contrats", icon: <AssignmentOutlinedIcon />, roles: ["ADMINISTRATEUR","DIRECTEUR"], },
   {

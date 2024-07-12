@@ -3,7 +3,10 @@ import axios from "axios";
 import { ip } from "constants/ip";
 import React, { useEffect, useState } from "react";
 
-const ReclamationModal = ({ openReclamation, handleCloseModalReclamation }) => {
+const ReclamationModal = ({ 
+  openReclamation, 
+  handleCloseModalReclamation 
+}) => {
   const [materiels, setMateriels] = useState([]);
   const fetchMateriels = () => {
     axios
@@ -21,19 +24,9 @@ const ReclamationModal = ({ openReclamation, handleCloseModalReclamation }) => {
   return (
     <Modal open={openReclamation} onClose={handleCloseModalReclamation}>
       <Box sx={{ ...style, width: 400 }}>
-        <h2>Consommer Stock</h2>
-        <TextField label="Référence Article" value={null} fullWidth disabled />
+        <h2>Reclamer un incident</h2>
 
-        <TextField
-          label="Quantité consommer"
-          name="quantiteConsomme"
-          type="number"
-          value={null}
-          onChange={null}
-          fullWidth
-          margin="normal"
-        />
-
+       
         <TextField
           select
           label="Utilisateur"
@@ -42,11 +35,9 @@ const ReclamationModal = ({ openReclamation, handleCloseModalReclamation }) => {
           onChange={null}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.categorie}
-          // // @ts-ignore
-          // helperText={errors.categorie}
-        ></TextField>
+      
+        >
+        </TextField>
         <TextField
           select
           label="Materiel"
@@ -55,10 +46,7 @@ const ReclamationModal = ({ openReclamation, handleCloseModalReclamation }) => {
           onChange={null}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.categorie}
-          // // @ts-ignore
-          // helperText={errors.categorie}
+
         >
           {materiels.map((elem) => (
             <MenuItem key={elem?.numeroSerie} value={elem?.numeroSerie}>
@@ -73,19 +61,16 @@ const ReclamationModal = ({ openReclamation, handleCloseModalReclamation }) => {
           label={"Date Consommation"}
           placeholder="Sélectionner une date"
           name="dateConsommation"
-          //value={dayjs(consommationData.dateConsommation).format("YYYY-MM-DD")}
+          // value={format("YYYY-MM-DD")}
           type="date"
           onChange={null}
           fullWidth
           margin="normal"
-          // // @ts-ignore
-          // error={!!errors.dateAcquisition}
-          // // @ts-ignore
-          // helperText={errors.dateAcquisition}
+       
         />
         <Box display="flex" justifyContent="center" alignItems="center" gap={2}>
           <Button variant="contained" color="primary" sx={{ flex: 1 }}>
-            Save
+            Valider
           </Button>
           <Button
             variant="contained"

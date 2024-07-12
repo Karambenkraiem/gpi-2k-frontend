@@ -44,6 +44,10 @@ const Alimentations = () => {
   return (
     
     <div style={{ height: 400, width: '100%' }}>
+
+    <h1>Historique d'alimentation stock</h1>
+
+
         <Button
         onClick={() => navigate(-1)}
         variant="contained"

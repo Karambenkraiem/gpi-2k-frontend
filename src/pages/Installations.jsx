@@ -154,6 +154,7 @@ function Installations() {
 
   return (
     <div style={{ height: 1000, width: "100%" }}>
+      <h1>Désinstallation des logiciels</h1>
       <Container className="py-4">
         <Button
           onClick={() => navigate(-1)}
