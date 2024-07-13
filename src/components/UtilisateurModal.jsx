@@ -110,8 +110,8 @@ const UtilisateurModal = ({
           error={!!errors.email}
           helperText={errors.email}
         />
-        {["ADMINISTRATEUR"].includes(user.roleUtilisateur) && !isProfile ? (
-          <>
+        {/* {["ADMINISTRATEUR"].includes(user.roleUtilisateur)  ? ( */}
+          
             <InputLabel htmlFor="specialite">Spécialité</InputLabel>
 
             <Select
@@ -130,7 +130,8 @@ const UtilisateurModal = ({
                 </MenuItem>
               ))}
             </Select>
-            {currentUser.roleUtilisateur !== "ADMINISTRATEUR" && (
+
+            {/* {currentUser.roleUtilisateur !== "ADMINISTRATEUR" && ( */}
               <>
                 <InputLabel htmlFor="roleUtilisateur">Role</InputLabel>
 
@@ -151,9 +152,9 @@ const UtilisateurModal = ({
                   ))}
                 </Select>
               </>
-            )}
-          </>
-        ) : null}
+            {/* )} */}
+          
+        {/* ) : null} */}
 
         {!isEditing && (
           <>
